@@ -1,3 +1,6 @@
 [submodule "apps/blog"]
 	path = apps/blog
 	url = git@github.com:zenta-dev/blog.zenta.dev.git
+[submodule "apps/cv"]
+	path = apps/cv
+	url = git@github.com:zenta-dev/cv.zenta.dev.git
