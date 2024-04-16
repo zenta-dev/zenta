@@ -3,7 +3,4 @@
 	url = git@github.com:zenta-dev/blog.zenta.dev.git
 [submodule "apps/cv"]
 	path = apps/cv
-	url = git@github.com:zenta-dev/cv.zenta.dev.git
-[submodule "apps/auth"]
-	path = apps/auth
-	url = git@github.com:zenta-dev/auth.zenta.dev.git
+	url = git@github.com:zenta-dev/cv.zenta.dev.git 
