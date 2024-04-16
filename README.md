@@ -9,9 +9,15 @@ One place to go for zenta team.
 ## Apps
 
  - [x] **Blog**
- - [ ] **CV Builder**
+ - [x] **CV Builder**
  - [ ] **URL Shortener**
  - [ ] **Pet App** 
  - [ ] **Markdown Editor**
 
-> Checked meaning we start to execute it, only internal team can see the backlog
+> Only internal team can see the backlog
+
+## Adding apps procedure
+
+- Create new repository in gh
+- Open root dir of zenta `/`
+- Add app by submoduling `git submodule <repo link> apps/<app_name>`
