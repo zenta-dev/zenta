@@ -1,0 +1,250 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+    schemas  = ["auth", "blog"]
+}
+
+model Account {
+    id                String  @id @default(cuid())
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String?
+    access_token      String?
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String?
+    session_state     String?
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@schema("auth")
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@schema("auth")
+}
+
+enum USER_ROLE {
+    USER
+    ADMIN
+
+    @@schema("auth")
+}
+
+enum SOCIAL_MEDIA_TYPE {
+    GITHUB
+    LINKEDIN
+    TWITTER
+
+    @@schema("auth")
+}
+
+model UserSocialMedia {
+    id     String            @id @default(uuid())
+    userId String
+    user   User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+    type   SOCIAL_MEDIA_TYPE
+    url    String
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt
+
+    @@schema("auth")
+}
+
+model User {
+    id            String            @id @default(cuid())
+    firstName     String?
+    lastName      String?
+    email         String?           @unique
+    emailVerified DateTime?
+    password      String?
+    role          USER_ROLE         @default(USER)
+    image         String?
+    socials       UserSocialMedia[]
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt
+
+    accounts             Account[]
+    sessions             Session[]
+    post                 Post[]
+    likedPost            PostLike[]
+    dislikedPost         PostDislike[]
+    comments             PostComment[]
+    techFounderCreatedBy TechFounder[] @relation("techFounderCreatedBy")
+    techFounderUpdatedBy TechFounder[] @relation("techFounderUpdatedBy")
+    techCreatedBy        Tech[]        @relation("techCreatedBy")
+    techUpdatedBy        Tech[]        @relation("techUpdatedBy")
+    tagCreateBy          Tag[]         @relation("createBy")
+    tagUpdateBy          Tag[]         @relation("updateBy")
+
+    @@schema("auth")
+}
+
+model VerificationToken {
+    identifier String
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+    @@schema("auth")
+}
+
+enum TechFounderType {
+    PERSON
+    ORGANIZATION
+    COMPANY
+
+    @@schema("blog")
+}
+
+model TechFounder {
+    id        String          @id @default(uuid())
+    createdBy User?           @relation("techFounderCreatedBy", fields: [creatorId], references: [id], onDelete: Cascade)
+    creatorId String?
+    updatedBy User?           @relation("techFounderUpdatedBy", fields: [updaterId], references: [id], onDelete: Cascade)
+    updaterId String?
+    name      String          @unique
+    type      TechFounderType @default(PERSON)
+    url       String
+    photo     String?
+    techs     Tech[]
+    createdAt DateTime        @default(now())
+    updatedAt DateTime?       @updatedAt
+
+    @@schema("blog")
+}
+
+model TechVersion {
+    id          String    @id @default(uuid())
+    techId      String
+    tech        Tech      @relation(fields: [techId], references: [id], onDelete: Cascade)
+    hash        String    @unique
+    version     Float
+    whatNews    String?
+    description String?
+    url         String?
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime? @updatedAt
+
+    @@schema("blog")
+}
+
+model Tech {
+    id          String        @id @default(uuid())
+    createdBy   User?         @relation("techCreatedBy", fields: [creatorId], references: [id], onDelete: Cascade)
+    creatorId   String?
+    updatedBy   User?         @relation("techUpdatedBy", fields: [updaterId], references: [id], onDelete: Cascade)
+    updaterId   String?
+    name        String        @unique
+    description String
+    logo        String
+    url         String
+    homepage    String?
+    founders    TechFounder[]
+    versions    TechVersion[]
+    heat        Int           @default(0)
+    tags        Tag[]
+    posts       Post[]
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime?     @updatedAt
+
+    @@schema("blog")
+}
+
+model Tag {
+    id          String    @id @default(uuid())
+    name        String    @unique
+    description String?
+    photo       String?
+    techs       Tech[]
+    posts       Post[]
+    heat        Int       @default(0)
+    createBy    User?     @relation("createBy", fields: [creatorId], references: [id], onDelete: Cascade)
+    creatorId   String?
+    updateBy    User?     @relation("updateBy", fields: [updaterId], references: [id], onDelete: Cascade)
+    updaterId   String?
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime? @updatedAt
+
+    @@schema("blog")
+}
+
+model Post {
+    id        String        @id @default(uuid())
+    title     String
+    slug      String        @unique
+    published Boolean       @default(false)
+    cover     String?
+    content   Json
+    summary   String?
+    related   String[]
+    authors   User[]
+    tags      Tag[]
+    stack     Tech[]
+    likes     PostLike[]
+    dislikes  PostDislike[]
+    comments  PostComment[]
+    heat      Int           @default(0)
+    readTime  Float         @default(0)
+    createdAt DateTime      @default(now())
+    updatedAt DateTime?     @updatedAt
+
+    @@schema("blog")
+}
+
+model PostLike {
+    id        String    @id @default(uuid())
+    postId    String
+    post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+    userId    String
+    user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt
+
+    @@schema("blog")
+}
+
+model PostDislike {
+    id     String @id @default(uuid())
+    postId String
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime  @default(now())
+    updatedAt DateTime? @updatedAt
+
+    @@schema("blog")
+}
+
+model PostComment {
+    id        String        @id @default(uuid())
+    postId    String
+    post      Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+    userId    String
+    user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+    content   Json
+    parentId  String?
+    parent    PostComment?  @relation("ParentComment", fields: [parentId], references: [id])
+    children  PostComment[] @relation("ParentComment")
+    createdAt DateTime      @default(now())
+    updatedAt DateTime?     @updatedAt
+
+    @@schema("blog")
+}
