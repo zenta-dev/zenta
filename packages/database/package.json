@@ -1,5 +1,5 @@
 {
-  "name": "@repo/database",
+  "name": "@packages/db",
   "version": "1.0.0",
   "exports": {
     ".": "./src/client.ts"
@@ -9,27 +9,34 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:seed": "tsx src/seed.ts",
-    "dev": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Prisma\" -c \"cyan,magenta\" \"bun run ts:watch\" \"bun run studio\"",
-    "ts:watch": "tsup ./src/client.ts --watch",
     "format": "prisma format",
     "generate": "prisma generate",
     "lint": "eslint . --max-warnings 0",
     "prebuild": "bun run generate",
     "predev": "bun run generate",
-    "studio": "prisma studio"
+    "studio": "prisma studio",
+    "postinstall": "bun run generate",
+    "clean": "rm -rf .turbo node_modules",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@prisma/client": "^5.10.2"
+    "@prisma/client": "^5.12.1"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "concurrently": "^8.2.2",
-    "eslint": "^8.57.0",
-    "prisma": "^5.10.2",
+    "@configs/eslint-config": "*",
+    "@configs/prettier-config": "*",
+    "@configs/tsconfig": "*",
+    "eslint": "^9.0.0",
+    "prisma": "^5.12.1",
     "rimraf": "^5.0.5",
-    "tsup": "^8.0.2",
-    "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
-  }
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@configs/eslint-config/base"
+    ]
+  },
+  "prettier": "@configs/prettier-config"
 }
