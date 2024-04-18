@@ -3,20 +3,14 @@
   "compilerOptions": {
     //"outDir": "dist"
     "baseUrl": ".",
-    "paths": {
-      "@ui/*": [
-        "./src/*"
-      ],
-      "@ui/components/ui*": [
-        "./src/components/ui/*"
-      ]
-    }
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
   },
   "include": [
-    "."
+    ".",
+    "*.ts",
+    "src"
   ],
   "exclude": [
-    "node_modules",
-    "dist"
-  ]
+    "node_modules"
+  ],
 }

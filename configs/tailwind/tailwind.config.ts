@@ -1,11 +1,17 @@
 import type { Config } from "tailwindcss";
 import animate from "tailwindcss-animate";
+import { fontFamily } from "tailwindcss/defaultTheme";
 
 import { themingSystemPlugin } from "./plugins/themingSystemPlugin";
 
 export default {
   darkMode: ["class"],
-  content: ["src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -50,9 +56,6 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
       },
-      borderColor: {
-        DEFAULT: "hsl(var(--border))",
-      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -71,6 +74,9 @@ export default {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)", ...fontFamily.sans],
       },
     },
   },

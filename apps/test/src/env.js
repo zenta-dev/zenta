@@ -2,6 +2,17 @@ import { createEnv } from "@t3-oss/env-nextjs";
 import { z } from "zod";
 
 export const env = createEnv({
+  shared: {
+    NODE_ENV: z
+      .enum(["development", "production", "test"])
+      .default("development"),
+    VERCEL_ENV: z.enum(["development", "preview", "production"]).optional(),
+    VERCEL_URL: z
+      .string()
+      .optional()
+      .transform((v) => (v ? `https://${v}` : undefined)),
+    PORT: z.coerce.number().default(3000),
+  },
   server: {
     DATABASE_URL: z.string().url(),
     NODE_ENV: z
@@ -11,15 +22,16 @@ export const env = createEnv({
       process.env.NODE_ENV === "production"
         ? z.string()
         : z.string().optional(),
-    NEXTAUTH_JWT_SECRET: z.string(),
     NEXTAUTH_URL: z.preprocess(
+      // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
+      // Since NextAuth.js automatically uses the VERCEL_URL if present.
       (str) => process.env.VERCEL_URL ?? str,
+      // VERCEL_URL doesn't include `https` so it cant be validated as a URL
       process.env.VERCEL ? z.string() : z.string().url(),
     ),
     DISCORD_CLIENT_ID: z.string(),
     DISCORD_CLIENT_SECRET: z.string(),
   },
-
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
@@ -32,6 +44,9 @@ export const env = createEnv({
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
   },
-  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
+  skipValidation:
+    !!process.env.CI ||
+    !!process.env.SKIP_ENV_VALIDATION ||
+    process.env.npm_lifecycle_event === "lint",
   emptyStringAsUndefined: true,
 });

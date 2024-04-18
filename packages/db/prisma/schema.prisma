@@ -6,7 +6,6 @@ generator client {
 datasource db {
     provider = "postgresql"
     url      = env("DATABASE_URL")
-    schemas  = ["auth", "blog"]
 }
 
 model Account {
@@ -25,7 +24,6 @@ model Account {
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
-    @@schema("auth")
 }
 
 model Session {
@@ -34,23 +32,17 @@ model Session {
     userId       String
     expires      DateTime
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    @@schema("auth")
 }
 
 enum USER_ROLE {
     USER
     ADMIN
-
-    @@schema("auth")
 }
 
 enum SOCIAL_MEDIA_TYPE {
     GITHUB
     LINKEDIN
     TWITTER
-
-    @@schema("auth")
 }
 
 model UserSocialMedia {
@@ -62,14 +54,11 @@ model UserSocialMedia {
 
     createdAt DateTime  @default(now())
     updatedAt DateTime? @updatedAt
-
-    @@schema("auth")
 }
 
 model User {
     id            String            @id @default(cuid())
-    firstName     String?
-    lastName      String?
+    name          String?
     email         String?           @unique
     emailVerified DateTime?
     password      String?
@@ -92,8 +81,6 @@ model User {
     techUpdatedBy        Tech[]        @relation("techUpdatedBy")
     tagCreateBy          Tag[]         @relation("createBy")
     tagUpdateBy          Tag[]         @relation("updateBy")
-
-    @@schema("auth")
 }
 
 model VerificationToken {
@@ -102,15 +89,12 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
-    @@schema("auth")
 }
 
 enum TechFounderType {
     PERSON
     ORGANIZATION
     COMPANY
-
-    @@schema("blog")
 }
 
 model TechFounder {
@@ -126,8 +110,6 @@ model TechFounder {
     techs     Tech[]
     createdAt DateTime        @default(now())
     updatedAt DateTime?       @updatedAt
-
-    @@schema("blog")
 }
 
 model TechVersion {
@@ -141,8 +123,6 @@ model TechVersion {
     url         String?
     createdAt   DateTime  @default(now())
     updatedAt   DateTime? @updatedAt
-
-    @@schema("blog")
 }
 
 model Tech {
@@ -163,8 +143,6 @@ model Tech {
     posts       Post[]
     createdAt   DateTime      @default(now())
     updatedAt   DateTime?     @updatedAt
-
-    @@schema("blog")
 }
 
 model Tag {
@@ -181,8 +159,6 @@ model Tag {
     updaterId   String?
     createdAt   DateTime  @default(now())
     updatedAt   DateTime? @updatedAt
-
-    @@schema("blog")
 }
 
 model Post {
@@ -204,8 +180,6 @@ model Post {
     readTime  Float         @default(0)
     createdAt DateTime      @default(now())
     updatedAt DateTime?     @updatedAt
-
-    @@schema("blog")
 }
 
 model PostLike {
@@ -216,8 +190,6 @@ model PostLike {
     user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
     createdAt DateTime  @default(now())
     updatedAt DateTime? @updatedAt
-
-    @@schema("blog")
 }
 
 model PostDislike {
@@ -229,8 +201,6 @@ model PostDislike {
 
     createdAt DateTime  @default(now())
     updatedAt DateTime? @updatedAt
-
-    @@schema("blog")
 }
 
 model PostComment {
@@ -245,6 +215,4 @@ model PostComment {
     children  PostComment[] @relation("ParentComment")
     createdAt DateTime      @default(now())
     updatedAt DateTime?     @updatedAt
-
-    @@schema("blog")
 }

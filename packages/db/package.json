@@ -1,6 +1,8 @@
 {
   "name": "@packages/db",
-  "version": "1.0.0",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
   "exports": {
     ".": "./src/client.ts"
   },
@@ -26,6 +28,7 @@
     "@configs/eslint-config": "*",
     "@configs/prettier-config": "*",
     "@configs/tsconfig": "*",
+    "@types/node": "^20.12.7",
     "eslint": "^9.0.0",
     "prisma": "^5.12.1",
     "rimraf": "^5.0.5",
