@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-
 import { objToCssVariables } from "./objToCssVariables";
 
 /**

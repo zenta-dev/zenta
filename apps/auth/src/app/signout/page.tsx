@@ -11,8 +11,8 @@ export default function SignOutPage() {
   }, []);
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="animate-bounce text-4xl font-bold text-center">
+    <div className="flex h-screen items-center justify-center">
+      <div className="animate-bounce text-center text-4xl font-bold">
         Signing Out...
       </div>
     </div>

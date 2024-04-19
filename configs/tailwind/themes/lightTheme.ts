@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-
 import { generateThemeTailwindConfig } from "../functions/generateThemeTailwindConfig";
 import { themeToCssVariables } from "../functions/themeToCssVariables";
 import { APP_THEMES } from "./appTheme";

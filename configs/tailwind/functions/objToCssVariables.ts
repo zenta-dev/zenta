@@ -1,5 +1,4 @@
 import type { RecursiveKeyValuePair } from "tailwindcss/types/config";
-
 import { flattenObject } from "./flattenObject";
 
 interface ObjToCssVariablesConfig {

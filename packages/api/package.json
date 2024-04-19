@@ -19,7 +19,7 @@
     "@packages/validators": "*",
     "@trpc/server": "next",
     "superjson": "2.2.1",
-    "zod": "^3.22.4"
+    "zod": "^3.22.5"
   },
   "devDependencies": {
     "@configs/eslint-config": "*",

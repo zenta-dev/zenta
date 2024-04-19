@@ -1,5 +1,4 @@
 import type { RecursiveKeyValuePair } from "tailwindcss/types/config";
-
 import { hexToRGB } from "./hexToRGB";
 
 type FlattenedObject = Record<string, string>;

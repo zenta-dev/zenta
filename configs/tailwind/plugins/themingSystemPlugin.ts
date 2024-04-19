@@ -1,6 +1,5 @@
 import deepmerge from "deepmerge";
 import plugin from "tailwindcss/plugin";
-
 import { appTheme } from "../themes/appTheme";
 import { darkCssVariables, darkTailwindConfig } from "../themes/darkTheme";
 import { lightCssVariables, lightTailwindConfig } from "../themes/lightTheme";

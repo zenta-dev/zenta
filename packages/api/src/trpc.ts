@@ -1,4 +1,3 @@
- 
 import { getServerAuthSession, type Session } from "@packages/auth";
 import { db } from "@packages/db";
 import { initTRPC, TRPCError } from "@trpc/server";
@@ -11,7 +10,7 @@ export const createTRPCContext = async (opts: {
 }) => {
   const session = opts.session ?? (await getServerAuthSession());
   const source = opts.headers.get("x-trpc-source") ?? "unknown";
- 
+
   console.log(">>> tRPC Request from", source, "by", session?.user);
 
   return {
@@ -19,7 +18,7 @@ export const createTRPCContext = async (opts: {
     db,
   };
 };
- 
+
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
   errorFormatter({ shape, error }) {
@@ -33,12 +32,12 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
     };
   },
 });
-export const createCallerFactory = t.createCallerFactory; 
+export const createCallerFactory = t.createCallerFactory;
 
 export const createTRPCRouter = t.router;
- 
+
 export const publicProcedure = t.procedure;
- 
+
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
