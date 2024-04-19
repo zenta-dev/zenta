@@ -37,6 +37,13 @@
     },
     "//#clean": {
       "cache": false
+    },
+
+    "db:migrate:deploy": {},
+    "db:push": {},
+    "db:seed": {},
+    "generate": {
+      "dependsOn": ["^generate"]
     }
   },
   "globalEnv": [
