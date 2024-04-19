@@ -1,0 +1,26 @@
+/* f studio-nav-dashboard */
+
+.btn_studio_dashboard {
+    @apply bg-opacity-5 bg-blue-500 hover:bg-blue-900 hover:bg-opacity-45 text-blue-500;
+}
+
+/* studio-nav-tags */
+
+.btn_studio_tags {
+    @apply bg-opacity-5 bg-green-500 hover:bg-green-900 hover:bg-opacity-45 text-green-500;
+}
+
+/* studio-nav-stacks */
+.btn_studio_stacks {
+    @apply bg-opacity-5 bg-red-500 hover:bg-red-900 hover:bg-opacity-45 text-red-500;
+}
+
+/* studio-nav-posts */
+.btn_studio_posts {
+    @apply bg-opacity-5 bg-purple-500 hover:bg-purple-900 hover:bg-opacity-45 text-purple-500;
+}
+
+/* studio-nav-settings */
+.btn_studio_settings {
+    @apply bg-opacity-5 bg-yellow-500 hover:bg-yellow-900 hover:bg-opacity-45 text-yellow-500;
+}

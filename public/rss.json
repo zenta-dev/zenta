@@ -1,0 +1,19 @@
+{
+    "version": "https://jsonfeed.org/version/1",
+    "title": "Zenta Blog",
+    "home_page_url": "https://blog.zenta.dev",
+    "feed_url": "https://blog.zenta.dev/rss.json",
+    "description": "Zenta Blog is a website about programming 🧑‍💻 . I will be posting about my programming progress, good and bad days and more. Also, I might have some videos of me coding 🎥 .",
+    "icon": "https://blog.zenta.dev/favicon.ico",
+    "author": {
+        "name": "Rahmat Hidayataullah",
+        "url": "mailto:bokirsianpar95@gmail.com"
+    },
+    "items": [
+        {
+            "url": "https://blog.zenta.dev/post/tavle",
+            "title": "Tavle",
+            "tags": []
+        }
+    ]
+}
