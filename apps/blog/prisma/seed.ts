@@ -830,32 +830,4 @@ const postSeeder = async () => {
   await techSeeder();
   await tagSeeder();
   await postSeeder();
-  const person = {
-    email: "zenta@seeder.com",
-    pin: parseInt(Math.random().toString().slice(2, 8)),
-  };
-
-  await prisma.invitation.upsert({
-    where: {
-      email: person.email,
-    },
-    update: {
-      email: person.email,
-      invitedBy: {
-        connect: {
-          email: "zenta@seeder.com",
-        },
-      },
-      pin: person.pin,
-    },
-    create: {
-      email: person.email,
-      invitedBy: {
-        connect: {
-          email: "zenta@seeder.com",
-        },
-      },
-      pin: person.pin,
-    },
-  });
 })();

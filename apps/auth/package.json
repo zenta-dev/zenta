@@ -34,7 +34,8 @@
     "react-hook-form": "^7.51.3",
     "react-icons": "^5.1.0",
     "superjson": "2.2.1",
-    "zod": "^3.22.5"
+    "zod": "^3.22.5",
+    "dotenv-cli": "^7.4.1"
   },
   "devDependencies": {
     "@configs/eslint-config": "*",
@@ -46,8 +47,7 @@
     "@types/eslint": "^8.56.10",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.79",
-    "@types/react-dom": "^18.2.25",
-    "dotenv-cli": "^7.4.1",
+    "@types/react-dom": "^18.2.25", 
     "eslint": "^9.0.0",
     "eslint-config-next": "^14.2.2",
     "postcss": "^8.4.38",

@@ -1,48 +1,29 @@
 [0m[2m[35m$[0m [2m[1mbun with-env next build[0m
 [0m[2m[35m$[0m [2m[1mdotenv -e ../../.env -- next build[0m
   [1m[38;2;173;127;168m▲ Next.js 14.2.2[39m[22m
-  - Environments: .env
 
  [37m[1m [22m[39m Creating an optimized production build ...
- [33m[1m⚠[22m[39m Compiled with warnings
-
-../../packages/api/src/trpc.ts
-Attempted import error: 'getServerAuthSession' is not exported from '@packages/auth' (imported as 'getServerAuthSession').
-
-Import trace for requested module:
-../../packages/api/src/trpc.ts
-../../packages/api/src/index.ts
-./src/app/api/trpc/[trpc]/route.ts
-../../node_modules/next/dist/build/webpack/loaders/next-app-loader.js?name=app%2Fapi%2Ftrpc%2F%5Btrpc%5D%2Froute&page=%2Fapi%2Ftrpc%2F%5Btrpc%5D%2Froute&pagePath=private-next-app-dir%2Fapi%2Ftrpc%2F%5Btrpc%5D%2Froute.ts&appDir=%2Fhome%2Fmorty%2FProjects%2Fzenta%2F2024%2Fzenta%2Fapps%2Fauth%2Fsrc%2Fapp&appPaths=%2Fapi%2Ftrpc%2F%5Btrpc%5D%2Froute&pageExtensions=tsx&pageExtensions=ts&pageExtensions=jsx&pageExtensions=js&basePath=&assetPrefix=&nextConfigOutput=&preferredRegion=&middlewareConfig=e30%3D!./src/app/api/trpc/[trpc]/route.ts?__next_edge_ssr_entry__
-
+ [32m[1m✓[22m[39m Compiled successfully
  [37m[1m [22m[39m Skipping validation of types
  [37m[1m [22m[39m Skipping linting
 [?25l [37m[1m [22m[39m Collecting page data  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting page data  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting page data  [36m...[39m1184035334800019476
-1184035334800019476
 [2K[1G[?25h [33m[1m⚠[22m[39m Using edge runtime on a page currently disables static generation for that page
-[?25l [37m[1m [22m[39m Collecting page data  [36m.[39mwarn(prisma) Conflict for env vars DATABASE_URL, NEXTAUTH_URL, NEXTAUTH_SECRET, NEXTAUTH_JWT_SECRET, NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, NEXT_PUBLIC_CLOUDINARY_API_KEY, NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_API_SECRET, DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET in ../../.env and ../../packages/db/.env
-Env vars from ../../packages/db/.env overwrite the ones from ../../.env
-      
-1184035334800019476
+[?25l [37m[1m [22m[39m Collecting page data  [36m.[39m1184035334800019476
 [2K[1G[?25h [37m[1m [22m[39m Collecting page data     [32m[1m✓[22m[39m Collecting page data 
-[?25l [37m[1m [22m[39m Generating static pages (0/7)  [36m[    ][39m[2K[1G [37m[1m [22m[39m Generating static pages (0/7)  [36m[=   ][39mwarn(prisma) Conflict for env vars DATABASE_URL, NEXTAUTH_URL, NEXTAUTH_SECRET, NEXTAUTH_JWT_SECRET, NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME, NEXT_PUBLIC_CLOUDINARY_API_KEY, NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET, CLOUDINARY_API_SECRET, DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET in ../../.env and ../../packages/db/.env
-Env vars from ../../packages/db/.env overwrite the ones from ../../.env
-      
-1184035334800019476
+[?25l [37m[1m [22m[39m Generating static pages (0/7)  [36m[    ][39m[2K[1G [37m[1m [22m[39m Generating static pages (0/7)  [36m[=   ][39m1184035334800019476
 [2K[1G[?25h [32m[1m✓[22m[39m Generating static pages (7/7)
-[?25l [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[?25l [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G[?25h [37m[1m [22m[39m Collecting build traces     [32m[1m✓[22m[39m Collecting build traces 
+[?25l [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[?25l [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m...[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m...[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m.[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m.[39m[2K[1G [37m[1m [22m[39m Finalizing page optimization  [36m..[39m[2K[1G [37m[1m [22m[39m Collecting build traces  [36m..[39m[2K[1G[?25h [37m[1m [22m[39m Collecting build traces     [32m[1m✓[22m[39m Collecting build traces 
 [2K[1G[?25h [37m[1m [22m[39m Finalizing page optimization     [32m[1m✓[22m[39m Finalizing page optimization 
 
 [4mRoute (app)[24m                              [4mSize[24m     [4mFirst Load JS[24m
 ┌ ○ /                                    138 B          [37m[1m87.1 kB[22m[39m
 ├ ○ /_not-found                          873 B          [37m[1m87.9 kB[22m[39m
 ├ ƒ /api/auth/[...nextauth]              0 B                [37m[1m0 B[22m[39m
-├ ƒ /api/trpc/[trpc]                     0 B                [37m[1m0 B[22m[39m
-├ ƒ /signin                              23.3 kB         [37m[1m159 kB[22m[39m
-└ ○ /signout                             1.19 kB        [37m[1m90.3 kB[22m[39m
+├ ƒ /signin                              23.2 kB         [37m[1m175 kB[22m[39m
+└ ○ /signout                             385 B          [37m[1m90.3 kB[22m[39m
 + First Load JS shared by all            [37m[1m87 kB[22m[39m
-  ├ chunks/1dd3208c-5eed6ea05361d6fb.js  53.6 kB
-  ├ chunks/286-796455a05c06d915.js       31.4 kB
+  ├ chunks/1dd3208c-240d02ad5e22194c.js  53.6 kB
+  ├ chunks/286-bdeeebbe6b4d78cd.js       31.4 kB
   └ other shared chunks (total)          1.96 kB
 
 
