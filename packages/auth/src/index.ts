@@ -1,7 +1,9 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@packages/db";
+import { compareSync } from "bcrypt-ts";
 import type { DefaultSession } from "next-auth";
 import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 import Discord from "next-auth/providers/discord";
 import { env } from "../env";
 
@@ -34,6 +36,34 @@ export const {
       clientId: env.DISCORD_CLIENT_ID,
       clientSecret: env.DISCORD_CLIENT_SECRET,
     }),
+    Credentials({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      authorize: async (credentials) => {
+        if (!credentials) throw new Error("No credentials provided");
+
+        const { email, password } = credentials as any;
+        if (!email) throw new Error("Email is required");
+        if (!password) throw new Error("Password is required");
+
+        const user = await db.user.findUnique({ where: { email } });
+        if (!user) throw new Error("Invalid credentials");
+
+        if (compareSync(password, user.password || "")) {
+          return {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            image: user.image,
+          };
+        } else {
+          throw new Error("Invalid credentials");
+        }
+      },
+    }),
   ],
   callbacks: {
     session: (opts) => {
@@ -51,19 +81,6 @@ export const {
   pages: {
     signIn: "/signin",
   },
-  // cookies: {
-  //   // set cookie options on top level domain
-  //   sessionToken: {
-  //     name: `${useSecureCookies ? "__Secure-" : ""}next-auth.session-token`,
-  //     options: {
-  //       httpOnly: true,
-  //       sameSite: "lax",
-  //       path: "/",
-  //       secure: useSecureCookies,
-  //       domain: hostName == "localhost" ? hostName : "." + rootDomain, // add a . in front so that subdomains are included
-  //     },
-  //   },
-  // },
 });
 
 // export const authOptions: NextAuthOptions = {
