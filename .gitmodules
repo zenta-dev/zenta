@@ -1,12 +1,12 @@
-[submodule "apps/blog"]
-	path = apps/blog
-	url = git@github.com:zenta-dev/blog.zenta.dev.git
-	branch = main
-[submodule "apps/cv"]
-	path = apps/cv
-	url = git@github.com:zenta-dev/cv.zenta.dev.git 
-	branch = main
-[submodule "apps/auth"]
-	path = apps/auth
-	url = git@github.com:zenta-dev/auth.zenta.dev.git
-	branch = main
+# [submodule "apps/blog"]
+# 	path = apps/blog
+# 	url = git@github.com:zenta-dev/blog.zenta.dev.git
+# 	branch = main
+# [submodule "apps/cv"]
+# 	path = apps/cv
+# 	url = git@github.com:zenta-dev/cv.zenta.dev.git 
+# 	branch = main
+# [submodule "apps/auth"]
+# 	path = apps/auth
+# 	url = git@github.com:zenta-dev/auth.zenta.dev.git
+# 	branch = main
