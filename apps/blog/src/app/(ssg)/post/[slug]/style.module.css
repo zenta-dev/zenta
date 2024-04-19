@@ -1,0 +1,29 @@
+.gradient_text {
+    /* background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff, #ff0000); */
+    /* 
+    background-clip: text;
+    font-size: 3rem; */
+    @apply bg-gradient-to-r from-red-400 via-green-400 to-blue-400 text-5xl bg-clip-text text-transparent;
+    background-size: 400% 400%;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    animation: slide 20s infinite;
+}
+
+@keyframes slide {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    25% {
+        background-position: 100% 50%;
+    }
+
+    50% {
+        background-position: 0% 50%;
+    }
+
+    75% {
+        background-position: 100% 50%;
+    }
+}
