@@ -20,10 +20,9 @@ export const LoginSchema = z.object({
 export type LoginForm = z.infer<typeof LoginSchema>;
 
 export const RegisterSchema = z.object({
-  firstName: z.string({
-    required_error: "First name is required",
+  name: z.string({
+    required_error: "Name is required",
   }),
-  lastName: z.string().optional(),
   email: z
     .string({
       required_error: "Email is required",

@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Session } from "@packages/auth";
 import {
   Button,
   Card,
@@ -16,47 +15,27 @@ import {
   FormLabel,
   FormMessage,
   Input,
-  Separator,
   toast,
 } from "@packages/ui";
-import { LoginForm, LoginSchema } from "@packages/validators";
-import { signIn } from "next-auth/react";
+import { RegisterForm, RegisterSchema } from "@packages/validators";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { FaDiscord } from "react-icons/fa";
 
-export default function SignInForm({
-  session,
-  origin,
-}: {
-  session: Session | null;
-  origin: string | undefined;
-}) {
+export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
-  const form = useForm<LoginForm>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<RegisterForm>({
+    resolver: zodResolver(RegisterSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
 
-  useEffect(() => {
-    if (origin) {
-      if (session) {
-        const localOrigin = localStorage.getItem("origin");
-        window.location.href = localOrigin as string;
-      } else {
-        localStorage.setItem("origin", origin);
-      }
-    }
-  }, []);
-
-  async function onSubmit(data: LoginForm) {
-    setLoading(true);
-    const req = await fetch("/api/auth/login", {
+  async function onSubmit(data: RegisterForm) {
+    const res = await fetch("/api/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,28 +43,40 @@ export default function SignInForm({
       body: JSON.stringify(data),
     });
 
-    const res = await req.json();
-
-    if (res?.error) {
+    const json = await res.json();
+    if (json.success) {
       setLoading(false);
-      toast.error("Invalid credentials");
+      const origin = localStorage.getItem("origin");
+      toast.success(json.message);
+      window.location.href = `/signin?origin=${origin}`;
     } else {
       setLoading(false);
-      toast.success("Logged in successfully");
-      window.location.href = localStorage.getItem("origin") as string;
+      toast.error(json.message);
     }
   }
-
   return (
     <main className="flex h-screen items-center justify-center">
       <Card className="w-96">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardTitle>Register</CardTitle>
+          <CardDescription>Sign up to access your account</CardDescription>
         </CardHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <CardContent className="flex flex-col gap-4">
+            <CardContent className="flex flex-col gap-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor={field.name}>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Input your name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
@@ -93,7 +84,7 @@ export default function SignInForm({
                   <FormItem>
                     <FormLabel htmlFor={field.name}>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="Email" {...field} />
+                      <Input placeholder="Input your email" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -108,7 +99,7 @@ export default function SignInForm({
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="Password"
+                        placeholder="Input your password"
                         {...field}
                       />
                     </FormControl>
@@ -116,40 +107,24 @@ export default function SignInForm({
                   </FormItem>
                 )}
               />
-
               <p className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <Link href="/signup">
+                Already have an account?
+                <Link href={`/signin?origin=${origin}`}>
                   <Button
                     variant="link"
                     className="text-blue-500"
                     type="button"
                   >
-                    Sign up
+                    Sign in
                   </Button>
                 </Link>
               </p>
-
               <Button type="submit">
                 {loading ? (
                   <AiOutlineLoading3Quarters className=" animate-spin" />
                 ) : (
-                  "Sign in"
+                  "Sign up"
                 )}
-              </Button>
-              <div className="mx-auto flex items-center justify-center gap-2">
-                <Separator className="w-full" />
-                <p className="text-sm text-gray-500">Or</p>
-                <Separator className="w-full" />
-              </div>
-              <Button
-                variant="outline"
-                onClick={() => signIn("discord")}
-                type="button"
-                className="flex items-center justify-center gap-2"
-              >
-                <FaDiscord />
-                Sign in with Discord
               </Button>
             </CardContent>
           </form>

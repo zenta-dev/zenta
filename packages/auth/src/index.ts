@@ -1,11 +1,13 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { db } from "@packages/db";
-import { compareSync } from "bcrypt-ts";
+import { LoginSchema } from "@packages/validators";
+import { compareSync, hash } from "bcrypt-ts";
 import type { DefaultSession } from "next-auth";
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Discord from "next-auth/providers/discord";
 import { env } from "../../env/env";
+
 
 export * from "next-auth";
 
@@ -38,15 +40,19 @@ export const {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      authorize: async (credentials) => {
+      async authorize(credentials) {
         if (!credentials) throw new Error("No credentials provided");
-
-        const { email, password } = credentials as any;
+        console.log(credentials);
+        const { email, password } = LoginSchema.parse(credentials);
         if (!email) throw new Error("Email is required");
         if (!password) throw new Error("Password is required");
 
         const user = await db.user.findUnique({ where: { email } });
-        if (!user) throw new Error("Invalid credentials");
+        if (!user) {
+          throw new CredentialsSignin({
+            cause: { message: "Invalid credentials" },
+          });
+        }
 
         if (compareSync(password, user.password || "")) {
           return {
@@ -56,7 +62,9 @@ export const {
             image: user.image,
           };
         } else {
-          throw new Error("Invalid credentials");
+          throw new CredentialsSignin({
+            cause: { message: "Invalid credentials" },
+          });
         }
       },
     }),
@@ -99,3 +107,28 @@ export const {
     //       },
   },
 });
+
+export async function register({
+  name,
+  email,
+  password,
+}: {
+  name: string;
+  email: string;
+  password: string;
+}) { 
+
+  const pwhash = await hash(
+    password,
+    parseInt(process.env.SALT_ROUNDS || "10"),
+  );
+  const newUser = await db.user.create({
+    data: {
+      name,
+      email,
+      password: pwhash,
+    },
+  });
+
+  return newUser;
+}
