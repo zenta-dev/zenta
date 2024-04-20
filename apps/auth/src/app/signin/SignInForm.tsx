@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaDiscord } from "react-icons/fa";
+import { toast } from "sonner";
 
 export default function SignInForm({
   session,
@@ -64,17 +65,17 @@ export default function SignInForm({
 
     console.log("res", res);
 
-    // if (res?.ok) {
-    //   setLoading(false);
-    //   console.log("Logged in successfully");
-    //   toast.success("Logged in successfully");
-    //   // window.location.href = "/studio";
-    //   window.location.href = localStorage.getItem("origin") as string;
-    // } else {
-    //   setLoading(false);
-    //   console.log(res?.error);
-    //   toast.error(res?.error);
-    // }
+    if (res?.ok) {
+      setLoading(false);
+      console.log("Logged in successfully");
+      toast.success("Logged in successfully");
+      // window.location.href = "/studio";
+      window.location.href = localStorage.getItem("origin") as string;
+    } else {
+      setLoading(false);
+      console.log(res?.error);
+      toast.error(res?.error);
+    }
   }
 
   return (
