@@ -20,12 +20,12 @@ import {
   toast,
 } from "@packages/ui";
 import { LoginForm, LoginSchema } from "@packages/validators";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaDiscord } from "react-icons/fa";
-import { signWithCredentials, signWithDiscord } from "./action";
 
 export default function SignInForm({
   session,
@@ -58,7 +58,11 @@ export default function SignInForm({
   async function onSubmit(data: LoginForm) {
     setLoading(true);
 
-    const res = await signWithCredentials(data);
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: data.email,
+      password: data.password,
+    });
     console.log("res", res);
 
     if (res?.ok) {
@@ -142,7 +146,7 @@ export default function SignInForm({
               </div>
               <Button
                 variant="outline"
-                onClick={() => signWithDiscord()}
+                onClick={() => signIn("discord")}
                 type="button"
                 className="flex items-center justify-center gap-2"
               >
