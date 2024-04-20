@@ -1,12 +1,7 @@
-"use client";
-
 import { signOut } from "next-auth/react";
-import { useEffect } from "react";
 
-export default function SignOutPage() {
-  useEffect(() => {
-    signOut();
-  }, []);
+export default async function SignOutPage() {
+  await signOut();
 
   return (
     <div className="flex h-screen items-center justify-center">

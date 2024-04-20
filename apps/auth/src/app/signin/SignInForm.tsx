@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Session, signIn } from "@packages/auth";
+import { Session } from "@packages/auth";
 import {
   Button,
   Card,
@@ -25,6 +25,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaDiscord } from "react-icons/fa";
+import { signWithCredentials, signWithDiscord } from "./action";
 
 export default function SignInForm({
   session,
@@ -56,12 +57,8 @@ export default function SignInForm({
 
   async function onSubmit(data: LoginForm) {
     setLoading(true);
-    const res = await signIn("credentials", {
-      redirect: false,
-      email: data.email,
-      password: data.password,
-    });
 
+    const res = await signWithCredentials(data);
     console.log("res", res);
 
     if (res?.ok) {
@@ -145,7 +142,7 @@ export default function SignInForm({
               </div>
               <Button
                 variant="outline"
-                onClick={() => signIn("discord")}
+                onClick={() => signWithDiscord()}
                 type="button"
                 className="flex items-center justify-center gap-2"
               >
