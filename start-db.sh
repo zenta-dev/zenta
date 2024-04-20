@@ -29,7 +29,7 @@ fi
 
 # import env variables from .env
 set -a
-source .env
+source .env.dev
 
 DB_PASSWORD=$(echo "$DATABASE_URL" | awk -F':' '{print $3}' | awk -F'@' '{print $1}')
 
@@ -45,9 +45,16 @@ if [ "$DB_PASSWORD" = "password" ]; then
   sed -i -e "s#:password@#:$DB_PASSWORD@#" .env
 fi
 
+DB_HOST=zenta.local
+
+echo "Creating database container '$DB_CONTAINER_NAME' with password '$DB_PASSWORD'"
+echo "Database Host: $DB_HOST, Port: 5432"
+echo "Starting database container..."
+
 docker run -d \
   --name $DB_CONTAINER_NAME \
   -e POSTGRES_PASSWORD="$DB_PASSWORD" \
   -e POSTGRES_DB=zenta \
-  -p 5433:5433 \
+  -e DB_HOST=$DB_HOST \
+  -p 5432:5432 \
   docker.io/postgres && echo "Database container '$DB_CONTAINER_NAME' was successfully created"

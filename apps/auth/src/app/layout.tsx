@@ -1,3 +1,4 @@
+import { env } from "@packages/env";
 import { ThemeProvider, ThemeToggle, Toaster } from "@packages/ui";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -15,6 +16,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log("ENV", env);
   return (
     <html lang="en">
       <body className={inter.className}>

@@ -1,5 +1,5 @@
-import { env } from "@/env";
 import { auth } from "@packages/auth";
+import { env } from "@packages/env";
 import Link from "next/link";
 
 export default async function Home() {
@@ -8,13 +8,14 @@ export default async function Home() {
   const dev = env.NODE_ENV === "development";
   const authLogin = () => {
     if (dev) {
-      return "http://localhost:3000/signin?origin=cv.zenta.dev";
+      // return "http://localhost:3000/signin?origin=cv.zenta.dev";
+      return "http://zenta.local:3000/signin?origin=zenta.local:3002";
     } else {
       return "https://auth.zenta.dev/signin?origin=cv.zenta.dev";
     }
   };
   return (
-    <main className="min-h">
+    <main>
       <h1>CV App</h1>
       <div>
         {ses?.user ? (

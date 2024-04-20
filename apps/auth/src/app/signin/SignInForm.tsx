@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Session, signIn } from "@packages/auth";
 import {
   Button,
   Card,
@@ -16,16 +17,14 @@ import {
   FormMessage,
   Input,
   Separator,
+  toast,
 } from "@packages/ui";
 import { LoginForm, LoginSchema } from "@packages/validators";
-import { Session } from "next-auth";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaDiscord } from "react-icons/fa";
-import { toast } from "sonner";
 
 export default function SignInForm({
   session,

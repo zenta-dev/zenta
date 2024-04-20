@@ -1,6 +1,5 @@
 // Importing env files here to validate on build
-import "@packages/auth/env";
-import "./src/env.js";
+import "@packages/env";
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -38,7 +37,7 @@ const config = {
         source: "/cv.zenta.dev",
         destination:
           process.env.NODE_ENV === "development"
-            ? "http://localhost:3002"
+            ? "http://zenta.local:3002"
             : "https://cv.zenta.dev",
         permanent: false,
         basePath: false,

@@ -16,6 +16,7 @@ rm -rf .turbo
 rm -rf build
 rm -rf dist
 rm -rf package-lock.json
+rm -rf bun.lockb
 
 # iterate over all the configs and clean the project
 for dir in configs/*/
@@ -29,6 +30,7 @@ do
   rm -rf build
   rm -rf dist
   rm -rf package-lock.json
+  rm -rf bun.lockb
   cd ../..
 done
 
@@ -44,6 +46,7 @@ do
   rm -rf build
   rm -rf dist
   rm -rf package-lock.json
+  rm -rf bun.lockb
   cd ../..
 done
 
@@ -59,6 +62,7 @@ do
   rm -rf build
   rm -rf dist
   rm -rf package-lock.json
+  rm -rf bun.lockb
   cd ../..
 done
 

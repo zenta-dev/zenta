@@ -1,6 +1,5 @@
 // Importing env files here to validate on build
-import "@packages/auth/env";
-import "./src/env.js";
+import "@packages/env";
 
 /** @type {import("next").NextConfig} */
 const config = {

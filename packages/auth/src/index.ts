@@ -5,9 +5,9 @@ import type { DefaultSession } from "next-auth";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Discord from "next-auth/providers/discord";
-import { env } from "../env";
+import { env } from "../../env/env";
 
-export type { Session } from "next-auth";
+export * from "next-auth";
 
 declare module "next-auth" {
   interface Session {
@@ -83,19 +83,19 @@ export const {
         httpOnly: true,
         sameSite: "lax",
         path: "/",
-        domain: ".zenta.dev",
+        domain: useSecureCookies ? ".zenta.dev" : ".zenta.local",
         secure: useSecureCookies,
       },
     },
-    csrfToken: {
-      name: "__Host-authjs.csrf-token",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        domain: ".zenta.dev",
-        secure: useSecureCookies,
-      },
-    },
+    // csrfToken: {
+    //         name: "__Host-authjs.csrf-token",
+    //         options: {
+    //           httpOnly: true,
+    //           sameSite: "lax",
+    //           path: "/",
+    //           domain: useSecureCookies ? ".zenta.dev" : ".zenta.local",
+    //           secure: useSecureCookies,
+    //         },
+    //       },
   },
 });
