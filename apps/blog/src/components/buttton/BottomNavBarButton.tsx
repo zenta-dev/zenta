@@ -21,7 +21,6 @@ export const BottomNavBarButton = ({ className }: { className?: string }) => {
         className
       )}
       onClick={() => {
-        console.log("invoking toggle open", isOpen);
         toggle(!isOpen);
       }}
       aria-label={isOpen ? "Close navigation" : "Open navigation"}

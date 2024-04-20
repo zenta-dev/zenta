@@ -29,8 +29,6 @@ export async function PATCH(req: Request, { params }: Props) {
     const { id } = params;
     const { title, summary, cover, content, readTime } = parse.data;
 
-    console.log(readTime, "/words");
-
     const totalTime = calculateReadTime(readTime);
 
     const post = await prisma.post.update({
@@ -85,7 +83,6 @@ export async function PATCH(req: Request, { params }: Props) {
 
 export async function DELETE(_: Request, { params }: Props) {
   try {
-    console.log(params);
     const ses = await gss(true);
     if (!ses.success) {
       return NextResponse.json(ses);

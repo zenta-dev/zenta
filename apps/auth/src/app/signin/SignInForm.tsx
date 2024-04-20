@@ -50,7 +50,6 @@ export default function SignInForm({
         window.location.href = localOrigin as string;
       } else {
         localStorage.setItem("origin", origin);
-        console.log(localStorage.getItem("origin"));
       }
     }
   }, []);
@@ -63,17 +62,16 @@ export default function SignInForm({
       email: data.email,
       password: data.password,
     });
-    console.log("res", res);
 
     if (res?.ok) {
       setLoading(false);
-      console.log("Logged in successfully");
+
       toast.success("Logged in successfully");
       // window.location.href = "/studio";
       window.location.href = localStorage.getItem("origin") as string;
     } else {
       setLoading(false);
-      console.log(res?.error);
+
       toast.error(res?.error);
     }
   }

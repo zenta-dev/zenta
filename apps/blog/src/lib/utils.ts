@@ -19,7 +19,7 @@ export function generateHTML(json: JsonValue | undefined) {
     const item = determineHTML(node);
     html += item;
   }
-  console.log(html);
+
   return html;
 }
 
@@ -75,10 +75,10 @@ function determineHTML(node: any) {
 type RecursivelyReplaceNullWithUndefined<T> = T extends null
   ? undefined
   : T extends (infer U)[]
-  ? RecursivelyReplaceNullWithUndefined<U>[]
-  : T extends Record<string, unknown>
-  ? { [K in keyof T]: RecursivelyReplaceNullWithUndefined<T[K]> }
-  : T;
+    ? RecursivelyReplaceNullWithUndefined<U>[]
+    : T extends Record<string, unknown>
+      ? { [K in keyof T]: RecursivelyReplaceNullWithUndefined<T[K]> }
+      : T;
 
 export function nullsToUndefined<T>(
   obj: T
@@ -157,4 +157,3 @@ export function calculateReadTime(words: number | undefined) {
 
   return Math.ceil(minutes);
 }
-

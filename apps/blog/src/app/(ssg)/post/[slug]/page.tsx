@@ -33,7 +33,7 @@ export async function generateStaticParams() {
   const qPost: RSSQuery[] = posts.map((item) => {
     const tags = item.tags ?? [];
     const authors = item.authors.map((author) => {
-      console.log(author);
+      
       return {
         name: author.name || "",
         email: author.email || "",
@@ -195,7 +195,7 @@ function getPre(html: string) {
   const regex = /<pre><code class="language-(.*?)">([\s\S]+?)<\/code><\/pre>/;
   const matches = html.match(regex);
   if (!matches) {
-    return { lang: "javascript", code: "console.log('Hello, world!')" };
+    return { lang: "javascript", code: "
   }
   const [, lang, code] = matches;
   const newCode = replace(code);

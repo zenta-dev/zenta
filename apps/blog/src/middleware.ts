@@ -36,7 +36,7 @@ export default async function middleware(req: NextRequest) {
   const res = NextResponse.next();
   res.headers.set(`x-middleware-cache`, `no-cache`);
   res.headers.set(`x-middleware-path`, path);
-  console.log("[MIDDLEWARE] path", path);
+
   return res;
 }
 

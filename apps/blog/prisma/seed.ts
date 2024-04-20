@@ -1,5 +1,3 @@
-console.log("Seeding started🚀");
-
 import { PrismaClient, TechFounderType } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 const prisma = new PrismaClient();
@@ -12,7 +10,7 @@ const userSeeder = async () => {
     name: "Zenta Seeder",
     role: "ADMIN",
   };
-  console.log(`Seeding user: ${user.email} 🌱`);
+
   const hash = await bcrypt.hash(
     user.password,
     parseInt(process.env.SALT_ROUNDS || "10")
@@ -566,7 +564,6 @@ const techs: Tech[] = [
 const techSeeder = async () => {
   const admin = await userSeeder();
   for (const tech of techs) {
-    console.log(`Seeding tech: ${tech.details.name} 🌱`);
     const res = await prisma.tech.upsert({
       where: {
         name: tech.details.name,
@@ -661,7 +658,6 @@ const techSeeder = async () => {
         },
       },
     });
-    console.log(`Seeded tech: ${tech.details.name} 🌱`);
   }
 };
 
@@ -737,7 +733,6 @@ const tagSeeder = async () => {
     },
   });
   for (const tag of tags) {
-    console.log(`Seeding tag: ${tag.name} 🌱`);
     const res = await prisma.tag.upsert({
       where: {
         name: tag.name,
@@ -763,7 +758,6 @@ const tagSeeder = async () => {
         },
       },
     });
-    console.log(`Seeded tag: ${res.name} 🌱`);
   }
 };
 
@@ -797,7 +791,6 @@ const postSeeder = async () => {
   ];
 
   for (const post of posts) {
-    console.log(`Seeding post: ${post.title} 🌱`);
     const res = await prisma.post.create({
       data: {
         title: post.title,
@@ -822,7 +815,6 @@ const postSeeder = async () => {
         },
       },
     });
-    console.log(`Seeded post: ${res.title} 🌱`);
   }
 };
 

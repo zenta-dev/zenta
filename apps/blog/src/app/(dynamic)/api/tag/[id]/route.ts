@@ -74,7 +74,6 @@ export async function PATCH(req: Request, { params }: Props) {
 
 export async function DELETE(_: Request, { params }: Props) {
   try {
-    console.log(params);
     const ses = await gss(true);
     if (!ses.success) {
       return NextResponse.json(ses);

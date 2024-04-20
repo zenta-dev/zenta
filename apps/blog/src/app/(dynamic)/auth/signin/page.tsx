@@ -43,8 +43,6 @@ export default function LoginPage() {
       password: data.password,
     });
 
-    console.log("res", res);
-
     if (res?.ok) {
       setLoading(false);
       toast.success("Logged in successfully");

@@ -89,7 +89,7 @@ export const StackForm: FC<StackFormProps> = ({ initialData }) => {
           setLimit(json.errors.length);
           for (const key in json.errors) {
             const error = json.errors[key];
-            console.log(error);
+
             toast.error(error.label, { description: error.message });
           }
           setIsExpanded(false);
@@ -110,12 +110,10 @@ export const StackForm: FC<StackFormProps> = ({ initialData }) => {
     try {
       if (initialData) {
         setLoading(true);
-        console.log(initialData.id);
+
         const res = await fetch(`/api/stack/${initialData.id}`, {
           method: "DELETE",
         });
-
-        console.log(res);
 
         const json = await res.json();
 

@@ -26,7 +26,6 @@ export async function PATCH(req: Request, { params }: Props) {
         errors,
       });
     }
-    console.log("BODY", parse.data);
 
     for (const version of parse.data.versions) {
       if (!version.hash) {
@@ -164,7 +163,6 @@ export async function PATCH(req: Request, { params }: Props) {
 
 export async function DELETE(_: Request, { params }: Props) {
   try {
-    console.log(params);
     const ses = await gss(true);
     if (!ses.success) {
       return NextResponse.json(ses);

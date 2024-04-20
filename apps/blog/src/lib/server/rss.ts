@@ -5,8 +5,6 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://blog.zenta.dev";
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Zenta's Blog";
 
 export function generateRSS(data: any[]) {
-  console.log("Generating RSS feed... 🚀");
-
   const feed = new Feed({
     id: siteUrl,
     title: siteName,
@@ -46,7 +44,6 @@ export function generateRSS(data: any[]) {
   fs.writeFileSync("./public/rss.xml", feed.rss2());
   fs.writeFileSync("./public/rss.json", feed.json1());
   // fs.writeFileSync("./public/atom.xml", feed.atom1());
-  console.log("Done! 🎉");
 }
 
 export interface RSSQuery {

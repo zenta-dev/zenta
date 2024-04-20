@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default async function Home() {
   const ses = await auth();
-  console.log(ses);
+
   const dev = env.NODE_ENV === "development";
   const authLogin = () => {
     if (dev) {

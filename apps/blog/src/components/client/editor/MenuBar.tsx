@@ -49,7 +49,7 @@ export const MenuBar = ({ editor }: { editor: Editor | null }) => {
     const url = attr.src;
     const title = attr.title;
     const alt = attr.alt;
-    console.log(attr);
+
     if (url) {
       editor
         ?.chain()
