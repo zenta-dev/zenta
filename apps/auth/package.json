@@ -6,7 +6,7 @@
   "scripts": {
     "build": "bun with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
-    "dev": "bun with-env next dev",
+    "dev": "bun with-env next dev --hostname zenta.local --port 3000",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
     "start": "bun with-env next start",
@@ -47,7 +47,7 @@
     "@types/eslint": "^8.56.10",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.79",
-    "@types/react-dom": "^18.2.25", 
+    "@types/react-dom": "^18.2.25",
     "eslint": "^9.0.0",
     "eslint-config-next": "^14.2.2",
     "postcss": "^8.4.38",

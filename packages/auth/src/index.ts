@@ -87,5 +87,15 @@ export const {
         secure: useSecureCookies,
       },
     },
+    csrfToken: {
+      name: "__Host-authjs.csrf-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        domain: ".zenta.dev",
+        secure: useSecureCookies,
+      },
+    },
   },
 });
