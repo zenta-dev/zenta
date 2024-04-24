@@ -2,7 +2,7 @@
   "name": "zenta",
   "private": true,
   "prisma": {
-    "schema": "packages/database/prisma/schema.prisma"
+    "schema": "packages/db/prisma/schema.prisma"
   },
   "scripts": {
     "postinstall": "bun lint:ws && bun generate",
