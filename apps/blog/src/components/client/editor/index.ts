@@ -1,5 +1,3 @@
-export * from "./Editor";
-
 import { Blockquote } from "@tiptap/extension-blockquote";
 import { Bold } from "@tiptap/extension-bold";
 import { BubbleMenu } from "@tiptap/extension-bubble-menu";

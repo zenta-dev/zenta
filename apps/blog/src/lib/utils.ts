@@ -1,4 +1,3 @@
-import { JsonValue } from "@db/client/runtime/library";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ZodIssue } from "zod";
@@ -7,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function generateHTML(json: JsonValue | undefined) {
+export function generateHTML(json: any | undefined) {
   if (!json) {
     return "";
   }

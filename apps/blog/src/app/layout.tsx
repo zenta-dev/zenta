@@ -1,6 +1,8 @@
+import { GuestFooter, GuestHeader } from "@/components/navigation";
+import { Separator } from "@/components/separator";
 import { ThemeProvider } from "@/provider";
-import { TRPCReactProvider } from "@/trpc/react";
 import { env } from "@packages/env";
+import { Toaster } from "@packages/ui";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { ReactNode } from "react";
@@ -24,16 +26,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={montserrat.className}>
-        <TRPCReactProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange={false}
-          >
-            {children}
-          </ThemeProvider>
-        </TRPCReactProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange={false}
+        >
+          <GuestHeader />
+          {children}
+          <Separator />
+          <GuestFooter />
+          <Toaster richColors closeButton />
+        </ThemeProvider>
       </body>
     </html>
   );
