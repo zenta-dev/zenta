@@ -1,8 +1,7 @@
-import { ResizablePanel } from "@/components/ui/resizable";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { defaultLayout } from "@/lib/config";
-import { getPostById, getTagById } from "@/lib/server";
 import { nullsToUndefined } from "@/lib/utils";
+import { api } from "@/trpc/server";
+import { ResizablePanel, ScrollArea } from "@packages/ui";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { PostForm } from "./PostForm";
@@ -14,10 +13,10 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const tag = await getTagById(params.id);
+  const post = await api.post.getById({ id: params.id });
   return {
-    title: tag?.name,
-    description: tag?.description,
+    title: post?.title || "New Post",
+    description: post?.summary || "Create a new post",
   };
 }
 
@@ -27,7 +26,7 @@ export default async function PostPageId({ params }: Props) {
     redirect("/studio/tags");
   }
 
-  const post = await getPostById(id);
+  const post = await api.post.getById({ id });
 
   if (!post && id !== "new") {
     redirect("/studio/tags");

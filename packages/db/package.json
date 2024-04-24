@@ -21,18 +21,16 @@
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
-  "dependencies": {
-    "@prisma/client": "^5.12.1"
-  },
   "devDependencies": {
     "@configs/eslint-config": "*",
     "@configs/prettier-config": "*",
     "@configs/tsconfig": "*",
     "@types/node": "^20.12.7",
-    "eslint": "^9.0.0",
-    "prisma": "^5.12.1",
-    "rimraf": "^5.0.5",
+    "@types/pg": "^8.11.5",
+    "eslint": "^9.1.1",
     "prettier": "^3.2.5",
+    "prisma": "^5.13.0",
+    "rimraf": "^5.0.5",
     "typescript": "^5.4.5"
   },
   "eslintConfig": {
@@ -41,5 +39,9 @@
       "@configs/eslint-config/base"
     ]
   },
-  "prettier": "@configs/prettier-config"
+  "prettier": "@configs/prettier-config",
+  "dependencies": {
+    "@prisma/adapter-pg": "^5.13.0",
+    "pg": "^8.11.5"
+  }
 }

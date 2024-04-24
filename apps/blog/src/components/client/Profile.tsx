@@ -1,12 +1,11 @@
 "use client";
 
 import { addImageSize } from "@/lib/utils";
-import { Session } from "next-auth";
-import { signOut } from "next-auth/react";
-import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { Button } from "../ui/button";
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -14,7 +13,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@packages/ui";
+import { Session } from "next-auth";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 export function Profile({ session }: { session: Session | null }) {
   if (!session || session.user === null)

@@ -1,6 +1,7 @@
-import { gss, prisma } from "@/lib/server";
 import { normalizeZodError } from "@/lib/utils";
 import { StackSchema } from "@/schema";
+import { auth } from "@packages/auth";
+import { db } from "@packages/db";
 import { NextResponse } from "next/server";
 
 type Props = {
@@ -11,8 +12,8 @@ type Props = {
 
 export async function PATCH(req: Request, { params }: Props) {
   try {
-    const ses = await gss(true);
-    if (!ses.success) {
+    const ses = await auth();
+    if (!ses) {
       return NextResponse.json(ses);
     }
 
@@ -39,7 +40,7 @@ export async function PATCH(req: Request, { params }: Props) {
     const { name, description, logo, url, versions, homepage, founders } =
       parse.data;
 
-    const find = await prisma.tech.findUnique({
+    const find = await db.tech.findUnique({
       where: {
         id,
       },
@@ -75,7 +76,7 @@ export async function PATCH(req: Request, { params }: Props) {
       )
       .map((version) => version.id);
 
-    await prisma.techFounder.deleteMany({
+    await db.techFounder.deleteMany({
       where: {
         id: {
           in: deleteFoundersIds,
@@ -83,7 +84,7 @@ export async function PATCH(req: Request, { params }: Props) {
       },
     });
 
-    await prisma.techVersion.deleteMany({
+    await db.techVersion.deleteMany({
       where: {
         id: {
           in: deleteVersionsIds,
@@ -91,7 +92,7 @@ export async function PATCH(req: Request, { params }: Props) {
       },
     });
 
-    const tech = await prisma.tech.update({
+    const tech = await db.tech.update({
       where: {
         id,
       },
@@ -163,14 +164,14 @@ export async function PATCH(req: Request, { params }: Props) {
 
 export async function DELETE(_: Request, { params }: Props) {
   try {
-    const ses = await gss(true);
-    if (!ses.success) {
+    const ses = await auth();
+    if (!ses) {
       return NextResponse.json(ses);
     }
 
     const { id } = params;
 
-    const tech = await prisma.tech.delete({
+    const tech = await db.tech.delete({
       where: {
         id,
       },

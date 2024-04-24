@@ -1,43 +1,39 @@
-import { getToken } from "next-auth/jwt";
+// import authConfig from "@packages/auth";
+// import NextAuth from "next-auth";
+// export const { auth: middleware } = NextAuth(authConfig);
+
+import { env } from "@packages/env";
 import { NextRequest, NextResponse } from "next/server";
+
+const useSecureCookies = !!process.env.VERCEL_URL;
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   if (path === "/") {
     return NextResponse.next();
   }
-  const rawToken = await getToken({
-    req,
-    secret: process.env.NEXTAUTH_SECRET,
-    raw: true,
+
+  const url = env.NEXT_PUBLIC_AUTH_APP_URL + "/api/auth";
+  const csrfToken = req.cookies.get(
+    `${useSecureCookies ? "__Host-" : ""}authjs.csrf-token`
+  );
+  const session = req.cookies.get(
+    `${useSecureCookies ? "__Secure-" : ""}next-auth.session-token`
+  );
+
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      Cookie: `${csrfToken?.name}=${csrfToken?.value}; ${session?.name}=${session?.value}`,
+    },
   });
-
-  const isStudio = path.includes("/studio");
-  const isSignIn = path.includes("/auth/signin");
-  const isSignUp = path.includes("/auth/signup");
-  const isSignOut = path.includes("/auth/signout");
-
-  const headers = new Headers(req.headers);
-  headers.set("x-pathname", req.nextUrl.pathname);
-  if (isSignOut && !rawToken) {
-    return NextResponse.rewrite(new URL("/auth/signin", req.url).toString());
-  }
-  if (!rawToken && isStudio) {
-    return NextResponse.rewrite(new URL("/auth/signin", req.url).toString());
+  const json = await res.json();
+  if (!json.success) {
+    const url = new URL("/auth", req.url).toString();
+    console.log("AUTH", url);
+    return NextResponse.redirect(url, { status: 302 });
   }
 
-  if (rawToken && isSignIn) {
-    return NextResponse.rewrite(new URL("/studio", req.url).toString());
-  }
-
-  if (rawToken && isSignUp) {
-    return NextResponse.rewrite(new URL("/studio", req.url).toString());
-  }
-
-  const res = NextResponse.next();
-  res.headers.set(`x-middleware-cache`, `no-cache`);
-  res.headers.set(`x-middleware-path`, path);
-
-  return res;
+  return NextResponse.next();
 }
 
-export const config = { matcher: ["/studio/:path*", "/auth/:path*"] };
+export const config = { matcher: ["/studio/:path*"] };

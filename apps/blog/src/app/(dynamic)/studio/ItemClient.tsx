@@ -1,5 +1,5 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FaTags } from "react-icons/fa6";
 import { GiPostStamp } from "react-icons/gi";
 import { IoSettings } from "react-icons/io5";
@@ -7,8 +7,8 @@ import { PiStackSimpleFill } from "react-icons/pi";
 import { RiDashboard3Fill } from "react-icons/ri";
 import styles from "./style.module.css";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Button } from "@packages/ui";
 
 export const ItemClient = () => {
   const router = usePathname();

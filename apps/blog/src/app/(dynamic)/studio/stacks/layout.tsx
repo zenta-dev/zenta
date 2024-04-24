@@ -1,10 +1,13 @@
 import { ReactNode } from "react";
 
-import { Button } from "@/components/ui/button";
-import { ResizableHandle, ResizablePanel } from "@/components/ui/resizable";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { defaultLayout } from "@/lib/config";
-import { prisma } from "@/lib/server";
+import { db } from "@packages/db";
+import {
+  Button,
+  ResizableHandle,
+  ResizablePanel,
+  ScrollArea,
+} from "@packages/ui";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,7 +23,7 @@ export default async function StudioStackLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const stacks = await prisma.tech.findMany({
+  const stacks = await db.tech.findMany({
     select: {
       id: true,
       name: true,

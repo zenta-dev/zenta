@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
+import { Button } from "@packages/ui";
 import { TiPlus } from "react-icons/ti";
-import { Button } from "../ui/button";
 
 export const AddCardButton = ({
   onClick,

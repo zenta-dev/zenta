@@ -1,4 +1,4 @@
-import { JsonValue } from "@prisma/client/runtime/library";
+import { JsonValue } from "@db/client/runtime/library";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ZodIssue } from "zod";

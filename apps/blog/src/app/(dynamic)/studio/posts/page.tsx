@@ -1,8 +1,7 @@
 import { Heading } from "@/components";
 import { Separator } from "@/components/separator";
-import { Button } from "@/components/ui/button";
-import { ResizablePanel } from "@/components/ui/resizable";
 import { defaultLayout } from "@/lib/config";
+import { Button, ResizablePanel } from "@packages/ui";
 import Link from "next/link";
 import { TiPlus } from "react-icons/ti";
 export default function PostPage() {

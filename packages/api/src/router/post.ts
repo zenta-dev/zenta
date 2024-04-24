@@ -2,33 +2,104 @@ import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 export const postRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
+  getMetaPaginate: publicProcedure
+    .input(z.object({ page: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.post.findMany({
+        select: {
+          title: true,
+          slug: true,
+          cover: true,
+          summary: true,
+          updatedAt: true,
+        },
+        orderBy: {
+          updatedAt: "desc",
+        },
+        skip: 10 * (input.page - 1),
+        take: 10,
+      });
+    }),
+  getAllMetaPublic: publicProcedure.query(({ ctx }) => {
+    return ctx.db.post.findMany({
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        cover: true,
+        summary: true,
+        createdAt: true,
+        updatedAt: true,
+        tags: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        authors: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+  }),
+
+  getAllMetaProtect: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.post.findMany({
+      select: {
+        id: true,
+        title: true,
+        cover: true,
+        createdAt: true,
+      },
+    });
+  }),
+
+  getBySlug: publicProcedure
+    .input(z.object({ slug: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.post.findUnique({
+        where: {
+          slug: input.slug,
+        },
+        include: {
+          authors: true,
+          tags: true,
+        },
+      });
     }),
 
-  // create: protectedProcedure
-  //   .input(z.object({ title: z.string().min(1) }))
-  //   .mutation(async ({ ctx, input }) => {
-  //     return ctx.db.post.create({
-  //       data: {
-  //         title: input.title,
-  //         authors: { connect: { id: ctx.session.user.id } },
-  //       },
-  //     });
-  //   }),
+  getById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .query(({ input, ctx }) => {
+      return ctx.db.post.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+    }),
 
-  // getLatest: protectedProcedure.query(({ ctx }) => {
-  //   return ctx.db.post.findFirst({
-  //     orderBy: { createdAt: "desc" },
-  //     where: { createdBy: { id: ctx.session.user.id } },
-  //   });
-  // }),
-
-  getSecretMessage: protectedProcedure.query(() => {
-    return "you can now see this secret message!";
-  }),
+  incrementHeat: publicProcedure
+    .input(z.object({ id: z.string().optional() }))
+    .mutation(({ input, ctx }) => {
+      if (!input.id) {
+        return null;
+      }
+      return ctx.db.post.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          heat: {
+            increment: 1,
+          },
+        },
+      });
+    }),
 });

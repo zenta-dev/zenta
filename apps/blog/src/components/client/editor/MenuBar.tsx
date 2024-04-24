@@ -1,12 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
+  Button,
+  Input,
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@packages/ui";
 import { CodeIcon } from "@radix-ui/react-icons";
 import { Editor } from "@tiptap/react";
 import { CldUploadWidget } from "next-cloudinary";

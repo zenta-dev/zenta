@@ -1,37 +1,7 @@
-import { ItemMeta } from "@/types";
-import { prisma } from ".";
-
-export async function getMetaTechs({ limit = 5, page = 1 }) {
-  const res = await prisma.tech.findMany({
-    select: {
-      id: true,
-      name: true,
-      logo: true,
-      description: true,
-      updatedAt: true,
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-    skip: limit * (page - 1),
-    take: limit,
-  });
-
-  const techs: ItemMeta[] = res.map((tech) => {
-    return {
-      id: tech.id,
-      name: tech.name,
-      photo: tech.logo,
-      description: tech.description,
-      updatedAt: tech.updatedAt,
-    };
-  });
-
-  return techs;
-}
+import { db } from "@packages/db";
 
 export const getAllMetaTechs = async () => {
-  const techs = await prisma.tech.findMany({
+  const techs = await db.tech.findMany({
     select: {
       id: true,
       name: true,
@@ -48,7 +18,7 @@ export const getAllMetaTechs = async () => {
 };
 
 export async function getTechById(id: string) {
-  const tech = await prisma.tech.findUnique({
+  const tech = await db.tech.findUnique({
     where: {
       id,
     },
@@ -61,21 +31,49 @@ export async function getTechById(id: string) {
   return tech;
 }
 
-export async function heatCountTech(id: string | undefined) {
-  if (!id) {
-    return;
-  }
+// export async function getMetaTechs({ limit = 5, page = 1 }) {
+//   const res = await db.tech.findMany({
+//     select: {
+//       id: true,
+//       name: true,
+//       logo: true,
+//       description: true,
+//       updatedAt: true,
+//     },
+//     orderBy: {
+//       updatedAt: "desc",
+//     },
+//     skip: limit * (page - 1),
+//     take: limit,
+//   });
 
-  const tech = await prisma.tech.update({
-    where: {
-      id,
-    },
-    data: {
-      heat: {
-        increment: 1,
-      },
-    },
-  });
+//   const techs: ItemMeta[] = res.map((tech) => {
+//     return {
+//       id: tech.id,
+//       name: tech.name,
+//       photo: tech.logo,
+//       description: tech.description,
+//       updatedAt: tech.updatedAt,
+//     };
+//   });
 
-  return tech;
-}
+//   return techs;
+// }
+// export async function heatCountTech(id: string | undefined) {
+//   if (!id) {
+//     return;
+//   }
+
+//   const tech = await db.tech.update({
+//     where: {
+//       id,
+//     },
+//     data: {
+//       heat: {
+//         increment: 1,
+//       },
+//     },
+//   });
+
+//   return tech;
+// }

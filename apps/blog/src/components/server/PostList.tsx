@@ -3,7 +3,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@packages/ui";
 import { ItemMeta } from "@/types";
 import Image from "next/image";
 import Link from "next/link";

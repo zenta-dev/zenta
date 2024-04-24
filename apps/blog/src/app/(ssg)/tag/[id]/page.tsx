@@ -1,4 +1,5 @@
-import { getAllMetaTags, getTagById, heatCountTag } from "@/lib/server";
+import { getAllMetaTags, getTagById } from "@/lib/server";
+import { api } from "@/trpc/server";
 import { Metadata } from "next";
 import Image from "next/image";
 type Props = {
@@ -24,9 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function TagPage({ params }: Props) {
-  const tag = await getTagById(params.id);
+  const tag = await api.tag.getById({ id: params.id });
 
-  await heatCountTag(tag?.id);
+  await api.tag.incrementHeat({ id: params.id });
 
   return (
     <main className="max-w-5xl mx-auto my-2">

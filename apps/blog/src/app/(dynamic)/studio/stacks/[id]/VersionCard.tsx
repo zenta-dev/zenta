@@ -1,15 +1,15 @@
 import { AddCardButton } from "@/components/buttton";
 import { Separator } from "@/components/separator";
-import { Button } from "@/components/ui/button";
 import {
+  Button,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+  Input,
+  Textarea,
+} from "@packages/ui";
 import { useFieldArray } from "react-hook-form";
 import { FaTrash } from "react-icons/fa6";
 

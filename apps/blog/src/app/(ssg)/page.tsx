@@ -1,16 +1,17 @@
 import { Separator } from "@/components/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@packages/ui";
 import { Metadata } from "next";
 import Image from "next/image";
 
 import { Logo } from "@/components/brand";
 import { PostList, StackList, TagList } from "@/components/server";
-import { getMetaPosts, getMetaTags, getMetaTechs } from "@/lib/server";
 import { cn } from "@/lib/utils";
+import { api } from "@/trpc/server";
 import banner from "../../../public/cover.webp";
+import { env } from "@packages/env";
 
-const title = process.env.NEXT_PUBLIC_SITE_NAME;
-const url = process.env.NEXT_PUBLIC_SITE_URL;
+const title = env.NEXT_PUBLIC_BLOG_APP_NAME;
+const url = env.NEXT_PUBLIC_BLOG_APP_URL;
 
 export const revalidate = 3600 * 12;
 
@@ -51,9 +52,28 @@ const tabList = [
 ];
 
 export default async function Home() {
-  const tags = await getMetaTags({ limit: 10, page: 1 });
-  const posts = await getMetaPosts({ limit: 10, page: 1 });
-  const stacks = await getMetaTechs({ limit: 10, page: 1 });
+  const tags = (await api.tag.getMetaPaginate({ page: 1 })).map((tag) => ({
+    id: tag.id,
+    name: tag.name,
+    photo: tag.photo,
+    description: tag.description,
+    updatedAt: tag.updatedAt,
+  }));
+
+  const posts = (await api.post.getMetaPaginate({ page: 1 })).map((post) => ({
+    id: post.slug,
+    name: post.title,
+    photo: post.cover,
+    description: post.summary,
+    updatedAt: post.updatedAt,
+  }));
+  const stacks = (await api.tech.getMetaPaginate({ page: 1 })).map((stack) => ({
+    id: stack.id,
+    name: stack.name,
+    photo: stack.logo,
+    description: stack.description,
+    updatedAt: stack.updatedAt,
+  }));
 
   return (
     <main className="mt-4">

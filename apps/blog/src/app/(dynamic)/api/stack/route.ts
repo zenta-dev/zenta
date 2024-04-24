@@ -1,12 +1,13 @@
-import { gss, prisma } from "@/lib/server";
 import { normalizeZodError } from "@/lib/utils";
 import { StackSchema } from "@/schema";
+import { auth } from "@packages/auth";
+import { db } from "@packages/db";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const ses = await gss(true);
-    if (!ses.success) {
+    const ses = await auth();
+    if (!ses) {
       return NextResponse.json(ses);
     }
 
@@ -32,7 +33,7 @@ export async function POST(req: Request) {
     const { name, description, logo, url, versions, homepage, founders } =
       parse.data;
 
-    const find = await prisma.tech.findFirst({
+    const find = await db.tech.findFirst({
       where: {
         name,
       },
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const tech = await prisma.tech.create({
+    const tech = await db.tech.create({
       data: {
         name,
         description,

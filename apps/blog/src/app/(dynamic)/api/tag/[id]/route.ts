@@ -1,6 +1,7 @@
-import { gss, prisma } from "@/lib/server";
 import { normalizeZodError } from "@/lib/utils";
 import { TagSchema } from "@/schema";
+import { auth } from "@packages/auth";
+import { db } from "@packages/db";
 import { NextResponse } from "next/server";
 
 type Props = {
@@ -10,8 +11,8 @@ type Props = {
 };
 export async function PATCH(req: Request, { params }: Props) {
   try {
-    const ses = await gss(true);
-    if (!ses.success) {
+    const ses = await auth();
+    if (!ses) {
       return NextResponse.json(ses);
     }
 
@@ -29,7 +30,7 @@ export async function PATCH(req: Request, { params }: Props) {
     const { id } = params;
     const { name, description, photo } = parse.data;
 
-    const tag = await prisma.tag.update({
+    const tag = await db.tag.update({
       where: {
         id,
       },
@@ -74,14 +75,14 @@ export async function PATCH(req: Request, { params }: Props) {
 
 export async function DELETE(_: Request, { params }: Props) {
   try {
-    const ses = await gss(true);
-    if (!ses.success) {
+    const ses = await auth();
+    if (!ses) {
       return NextResponse.json(ses);
     }
 
     const { id } = params;
 
-    const tag = await prisma.tag.delete({
+    const tag = await db.tag.delete({
       where: {
         id,
       },

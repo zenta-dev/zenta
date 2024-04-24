@@ -1,6 +1,8 @@
-import { getAllMetaTechs, getTechById, heatCountTech } from "@/lib/server";
+import { getAllMetaTechs, getTechById } from "@/lib/server";
+import { api } from "@/trpc/server";
 import { Metadata } from "next";
 import Image from "next/image";
+
 type Props = {
   params: {
     id: string;
@@ -24,9 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function TechPage({ params }: Props) {
-  const tech = await getTechById(params.id);
+  const tech = await api.tech.getById({ id: params.id });
 
-  await heatCountTech(tech?.id);
+  await api.tech.incrementHeat({ id: params.id });
 
   return (
     <main className="max-w-5xl mx-auto my-2">

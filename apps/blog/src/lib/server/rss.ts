@@ -34,7 +34,7 @@ export function generateRSS(data: any[]) {
       link: `${siteUrl}/post/${item.slug}`,
       guid: item.id,
       image: item.cover,
-      category: tags.map((tag: any) => tag.name),
+      category: [],
       date: item.updatedAt,
       author: item.authors,
       published: item.createdAt,

@@ -1,12 +1,13 @@
-import { gss, prisma } from "@/lib/server";
 import { calculateReadTime, normalizeZodError } from "@/lib/utils";
 import { PostSchema } from "@/schema";
+import { auth } from "@packages/auth";
+import { db } from "@packages/db";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const ses = await gss(true);
-    if (!ses.success) {
+    const ses = await auth();
+    if (!ses) {
       return NextResponse.json(ses);
     }
 
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
 
     const { title, summary, cover, content, readTime } = parse.data;
 
-    const find = await prisma.post.findFirst({
+    const find = await db.post.findFirst({
       where: {
         title,
       },
@@ -43,7 +44,7 @@ export async function POST(req: Request) {
 
     const totalTime = calculateReadTime(readTime);
 
-    const post = await prisma.post.create({
+    const post = await db.post.create({
       data: {
         title,
         slug: title.toLowerCase().replace(/ /g, "-"),

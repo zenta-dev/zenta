@@ -1,8 +1,8 @@
-import { ResizablePanel } from "@/components/ui/resizable";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { defaultLayout } from "@/lib/config";
 import { getTagById } from "@/lib/server";
 import { nullsToUndefined } from "@/lib/utils";
+import { api } from "@/trpc/server";
+import { ResizablePanel, ScrollArea } from "@packages/ui";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { TagForm } from "./TagForm";
@@ -26,7 +26,7 @@ export default async function TagPageId({ params }: Props) {
   if (!id) {
     redirect("/studio/tags");
   }
-  const tag = await getTagById(id);
+  const tag = await api.tag.getById({ id });
 
   if (!tag && id !== "new") {
     redirect("/studio/tags");

@@ -1,10 +1,5 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { ItemMeta } from "@/types";
+import { Card, CardDescription, CardHeader, CardTitle } from "@packages/ui";
 import Image from "next/image";
 import Link from "next/link";
 

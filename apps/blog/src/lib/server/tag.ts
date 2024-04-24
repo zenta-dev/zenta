@@ -1,27 +1,7 @@
-import { ItemMeta } from "@/types";
-import { prisma } from ".";
+import { db } from "@packages/db";
 
-export async function getMetaTags({ limit = 5, page = 1 }) {
-  const tags: ItemMeta[] = await prisma.tag.findMany({
-    select: {
-      id: true,
-      name: true,
-      description: true,
-      photo: true,
-      updatedAt: true,
-    },
-    orderBy: {
-      updatedAt: "desc",
-    },
-    skip: limit * (page - 1),
-    take: limit,
-  });
-
-  return tags;
-}
-
-export const getAllMetaTags = async () => {
-  const tags = await prisma.tag.findMany({
+export function getAllMetaTags() {
+  return db.tag.findMany({
     select: {
       id: true,
       name: true,
@@ -33,35 +13,50 @@ export const getAllMetaTags = async () => {
       updatedAt: "desc",
     },
   });
+}
 
-  return tags;
-};
-
-export async function getTagById(id: string) {
-  const tag = await prisma.tag.findUnique({
+export function getTagById(id: string) {
+  return db.tag.findUnique({
     where: {
       id,
     },
   });
-
-  return tag;
 }
 
-export async function heatCountTag(id: string | undefined) {
-  if (!id) {
-    return;
-  }
+// export async function getMetaTags({ limit = 5, page = 1 }) {
+//   const tags: ItemMeta[] = await db.tag.findMany({
+//     select: {
+//       id: true,
+//       name: true,
+//       description: true,
+//       photo: true,
+//       updatedAt: true,
+//     },
+//     orderBy: {
+//       updatedAt: "desc",
+//     },
+//     skip: limit * (page - 1),
+//     take: limit,
+//   });
 
-  const tag = await prisma.tag.update({
-    where: {
-      id,
-    },
-    data: {
-      heat: {
-        increment: 1,
-      },
-    },
-  });
+//   return tags;
+// }
 
-  return tag;
-}
+// export async function heatCountTag(id: string | undefined) {
+//   if (!id) {
+//     return;
+//   }
+
+//   const tag = await db.tag.update({
+//     where: {
+//       id,
+//     },
+//     data: {
+//       heat: {
+//         increment: 1,
+//       },
+//     },
+//   });
+
+//   return tag;
+// }

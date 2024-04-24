@@ -17,7 +17,7 @@
     "@configs/eslint-config": "*",
     "@configs/prettier-config": "*",
     "@configs/tsconfig": "*",
-    "eslint": "^9.0.0",
+    "eslint": "^9.1.1",
     "prettier": "^3.2.5",
     "typescript": "^5.4.5"
   },

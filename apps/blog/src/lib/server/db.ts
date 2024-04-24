@@ -1,31 +1,31 @@
-import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "@prisma/client";
-import { Pool } from "pg";
-import { dev } from "../config";
+// import { dbPg } from "@db/adapter-pg";
+// import { dbClient } from "@db/client";
+// import { Pool } from "pg";
+// import { dev } from "../config";
 
-const prismaClientSingleton = () => {
-  if (dev) {
-    const client = new PrismaClient();
-    // const client = new PrismaClient();
+// const dbClientSingleton = () => {
+//   if (dev) {
+//     const client = new dbClient();
+//     // const client = new dbClient();
 
-    return client;
-  } else {
-    const connectionString = process.env.DATABASE_URL;
-    const pool = new Pool({ connectionString });
-    const adapter = new PrismaPg(pool);
-    const client = new PrismaClient({ adapter });
-    // const client = new PrismaClient();
+//     return client;
+//   } else {
+//     const connectionString = process.env.DATABASE_URL;
+//     const pool = new Pool({ connectionString });
+//     const adapter = new dbPg(pool);
+//     const client = new dbClient({ adapter });
+//     // const client = new dbClient();
 
-    return client;
-  }
-};
+//     return client;
+//   }
+// };
 
-declare global {
-  var prismaGlobal: undefined | ReturnType<typeof prismaClientSingleton>;
-}
+// declare global {
+//   var dbGlobal: undefined | ReturnType<typeof dbClientSingleton>;
+// }
 
-const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
+// const db = globalThis.dbGlobal ?? dbClientSingleton();
 
-export { prisma };
+// export { db };
 
-if (dev) globalThis.prismaGlobal = prisma;
+// if (dev) globalThis.dbGlobal = db;

@@ -1,12 +1,11 @@
 import { StudioHeader } from "@/components/navigation";
-import { Button } from "@/components/ui/button";
-import { ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { defaultLayout } from "@/lib/config";
-import { options, prisma } from "@/lib/server";
 import { cn } from "@/lib/utils";
 import { AuthProvider, ToastProvider } from "@/provider";
+import { auth } from "@packages/auth";
+import { db } from "@packages/db";
+import { Button, ResizablePanel, ResizablePanelGroup } from "@packages/ui";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth/next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { FaTags } from "react-icons/fa6";
@@ -26,12 +25,12 @@ export default async function StudioLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession(options);
+  const session = await auth();
   // if (!session) {
   //   redirect("/auth/signin");
   // }
 
-  const find = await prisma.user.findUnique({
+  const find = await db.user.findUnique({
     where: {
       id: session?.user.id,
     },

@@ -1,11 +1,10 @@
-import { options } from "@/lib/server";
-import { getServerSession } from "next-auth";
+import { auth } from "@packages/auth";
 import { BrandLink, Logo } from "../brand";
 import { ThemeButton } from "../buttton";
 import { Profile } from "../client";
 
 export const StudioHeader = async () => {
-  const session = await getServerSession(options);
+  const session = await auth();
   return (
     <header className="sticky top-0 z-50 flex items-center justify-between p-4 mx-auto backdrop-blur-xl">
       {/* Brand */}

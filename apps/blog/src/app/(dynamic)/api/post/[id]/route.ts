@@ -1,6 +1,7 @@
-import { gss, prisma } from "@/lib/server";
 import { calculateReadTime, normalizeZodError } from "@/lib/utils";
 import { PostSchema } from "@/schema";
+import { auth } from "@packages/auth";
+import { db } from "@packages/db";
 import { NextResponse } from "next/server";
 
 type Props = {
@@ -10,8 +11,8 @@ type Props = {
 };
 export async function PATCH(req: Request, { params }: Props) {
   try {
-    const ses = await gss(true);
-    if (!ses.success) {
+    const ses = await auth();
+    if (!ses) {
       return NextResponse.json(ses);
     }
 
@@ -31,7 +32,7 @@ export async function PATCH(req: Request, { params }: Props) {
 
     const totalTime = calculateReadTime(readTime);
 
-    const post = await prisma.post.update({
+    const post = await db.post.update({
       where: {
         id,
       },
@@ -83,14 +84,14 @@ export async function PATCH(req: Request, { params }: Props) {
 
 export async function DELETE(_: Request, { params }: Props) {
   try {
-    const ses = await gss(true);
-    if (!ses.success) {
+    const ses = await auth();
+    if (!ses) {
       return NextResponse.json(ses);
     }
 
     const { id } = params;
 
-    const post = await prisma.post.delete({
+    const post = await db.post.delete({
       where: {
         id,
       },

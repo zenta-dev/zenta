@@ -1,8 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { ResizableHandle, ResizablePanel } from "@/components/ui/resizable";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { defaultLayout } from "@/lib/config";
-import { prisma } from "@/lib/server";
+import { api } from "@/trpc/server";
+import {
+  Button,
+  ResizableHandle,
+  ResizablePanel,
+  ScrollArea,
+} from "@packages/ui";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,14 +22,7 @@ export default async function StudioPostLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const posts = await prisma.post.findMany({
-    select: {
-      id: true,
-      title: true,
-      cover: true,
-      createdAt: true,
-    },
-  });
+  const posts = await api.post.getAllMetaProtect();
   return (
     <>
       <ResizableHandle withHandle />

@@ -109,7 +109,7 @@ export default function RegisterPage() {
               />
               <p className="text-center text-sm">
                 Already have an account?
-                <Link href={`/signin?origin=${origin}`}>
+                <Link href={`/signin`}>
                   <Button
                     variant="link"
                     className="text-blue-500"

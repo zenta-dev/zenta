@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Button } from "@packages/ui";
 import { PersonIcon } from "@radix-ui/react-icons";
 import { CldUploadWidget } from "next-cloudinary";
 import Image from "next/image";

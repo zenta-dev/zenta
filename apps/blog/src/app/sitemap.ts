@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/server";
+import { db } from "@packages/db";
 import { MetadataRoute } from "next";
 
 function calculateChangeFrequency(
@@ -39,7 +39,7 @@ function determineAllLastChanges(post: any[], tag: any[], stack: any[]) {
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const post = await prisma.post.findMany({
+  const post = await db.post.findMany({
     select: {
       slug: true,
       updatedAt: true,
@@ -55,7 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
   });
 
-  const tags = await prisma.tag.findMany({
+  const tags = await db.tag.findMany({
     select: {
       id: true,
       createdAt: true,
@@ -71,7 +71,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
   });
 
-  const tech = await prisma.tech.findMany({
+  const tech = await db.tech.findMany({
     select: {
       id: true,
       createdAt: true,

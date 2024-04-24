@@ -1,5 +1,6 @@
 generator client {
     provider = "prisma-client-js"
+    // previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -16,7 +17,7 @@ model User {
     password      String?
 
     socials UserSocialMedia[]
-    // role    USER_ROLE         @default(USER)
+    role    USER_ROLE         @default(USER)
 
     createdAt DateTime  @default(now())
     updatedAt DateTime? @updatedAt

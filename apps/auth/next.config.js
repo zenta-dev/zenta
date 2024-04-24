@@ -4,12 +4,6 @@ import "@packages/env";
 /** @type {import("next").NextConfig} */
 const config = {
   reactStrictMode: true,
-  // webpack: (
-  //   config,
-  //   { buildId, dev, isServer, defaultLoaders, nextRuntime, webpack },
-  // ) => {
-  //   return config;
-  // },
   webpack: (config) => {
     config.resolve.extensionAlias = {
       ".js": [".ts", ".tsx", ".js", ".jsx"],
@@ -33,6 +27,15 @@ const config = {
 
   async redirects() {
     return [
+      {
+        source: "/blog.zenta.dev",
+        destination:
+          process.env.NODE_ENV === "development"
+            ? "http://zenta.local:3001"
+            : "https://blog.zenta.dev",
+        permanent: false,
+        basePath: false,
+      },
       {
         source: "/cv.zenta.dev",
         destination:

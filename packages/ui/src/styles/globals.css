@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 0% 94%;
     --foreground: 0 0% 3.9%;
 
     --card: 0 0% 100%;
@@ -33,13 +33,15 @@
     --ring: 0 0% 3.9%;
 
     --radius: 0.5rem;
+
+
   }
 
   .dark {
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 7%;
+    --foreground: 0 0% 95%;
 
-    --card: 0 0% 3.9%;
+    --card: 0 0% 8%;
     --card-foreground: 0 0% 98%;
 
     --popover: 0 0% 3.9%;
@@ -64,13 +66,135 @@
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
   }
+
+
 }
 
 @layer base {
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(0 0% 38%);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(0 0% 30%);
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: hsl(0 0% 17%);
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: hsl(0 0% 25%);
+  }
+
+
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply transition-all duration-300 ease-in-out bg-background text-foreground;
+  }
+
+  h1 {
+    @apply font-bold text-3xl my-4;
+  }
+
+  h2 {
+    @apply font-bold text-2xl my-3;
+  }
+
+  h3 {
+    @apply font-bold text-xl my-2;
+  }
+
+  ul[data-type="taskList"] {
+    @apply list-none p-0;
+
+    p {
+      @apply m-0;
+    }
+
+    li {
+      @apply flex;
+
+      >label {
+        @apply flex-initial mr-2 select-none;
+      }
+
+      >div {
+        @apply flex-1;
+      }
+
+      ul li,
+      ol li {
+        @apply list-item;
+      }
+
+      ul[data-type="taskList"]>li {
+        @apply flex;
+      }
+    }
+  }
+
+  hr {
+    @apply border-t border-border my-4;
+  }
+
+  ul {
+    @apply p-2
+  }
+
+  ul li {
+    @apply list-disc p-2;
+  }
+
+  ol {
+    @apply p-2
+  }
+
+  ol li {
+    @apply list-decimal p-2;
+  }
+
+  table {
+    @apply w-full;
+  }
+
+  table th {
+    @apply font-bold text-left dark:bg-neutral-800;
+  }
+
+  table th,
+  table td {
+    @apply border border-border p-2;
+  }
+
+  div[data-youtube-video] {
+    @apply flex items-center justify-center w-full p-4;
+  }
+
+  p {
+    a {
+      @apply text-blue-500 hover:underline;
+    }
+
+    code {
+      @apply bg-gray-200 dark:bg-gray-800 p-1 rounded;
+    }
+
+    mark {
+      @apply rounded;
+
+      em {
+        @apply p-2 text-black;
+      }
+    }
   }
 }

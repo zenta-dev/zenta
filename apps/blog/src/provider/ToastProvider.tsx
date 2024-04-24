@@ -1,6 +1,6 @@
 "use client";
-import { Toaster } from "@/components/ui/sonner";
 import { ToastContext } from "@/hooks/use-toast";
+import { Toaster } from "@packages/ui";
 import { ReactNode, useState } from "react";
 
 export const ToastProvider = ({

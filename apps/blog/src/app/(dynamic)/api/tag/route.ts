@@ -1,12 +1,13 @@
-import { gss, prisma } from "@/lib/server";
 import { normalizeZodError } from "@/lib/utils";
 import { TagSchema } from "@/schema";
+import { auth } from "@packages/auth";
+import { db } from "@packages/db";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const ses = await gss(true);
-    if (!ses.success) {
+    const ses = await auth();
+    if (!ses) {
       return NextResponse.json(ses);
     }
 
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
 
     const { name, description, photo } = parse.data;
 
-    const find = await prisma.tag.findFirst({
+    const find = await db.tag.findFirst({
       where: {
         name,
       },
@@ -41,7 +42,7 @@ export async function POST(req: Request) {
       );
     }
 
-    const tag = await prisma.tag.create({
+    const tag = await db.tag.create({
       data: {
         name,
         description,

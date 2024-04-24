@@ -1,5 +1,3 @@
-import { options } from "@/lib/server";
-import NextAuth from "next-auth/next"; 
+export { GET, POST } from "@packages/auth";
 
-const handler = NextAuth(options);
-export { handler as GET, handler as POST };
+// export const runtime = "edge";

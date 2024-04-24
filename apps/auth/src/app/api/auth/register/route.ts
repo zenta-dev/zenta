@@ -1,4 +1,3 @@
- 
 import { register } from "@packages/auth";
 import { db } from "@packages/db";
 import { NextResponse } from "next/server";
@@ -6,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const {  name, email, password } = body;
+    const { name, email, password } = body;
 
     const find = await db.user.findUnique({
       where: {
@@ -20,15 +19,15 @@ export async function POST(req: Request) {
           success: false,
           message: "User already exists",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
- 
+
     const user = register({
       name,
       email,
       password,
-    }); 
+    });
 
     if (!user) {
       return defaultErrorResponse();
@@ -39,9 +38,8 @@ export async function POST(req: Request) {
         success: true,
         message: "User created successfully",
       },
-      { status: 200 }
+      { status: 200 },
     );
-    
   } catch (error) {
     console.error(error);
     return defaultErrorResponse();
@@ -54,6 +52,6 @@ function defaultErrorResponse() {
       success: false,
       message: "An error occurred while creating the user",
     },
-    { status: 500 }
+    { status: 500 },
   );
 }

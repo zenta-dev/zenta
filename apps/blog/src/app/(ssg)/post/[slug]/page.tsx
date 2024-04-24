@@ -1,14 +1,15 @@
 import { extensions } from "@/components/client/editor";
 import { Separator } from "@/components/separator";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
   generateRSS,
   getAllMetaPosts,
   getPostBySlug,
-  heatCountPost,
   RSSQuery,
 } from "@/lib/server";
 import { addImageSize } from "@/lib/utils";
+import { api } from "@/trpc/server";
+import { env } from "@packages/env";
+import { Avatar, AvatarImage } from "@packages/ui";
 import { generateHTML } from "@tiptap/html";
 import parse from "html-react-parser";
 import { Metadata } from "next";
@@ -33,7 +34,6 @@ export async function generateStaticParams() {
   const qPost: RSSQuery[] = posts.map((item) => {
     const tags = item.tags ?? [];
     const authors = item.authors.map((author) => {
-      
       return {
         name: author.name || "",
         email: author.email || "",
@@ -61,11 +61,12 @@ export async function generateStaticParams() {
   }));
 }
 
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME;
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const siteName = env.NEXT_PUBLIC_BLOG_APP_NAME;
+const siteUrl = env.NEXT_PUBLIC_BLOG_APP_URL;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
+  // const post = await api.post.getBySlug({ slug: params.slug });
   const authors = post?.authors ?? [];
   const tags = post?.tags ?? [];
   return {
@@ -113,9 +114,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PostPage({ params }: Props) {
-  const post = await getPostBySlug(params.slug);
+  // const post = await getPostBySlug(params.slug);
+  const post = await api.post.getBySlug({ slug: params.slug });
   const content = post?.content as any;
-  await heatCountPost(post?.id);
+  await api.post.incrementHeat({ id: post?.id });
 
   let html = generateHTML(content, extensions);
   const pre = getPre(html);
@@ -153,23 +155,16 @@ export default async function PostPage({ params }: Props) {
           >
             {post?.title}
           </h1>
-          <div className="grid grid-8">
-            {post?.tags.map((item) => {
-              return (
-                <div key={item.id}>
-                  <p>{item.name}</p>
-                </div>
-              );
-            })}
-          </div>
           {post?.authors && (
             <div className="flex items-center justify-center">
               {post.authors.map((user) => (
                 <Link key={user.id} href={`mailto:${user.email}`}>
                   <div className="flex items-center justify-center">
-                    <Avatar className="h-16 w-16 flex items-center">
+                    <p className="mr-2">Written by :</p>
+                    <Avatar className="flex items-center">
                       {user.image ? (
                         <AvatarImage
+                          className="size-8 rounded-full"
                           src={addImageSize(user.image, 32, 32)}
                           alt={user.name || user.email || ""}
                         />
@@ -183,6 +178,19 @@ export default async function PostPage({ params }: Props) {
               ))}
             </div>
           )}
+          <div className="grid grid-cols-4 items-center justify-center gap-2 mt-4">
+            {post?.tags.map((item) => {
+              return (
+                <Link
+                  href={`/tag/${item.id}`}
+                  key={item.id}
+                  className="p-2 rounded bg-emerald-900"
+                >
+                  <p className="text-sm">#{item.name}</p>
+                </Link>
+              );
+            })}
+          </div>
         </section>
         <Separator />
         <article className="px-4 md:px-8 ">{newHTML}</article>
@@ -195,7 +203,7 @@ function getPre(html: string) {
   const regex = /<pre><code class="language-(.*?)">([\s\S]+?)<\/code><\/pre>/;
   const matches = html.match(regex);
   if (!matches) {
-    return { lang: "javascript", code: "
+    return { lang: "javascript", code: "" };
   }
   const [, lang, code] = matches;
   const newCode = replace(code);

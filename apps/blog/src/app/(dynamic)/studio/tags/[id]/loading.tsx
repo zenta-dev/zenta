@@ -1,8 +1,6 @@
 import { Separator } from "@/components/separator";
-import { ResizablePanel } from "@/components/ui/resizable";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Skeleton } from "@/components/ui/skeleton";
 import { defaultLayout } from "@/lib/config";
+import { ResizablePanel, ScrollArea, Skeleton } from "@packages/ui";
 
 export default function Loading() {
   return (

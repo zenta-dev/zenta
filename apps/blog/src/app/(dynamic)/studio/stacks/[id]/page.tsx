@@ -1,8 +1,8 @@
-import { ResizablePanel } from "@/components/ui/resizable";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { defaultLayout } from "@/lib/config";
 import { getTechById } from "@/lib/server";
 import { nullsToUndefined } from "@/lib/utils";
+import { api } from "@/trpc/server";
+import { ResizablePanel, ScrollArea } from "@packages/ui";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { StackForm } from "./StackForm";
@@ -26,7 +26,7 @@ export default async function StackPageId({ params }: Props) {
   if (!id) {
     redirect("/studio/stacks");
   }
-  const stack = await getTechById(id);
+  const stack = await api.tech.getById({ id });
 
   if (!stack && id !== "new") {
     redirect("/studio/stacks");

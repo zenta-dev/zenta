@@ -9,9 +9,6 @@ export async function POST(req: Request) {
       email: body.email,
       password: body.password,
     });
-
-    // console.log(res);
-
     return new NextResponse(JSON.stringify({ res }), { status: 200 });
   } catch (error) {
     console.error(error);
