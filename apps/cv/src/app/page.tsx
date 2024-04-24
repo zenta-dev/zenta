@@ -8,7 +8,6 @@ export default async function Home() {
   const dev = env.NODE_ENV === "development";
   const authLogin = () => {
     if (dev) {
-      // return "http://localhost:3000/signin?origin=cv.zenta.dev";
       return "http://zenta.local:3000/signin?origin=zenta.local:3002";
     } else {
       return "https://auth.zenta.dev/signin?origin=cv.zenta.dev";
