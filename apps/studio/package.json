@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "postinstall": "prisma generate",
     "build": "bun with-env next build",
     "clean": "git clean -xdf .next .turbo node_modules",
     "dev": "bun with-env next dev --hostname zenta.local --port 3003",
@@ -64,7 +65,7 @@
     "@trpc/client": "11.0.0-rc.334",
     "@trpc/react-query": "11.0.0-rc.334",
     "@trpc/server": "11.0.0-rc.334",
-    "cloudinary": "^2.2.0", 
+    "cloudinary": "^2.2.0",
     "html-react-parser": "^5.1.10",
     "lowlight": "^3.1.0",
     "sharp": "^0.33.3",
@@ -87,7 +88,7 @@
     "dotenv-cli": "^7.4.1",
     "eslint": "^9.1.1",
     "eslint-config-next": "^14.2.3",
-    "postcss": "^8.4.38", 
+    "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
   },
