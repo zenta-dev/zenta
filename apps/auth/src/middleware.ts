@@ -18,7 +18,7 @@ export async function middleware(req: NextRequest) {
   const res = await fetch(authUrl + "/api/auth/csrf");
   const json = await res.json();
 
-  nextRes.cookies.set("authjs.csrf-token", json.csrfToken, {
+  nextRes.cookies.set(csrfName, json.csrfToken, {
     sameSite: "lax",
     httpOnly: true,
     secure: useSecureCookies,
