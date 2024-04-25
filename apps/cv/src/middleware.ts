@@ -5,6 +5,10 @@ const useSecureCookies = !!process.env.VERCEL_URL;
 const csrfName = `${useSecureCookies ? "__Host-" : ""}authjs.csrf-token`;
 
 export async function middleware(req: NextRequest) {
+  console.log(
+    "============>>> IS PROD: ",
+    process.env.NODE_ENV === "production",
+  );
   // =================== CSRF START ===================
 
   const { cookies } = req;
@@ -15,7 +19,11 @@ export async function middleware(req: NextRequest) {
   if (!csrf) {
     const res = await fetch(authUrl + "/api/auth/csrf");
     const json = await res.json();
+    console.log("Middleware json", json);
+    console.log("Middleware json.csrfToken", json.csrfToken);
     cookies.set(csrfName, json.csrfToken);
+    console.log("Middleware csrfName", csrfName);
+    console.log("Middleware cookies", cookies.get(csrfName));
   }
 
   // =================== CSRF END ===================

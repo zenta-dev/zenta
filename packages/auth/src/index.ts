@@ -18,7 +18,7 @@ declare module "next-auth" {
   }
 }
 
-const useSecureCookies = !!process.env.VERCEL_URL;
+const useSecureCookies = process.env.NODE_ENV === "production";
 
 export const {
   handlers: { GET, POST },
