@@ -93,7 +93,7 @@ export const {
       name: `${useSecureCookies ? "__Secure-" : ""}authjs.session-token`,
       options: {
         httpOnly: true,
-        sameSite: useSecureCookies ? "none" : "lax",
+        sameSite: "lax",
         path: "/",
         domain: useSecureCookies ? ".zenta.dev" : ".zenta.local",
         secure: useSecureCookies,
@@ -103,7 +103,7 @@ export const {
       name: `${useSecureCookies ? "__Host-" : ""}authjs.csrf-token`,
       options: {
         httpOnly: true,
-        sameSite: useSecureCookies ? "none" : "lax",
+        sameSite: "lax",
         path: "/",
         domain: useSecureCookies ? ".zenta.dev" : ".zenta.local",
         secure: useSecureCookies,
