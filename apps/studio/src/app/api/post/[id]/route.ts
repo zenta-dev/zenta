@@ -1,5 +1,5 @@
 import { calculateReadTime, normalizeZodError } from "@/lib/utils";
-import { PostSchema } from "@/schema";
+import { PostSchema } from "@packages/validators";
 import { auth } from "@packages/auth";
 import { db } from "@packages/db";
 import { NextResponse } from "next/server";

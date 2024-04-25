@@ -1,7 +1,7 @@
 import { normalizeZodError } from "@/lib/utils";
-import { TagSchema } from "@/schema";
 import { auth } from "@packages/auth";
 import { db } from "@packages/db";
+import { TagSchema } from "@packages/validators";
 import { NextResponse } from "next/server";
 
 type Props = {
@@ -50,7 +50,7 @@ export async function PATCH(req: Request, { params }: Props) {
         },
         {
           status: 400,
-        }
+        },
       );
     } else {
       return NextResponse.json({
@@ -68,7 +68,7 @@ export async function PATCH(req: Request, { params }: Props) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
@@ -96,7 +96,7 @@ export async function DELETE(_: Request, { params }: Props) {
         },
         {
           status: 400,
-        }
+        },
       );
     } else {
       return NextResponse.json({
@@ -113,7 +113,7 @@ export async function DELETE(_: Request, { params }: Props) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

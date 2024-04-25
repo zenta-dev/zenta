@@ -1,8 +1,9 @@
 import { normalizeZodError } from "@/lib/utils";
-import { StackSchema } from "@/schema";
 import { auth } from "@packages/auth";
 import { db } from "@packages/db";
+import { StackSchema } from "@packages/validators";
 import { NextResponse } from "next/server";
+
 
 export async function POST(req: Request) {
   try {

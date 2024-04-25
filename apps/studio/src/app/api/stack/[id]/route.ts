@@ -1,7 +1,7 @@
 import { normalizeZodError } from "@/lib/utils";
-import { StackSchema } from "@/schema";
 import { auth } from "@packages/auth";
 import { db } from "@packages/db";
+import { StackSchema } from "@packages/validators";
 import { NextResponse } from "next/server";
 
 type Props = {
@@ -58,21 +58,23 @@ export async function PATCH(req: Request, { params }: Props) {
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
     const deleteFoundersIds = find.founders
       .filter(
         (founder) =>
-          !founders.some((newFounder) => newFounder.name === founder.name)
+          !founders.some((newFounder) => newFounder.name === founder.name),
       )
       .map((founder) => founder.id);
 
     const deleteVersionsIds = find.versions
       .filter(
         (version) =>
-          !versions.some((newVersion) => newVersion.version === version.version)
+          !versions.some(
+            (newVersion) => newVersion.version === version.version,
+          ),
       )
       .map((version) => version.id);
 
@@ -139,7 +141,7 @@ export async function PATCH(req: Request, { params }: Props) {
         },
         {
           status: 400,
-        }
+        },
       );
     } else {
       return NextResponse.json({
@@ -157,7 +159,7 @@ export async function PATCH(req: Request, { params }: Props) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
@@ -185,7 +187,7 @@ export async function DELETE(_: Request, { params }: Props) {
         },
         {
           status: 400,
-        }
+        },
       );
     } else {
       return NextResponse.json({
@@ -202,7 +204,7 @@ export async function DELETE(_: Request, { params }: Props) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

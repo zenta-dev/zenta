@@ -1,7 +1,7 @@
 import { normalizeZodError } from "@/lib/utils";
-import { TagSchema } from "@/schema";
 import { auth } from "@packages/auth";
 import { db } from "@packages/db";
+import { TagSchema } from "@packages/validators";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -59,7 +59,7 @@ export async function POST(req: Request) {
         },
         {
           status: 400,
-        }
+        },
       );
     } else {
       return NextResponse.json({
@@ -77,7 +77,7 @@ export async function POST(req: Request) {
       },
       {
         status: 400,
-      }
+      },
     );
   }
 }
