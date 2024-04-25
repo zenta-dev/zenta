@@ -14,7 +14,7 @@ export async function middleware(req: NextRequest) {
 
   nextRes.cookies.set(csrfName, json.csrfToken, {
     httpOnly: true,
-    sameSite: useSecureCookies ? "none" : "lax",
+    sameSite: "lax",
     path: "/",
     domain: useSecureCookies ? ".zenta.dev" : ".zenta.local",
     secure: useSecureCookies,
