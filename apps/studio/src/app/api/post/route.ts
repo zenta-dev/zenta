@@ -1,7 +1,7 @@
 import { calculateReadTime, normalizeZodError } from "@/lib/utils";
-import { PostSchema } from "@/schema";
 import { auth } from "@packages/auth";
 import { db } from "@packages/db";
+import { PostSchema } from "@packages/validators";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
         },
         {
           status: 400,
-        }
+        },
       );
     } else {
       return NextResponse.json({
@@ -86,7 +86,7 @@ export async function POST(req: Request) {
       },
       {
         status: 400,
-      }
+      },
     );
   }
 }
