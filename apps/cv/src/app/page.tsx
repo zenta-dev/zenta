@@ -5,14 +5,6 @@ import { env } from "@packages/env";
 export default async function Home() {
   const ses = await auth();
 
-  const dev = env.NODE_ENV === "development";
-  const authLogin = () => {
-    if (dev) {
-      return "http://zenta.local:3000/signin?origin=zenta.local:3002";
-    } else {
-      return "https://auth.zenta.dev/signin?origin=cv.zenta.dev";
-    }
-  };
   return (
     <main>
       <h1>CV App</h1>

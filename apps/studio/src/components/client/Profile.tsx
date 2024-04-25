@@ -59,7 +59,7 @@ export function Profile({ session }: { session: Session | null }) {
   async function handleSignOut() {
     const res = await fetch(
       dev
-        ? "http://zenta.local:3003/api/auth/logout"
+        ? "https://zenta.local:3003/api/auth/logout"
         : "https://studio.zenta.dev/api/auth/logout",
       {
         method: "GET",

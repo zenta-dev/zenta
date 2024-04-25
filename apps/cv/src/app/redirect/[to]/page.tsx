@@ -1,6 +1,7 @@
 "use client";
 
 import { handleSignIn } from "@/action/auth/signin";
+import { useSession } from "@packages/auth";
 import { useEffect } from "react";
 import "./redirect.css";
 
@@ -20,6 +21,7 @@ function determineRedirectUrl(to: string) {
 }
 
 export default function RedirectPage({ params }: Props) {
+  const user = useSession();
   useEffect(() => {
     determineRedirectUrl(params.to);
   }, []);

@@ -9,6 +9,7 @@ import Credentials from "next-auth/providers/credentials";
 import Discord from "next-auth/providers/discord";
 
 export * from "next-auth";
+export * from "next-auth/react";
 
 declare module "next-auth" {
   interface Session {
@@ -81,6 +82,9 @@ export const {
       };
     },
     authorized({ request, auth }) {
+      if (!auth) {
+        request.cookies.set("redirect", request.url);
+      }
       return true;
     },
   },
@@ -90,7 +94,7 @@ export const {
   },
   cookies: {
     sessionToken: {
-      name: `${useSecureCookies ? "__Secure-" : ""}authjs.session-token`,
+      name: "X-Session-Token",
       options: {
         httpOnly: true,
         sameSite: "lax",
@@ -100,7 +104,7 @@ export const {
       },
     },
     csrfToken: {
-      name: `${useSecureCookies ? "__Host-" : ""}authjs.csrf-token`,
+      name: "X-CSRF-Token",
       options: {
         httpOnly: true,
         sameSite: "lax",

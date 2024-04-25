@@ -29,7 +29,7 @@ const config = {
         source: "/blog.zenta.dev",
         destination:
           process.env.NODE_ENV === "development"
-            ? "http://zenta.local:3001"
+            ? "https://zenta.local:3001"
             : "https://blog.zenta.dev",
         permanent: false,
         basePath: false,
@@ -38,7 +38,7 @@ const config = {
         source: "/cv.zenta.dev",
         destination:
           process.env.NODE_ENV === "development"
-            ? "http://zenta.local:3002"
+            ? "https://zenta.local:3002"
             : "https://cv.zenta.dev",
         permanent: false,
         basePath: false,
@@ -47,7 +47,7 @@ const config = {
         source: "/studio.zenta.dev",
         destination:
           process.env.NODE_ENV === "development"
-            ? "http://zenta.local:3003"
+            ? "https://zenta.local:3003"
             : "https://studio.zenta.dev",
         permanent: false,
         basePath: false,

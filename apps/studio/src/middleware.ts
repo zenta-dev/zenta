@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 const useSecureCookies = !!process.env.VERCEL_URL;
 const authUrl = useSecureCookies
   ? "https://auth.zenta.dev"
-  : "http://zenta.local:3000";
+  : "https://zenta.local:3000";
 
 export async function middleware(req: NextRequest) {
   const res = await fetch(authUrl + "/api/auth/session", {
