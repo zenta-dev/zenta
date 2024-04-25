@@ -11,13 +11,18 @@
     },
     "items": [
         {
-            "url": "https://blog.zenta.dev/post/the-history-of-javaa",
-            "title": "The History of Javaa",
+            "url": "https://blog.zenta.dev/post/the-history-of-java",
+            "title": "The History of Java",
             "tags": []
         },
         {
             "url": "https://blog.zenta.dev/post/woyo",
             "title": "Woyo",
+            "tags": []
+        },
+        {
+            "url": "https://blog.zenta.dev/post/the-history-of-javaa",
+            "title": "The History of Javaa",
             "tags": []
         }
     ]

@@ -1,39 +1,51 @@
-// import authConfig from "@packages/auth";
-// import NextAuth from "next-auth";
-// export const { auth: middleware } = NextAuth(authConfig);
-
-import { env } from "@packages/env";
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 const useSecureCookies = !!process.env.VERCEL_URL;
-export default async function middleware(req: NextRequest) {
+const csrfName = `${useSecureCookies ? "__Host-" : ""}authjs.csrf-token`;
+
+export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
-  if (path === "/") {
-    return NextResponse.next();
+  // =================== CSRF START ===================
+  const { cookies } = req;
+  const csrf = cookies.get(csrfName);
+  const authUrl = useSecureCookies
+    ? "https://auth.zenta.dev"
+    : "http://zenta.local:3000";
+  if (!csrf) {
+    const res = await fetch(authUrl + "/api/auth/csrf");
+    const json = await res.json();
+    cookies.set(csrfName, json.csrfToken);
   }
 
-  const url = env.NEXT_PUBLIC_AUTH_APP_URL + "/api/auth";
-  const csrfToken = req.cookies.get(
-    `${useSecureCookies ? "__Host-" : ""}authjs.csrf-token`
-  );
-  const session = req.cookies.get(
-    `${useSecureCookies ? "__Secure-" : ""}next-auth.session-token`
-  );
+  // =================== CSRF END ===================
 
-  const res = await fetch(url, {
-    method: "GET",
+  // =================== AUTH START ===================
+  // if url is /dashboard, check if user is logged in
+  const res = await fetch(authUrl + "/api/auth/session", {
     headers: {
-      Cookie: `${csrfToken?.name}=${csrfToken?.value}; ${session?.name}=${session?.value}`,
+      cookie: req.headers.get("cookie") || "",
     },
   });
-  const json = await res.json();
-  if (!json.success) {
-    const url = new URL("/auth", req.url).toString();
-    console.log("AUTH", url);
-    return NextResponse.redirect(url, { status: 302 });
+  const ses = await res.json();
+  if (!ses?.user) {
+    const path = req.nextUrl.pathname;
+    console.log("Middleware path", path);
+    if (
+      path.startsWith("/redirect") ||
+      path.startsWith("/api") ||
+      path.startsWith("/_next")
+    ) {
+      return NextResponse.next({ request: req });
+    }
+
+    const url = new URL(`/redirect/auth`, req.url).toString();
+    return NextResponse.redirect(url);
   }
 
-  return NextResponse.next();
+  return NextResponse.next({ request: req });
 }
 
-export const config = { matcher: ["/studio/:path*"] };
+export const config = {
+  matcher: "/:path*",
+};

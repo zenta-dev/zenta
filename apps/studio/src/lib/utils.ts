@@ -1,5 +1,4 @@
-import { JsonValue } from "@db/client/runtime/library";
-import { type ClassValue, clsx } from "clsx";
+import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { ZodIssue } from "zod";
 
@@ -7,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function generateHTML(json: JsonValue | undefined) {
+export function generateHTML(json: any | undefined) {
   if (!json) {
     return "";
   }
@@ -50,7 +49,7 @@ function determineHTML(node: any) {
             (item: any) =>
               `<li className="${item.checked ? "line-through" : ""}">${
                 item.content[0].content[0].text
-              }</li>`
+              }</li>`,
           )
           .join("")}</ul>`;
       }
@@ -65,7 +64,7 @@ function determineHTML(node: any) {
         return `<blockquote className="pl-4 border-l-4 border-neutral-500">${node.content
           .map(
             (item: any) =>
-              '<p className="italic">' + item.content[0].text + "</p>"
+              '<p className="italic">' + item.content[0].text + "</p>",
           )
           .join("")}</blockquote>`;
       }
@@ -81,7 +80,7 @@ type RecursivelyReplaceNullWithUndefined<T> = T extends null
       : T;
 
 export function nullsToUndefined<T>(
-  obj: T
+  obj: T,
 ): RecursivelyReplaceNullWithUndefined<T> {
   if (obj === null || obj === undefined) {
     return undefined as any;

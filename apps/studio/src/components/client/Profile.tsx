@@ -1,5 +1,6 @@
 "use client";
 
+import { dev } from "@/lib/config";
 import { addImageSize } from "@/lib/utils";
 import {
   Avatar,
@@ -13,12 +14,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  toast,
 } from "@packages/ui";
 import { Session } from "next-auth";
-import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export function Profile({ session }: { session: Session | null }) {
+  const router = useRouter();
   if (!session || session.user === null)
     return (
       <>
@@ -46,10 +49,29 @@ export function Profile({ session }: { session: Session | null }) {
         .map((n) => n[0])
         .join("");
       return (
-        <AvatarFallback className="bg-primary-foreground text-primary-background">
+        <AvatarFallback className="text-primary-background bg-primary-foreground">
           {initials}
         </AvatarFallback>
       );
+    }
+  }
+
+  async function handleSignOut() {
+    const res = await fetch(
+      dev
+        ? "http://zenta.local:3003/api/auth/logout"
+        : "https://studio.zenta.dev/api/auth/logout",
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    const json = await res.json();
+    // console.log(json);
+    if (json.redirect) {
+      router.push("/redirect/auth");
+    } else {
+      toast.error("An error occurred");
     }
   }
 
@@ -73,18 +95,12 @@ export function Profile({ session }: { session: Session | null }) {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href={"/studio"}>
+          <Link href={""}>
             <DropdownMenuItem>Studio</DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() => {
-            signOut();
-          }}
-        >
-          Log out
-        </DropdownMenuItem>
+        <DropdownMenuItem onClick={handleSignOut}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
