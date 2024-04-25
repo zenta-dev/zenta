@@ -15,7 +15,9 @@ export async function middleware(req: NextRequest) {
     : "http://zenta.local:3000";
   if (!csrf) {
     const res = await fetch(authUrl + "/api/auth/csrf");
+    console.log("Middleware res", res);
     const json = await res.json();
+    console.log("Middleware json", json);
     cookies.set(csrfName, json.csrfToken);
   }
 
