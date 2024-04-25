@@ -26,7 +26,7 @@ function determineRedirectUrl(to: string) {
 export default function RedirectPage({ params }: Props) {
   useEffect(() => {
     const timer = setTimeout(() => {
-      window.location.href = determineRedirectUrl(params.to).toString();
+      // window.location.href = determineRedirectUrl(params.to).toString();
     }, 2000);
     return () => {
       clearTimeout(timer);
