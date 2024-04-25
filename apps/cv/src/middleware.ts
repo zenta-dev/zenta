@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 const useSecureCookies = !!process.env.VERCEL_URL;
 const csrfName = `${useSecureCookies ? "__Host-" : ""}authjs.csrf-token`;
 
-export async function middleware(req: NextRequest) { 
+export async function middleware(req: NextRequest) {
   const { cookies } = req;
   const csrf = cookies.get(csrfName);
   const authUrl = useSecureCookies
@@ -27,17 +27,7 @@ export async function middleware(req: NextRequest) {
 
   if (!ses?.user) {
     const url = new URL(`/redirect/auth`, req.url).toString();
-    const res = NextResponse.rewrite(url, { request: req });
-    if (csrfToken !== "") {
-      res.cookies.set(csrfName, csrfToken, {
-        sameSite: "lax",
-        secure: useSecureCookies,
-        path: "/",
-        domain: useSecureCookies ? ".zenta.dev" : ".zenta.local",
-      });
-    }
-
-    return res;
+    return NextResponse.rewrite(url, { request: req });
   }
 
   return NextResponse.next({ request: req });

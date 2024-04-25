@@ -90,7 +90,7 @@ export const {
   },
   cookies: {
     sessionToken: {
-      name: `${useSecureCookies ? "__Secure-" : ""}next-auth.session-token`,
+      name: `${useSecureCookies ? "__Secure-" : ""}authjs.session-token`,
       options: {
         httpOnly: true,
         sameSite: useSecureCookies ? "none" : "lax",
