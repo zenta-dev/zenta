@@ -8,6 +8,7 @@ export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   // =================== CSRF START ===================
   const { cookies } = req;
+  console.log("Middleware cookies", cookies);
   const csrf = cookies.get(csrfName);
   const authUrl = useSecureCookies
     ? "https://auth.zenta.dev"

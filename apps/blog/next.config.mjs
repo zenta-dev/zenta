@@ -1,4 +1,3 @@
-// Importing env files here to validate on build
 import "@packages/env";
 
 /** @type {import('next').NextConfig} */
@@ -12,10 +11,7 @@ const nextConfig = {
     };
     return config;
   },
-  /** Enables hot reloading for local packages without a build step */
   transpilePackages: ["@packages/db", "@packages/ui"],
-
-  /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   images: {

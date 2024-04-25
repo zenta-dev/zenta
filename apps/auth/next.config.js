@@ -12,7 +12,6 @@ const config = {
     };
     return config;
   },
-  /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
     "@packages/api",
     "@packages/auth",
@@ -21,7 +20,6 @@ const config = {
     "@packages/validators",
   ],
 
-  /** We already do linting and typechecking as separate tasks in CI */
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
 
@@ -58,10 +56,10 @@ const config = {
   },
 
   async headers() {
-    // cors policy
     return [
       {
         source: "/(.*)",
+        source: "/api/:path*",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
           { key: "Access-Control-Allow-Origin", value: "*" },
