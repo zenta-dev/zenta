@@ -1,6 +1,6 @@
+import { LoginButton } from "@/components/LoginButton";
 import { auth } from "@packages/auth";
 import { env } from "@packages/env";
-import Link from "next/link";
 
 export default async function Home() {
   const ses = await auth();
@@ -24,9 +24,7 @@ export default async function Home() {
         ) : (
           <div>
             <h1>Not logged in</h1>
-            <Link href={authLogin()} className="rounded bg-blue-700 p-2">
-              signIn
-            </Link>
+            <LoginButton />
           </div>
         )}
       </div>

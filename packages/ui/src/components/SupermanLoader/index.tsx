@@ -1,5 +1,6 @@
 import { cn } from "../..";
-import styles from "./redirect.module.css";
+// @ts-ignore
+import style from "./redirect.module.css";
 
 export const SupermanLoader = ({
   withParentClass = true,
@@ -12,23 +13,23 @@ export const SupermanLoader = ({
         withParentClass && "relative h-full w-full overflow-hidden",
       )}
     >
-      <div className={styles.main_frame}>
-        <span className={styles.main_frame_span}>
+      <div className={style.main_frame}>
+        <span className={style.main_frame_span}>
           <span></span>
           <span></span>
           <span></span>
           <span></span>
         </span>
-        <div className={styles.inner_frame}>
-          <span className={styles.inner_frame_span}></span>
-          <div className={styles.person_face}></div>
+        <div className={style.inner_frame}>
+          <span className={style.inner_frame_span}></span>
+          <div className={style.person_face}></div>
         </div>
       </div>
-      <div className={styles.longfazers}>
-        <span className={styles.longfazers_span}></span>
-        <span className={styles.longfazers_span}></span>
-        <span className={styles.longfazers_span}></span>
-        <span className={styles.longfazers_span}></span>
+      <div className={style.longfazers}>
+        <span className={style.longfazers_span}></span>
+        <span className={style.longfazers_span}></span>
+        <span className={style.longfazers_span}></span>
+        <span className={style.longfazers_span}></span>
       </div>
     </div>
   );

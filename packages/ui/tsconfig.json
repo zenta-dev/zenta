@@ -1,10 +1,11 @@
 {
   "extends": "@configs/tsconfig/base.json",
   "include": [
+    ".",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "tsup.config.ts"
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

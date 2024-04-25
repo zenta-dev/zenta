@@ -1,5 +1,6 @@
 "use client";
 
+import { handleSignIn } from "@/action/auth/signin";
 import { useEffect } from "react";
 import "./redirect.css";
 
@@ -12,12 +13,7 @@ type Props = {
 function determineRedirectUrl(to: string) {
   switch (to) {
     case "auth":
-      // remove cookies
-      return new URL(
-        process.env.NODE_ENV === "development"
-          ? "http://zenta.local:3000/signin?origin=cv.zenta.dev"
-          : "https://auth.zenta.dev/signin?origin=cv.zenta.dev",
-      );
+      handleSignIn();
     default:
       return to;
   }
@@ -25,12 +21,7 @@ function determineRedirectUrl(to: string) {
 
 export default function RedirectPage({ params }: Props) {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      window.location.href = determineRedirectUrl(params.to).toString();
-    }, 2000);
-    return () => {
-      clearTimeout(timer);
-    };
+    determineRedirectUrl(params.to);
   }, []);
   return (
     <>
