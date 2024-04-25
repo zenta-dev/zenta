@@ -7,9 +7,9 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
-    NEXTAUTH_SECRET: z.string(),
-    NEXTAUTH_JWT_SECRET: z.string(),
-    NEXTAUTH_URL: z.preprocess(
+    AUTH_SECRET: z.string(),
+    AUTH_JWT_SECRET: z.string(),
+    AUTH_URL: z.preprocess(
       (str) => process.env.VERCEL_URL ?? str,
       process.env.VERCEL ? z.string() : z.string().url(),
     ),
@@ -34,9 +34,9 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
 
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-    NEXTAUTH_JWT_SECRET: process.env.NEXTAUTH_JWT_SECRET,
+    AUTH_SECRET: process.env.AUTH_SECRET,
+    AUTH_URL: process.env.AUTH_URL,
+    AUTH_JWT_SECRET: process.env.AUTH_JWT_SECRET,
 
     DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,

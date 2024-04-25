@@ -26,7 +26,7 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
-  secret: env.NEXTAUTH_SECRET,
+  secret: env.AUTH_SECRET,
   adapter: PrismaAdapter(db),
   trustHost: true,
   providers: [
