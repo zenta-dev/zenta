@@ -1,16 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
-  const useSecureCookies = !!process.env.VERCEL_URL;
+  const useSecureCookies = process.env.NODE_ENV === "production";
   const csrfName = `${useSecureCookies ? "__Host-" : ""}authjs.csrf-token`;
 
   const nextRes = NextResponse.next();
-
-  const { cookies } = req;
-  const csrf = cookies.get(csrfName);
-  if (csrf) {
-    return nextRes;
-  }
 
   const authUrl = useSecureCookies
     ? "https://auth.zenta.dev"
@@ -19,12 +13,16 @@ export async function middleware(req: NextRequest) {
   const json = await res.json();
 
   nextRes.cookies.set(csrfName, json.csrfToken, {
-    sameSite: "lax",
     httpOnly: true,
-    secure: useSecureCookies,
+    sameSite: useSecureCookies ? "none" : "lax",
     path: "/",
     domain: useSecureCookies ? ".zenta.dev" : ".zenta.local",
+    secure: useSecureCookies,
   });
 
   return nextRes;
 }
+
+export const config = {
+  match: "/:path*",
+};
