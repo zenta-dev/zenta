@@ -10,7 +10,7 @@
     "dev": "bun with-env next dev --experimental-https --hostname zenta.local --port 3003",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "dotenv -v SKIP_ENV_VALIDATION=1 next lint",
-    "start": "bun with-env next start --port 3003",
+    "start": "bun with-env next start --hostname zenta.local --port 3003",
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },

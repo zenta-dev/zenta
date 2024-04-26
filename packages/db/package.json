@@ -21,6 +21,11 @@
     "clean": "rm -rf .turbo node_modules",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@packages/env": "*",
+    "@prisma/adapter-pg": "^5.13.0",
+    "pg": "^8.11.5"
+  },
   "devDependencies": {
     "@configs/eslint-config": "*",
     "@configs/prettier-config": "*",
@@ -39,9 +44,5 @@
       "@configs/eslint-config/base"
     ]
   },
-  "prettier": "@configs/prettier-config",
-  "dependencies": {
-    "@prisma/adapter-pg": "^5.13.0",
-    "pg": "^8.11.5"
-  }
+  "prettier": "@configs/prettier-config"
 }
