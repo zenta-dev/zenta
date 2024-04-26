@@ -1,14 +1,8 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@packages/ui";
-import { ItemMeta } from "@/types";
+import { Card, CardDescription, CardHeader, CardTitle } from "@packages/ui";
 import Image from "next/image";
 import Link from "next/link";
 
-export const PostList = async ({ posts }: { posts: ItemMeta[] }) => {
+export const PostList = async ({ posts }: { posts: any[] }) => {
   return (
     <section aria-labelledby="post-list-heading">
       <h2 id="post-list-heading" className="sr-only">

@@ -1,6 +1,8 @@
 import { signOut } from "@packages/auth";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const res = await signOut({ redirect: false });

@@ -1,9 +1,8 @@
-import { ItemMeta } from "@/types";
 import { Card, CardDescription, CardHeader, CardTitle } from "@packages/ui";
 import Image from "next/image";
 import Link from "next/link";
 
-export const TagList = ({ tags }: { tags: ItemMeta[] }) => {
+export const TagList = ({ tags }: { tags: any[] }) => {
   return (
     <section aria-labelledby="tag-list-heading">
       <h2 id="tag-list-heading" className="sr-only">

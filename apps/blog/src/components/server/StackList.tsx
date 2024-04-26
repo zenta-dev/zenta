@@ -1,14 +1,8 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@packages/ui";
-import { ItemMeta } from "@/types";
+import { Card, CardDescription, CardHeader, CardTitle } from "@packages/ui";
 import Image from "next/image";
 import Link from "next/link";
 
-export const StackList = async ({ stacks }: { stacks: ItemMeta[] }) => {
+export const StackList = async ({ stacks }: { stacks: any[] }) => {
   return (
     <section aria-labelledby="stacks-list-heading">
       <h2 id="stacks-list-heading" className="sr-only">
