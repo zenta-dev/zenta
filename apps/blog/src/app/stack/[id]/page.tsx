@@ -34,7 +34,7 @@ export default async function TechPage({ params }: Props) {
       <article>
         <figure className="inline-flex flex-col items-center relative w-full drop-shadow-2xl p-4">
           <Image
-            className="rounded-xl object-cover object-center h-48 sm:h-64 md:h-96"
+            className="rounded-xl transition-all duration-300 object-cover object-center h-48 sm:h-64 md:h-96"
             src={tech?.logo ?? "https://via.placeholder.com/360/144"}
             alt={tech?.name ?? "Tag logo"}
             width={1024}

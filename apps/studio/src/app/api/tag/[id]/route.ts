@@ -28,7 +28,7 @@ export async function PATCH(req: Request, { params }: Props) {
     }
 
     const { id } = params;
-    const { name, description, photo } = parse.data;
+    const { name, description, photo, color } = parse.data;
 
     const tag = await db.tag.update({
       where: {
@@ -38,6 +38,7 @@ export async function PATCH(req: Request, { params }: Props) {
         name,
         description,
         photo,
+        color,
         updaterId: ses?.user?.id,
       },
     });

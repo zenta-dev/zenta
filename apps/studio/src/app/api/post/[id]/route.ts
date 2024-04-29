@@ -1,7 +1,7 @@
 import { calculateReadTime, normalizeZodError } from "@/lib/utils";
-import { PostSchema } from "@packages/validators";
 import { auth } from "@packages/auth";
 import { db } from "@packages/db";
+import { PostSchema } from "@packages/validators";
 import { NextResponse } from "next/server";
 
 type Props = {
@@ -28,9 +28,53 @@ export async function PATCH(req: Request, { params }: Props) {
     }
 
     const { id } = params;
-    const { title, summary, cover, content, readTime } = parse.data;
+    const { title, summary, cover, content, readTime, tags, techs } =
+      parse.data;
 
     const totalTime = calculateReadTime(readTime);
+
+    // unconnect all tags and techs from post
+    const postTags = await db.post.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        tags: {
+          select: {
+            id: true,
+          },
+        },
+        stack: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    if (tags) {
+      await db.post.update({
+        where: {
+          id,
+        },
+        data: {
+          tags: {
+            disconnect: postTags?.tags,
+          },
+        },
+      });
+    }
+    if (techs) {
+      await db.post.update({
+        where: {
+          id,
+        },
+        data: {
+          stack: {
+            disconnect: postTags?.stack,
+          },
+        },
+      });
+    }
 
     const post = await db.post.update({
       where: {
@@ -48,6 +92,12 @@ export async function PATCH(req: Request, { params }: Props) {
             id: ses?.user?.id,
           },
         },
+        tags: {
+          connect: tags?.map((tag: string) => ({ id: tag })),
+        },
+        stack: {
+          connect: techs?.map((tech: string) => ({ id: tech })),
+        },
       },
     });
 
@@ -59,7 +109,7 @@ export async function PATCH(req: Request, { params }: Props) {
         },
         {
           status: 400,
-        }
+        },
       );
     } else {
       return NextResponse.json({
@@ -77,7 +127,7 @@ export async function PATCH(req: Request, { params }: Props) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
@@ -105,7 +155,7 @@ export async function DELETE(_: Request, { params }: Props) {
         },
         {
           status: 400,
-        }
+        },
       );
     } else {
       return NextResponse.json({
@@ -122,7 +172,7 @@ export async function DELETE(_: Request, { params }: Props) {
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }

@@ -10,7 +10,12 @@ export const GuestFooter = () => {
       <p>
         &copy; {new Date().getFullYear().toString()} by {siteName}
       </p>
-      <Link href={`${siteUrl}/rss.xml`} rel="noreferrer" target="_blank">
+      <Link
+        href={`${siteUrl}/rss.xml`}
+        rel="noreferrer"
+        target="_blank"
+        aria-label="Zenta RSS"
+      >
         <MdRssFeed color="#ee802f" size="30px" />
       </Link>
     </footer>

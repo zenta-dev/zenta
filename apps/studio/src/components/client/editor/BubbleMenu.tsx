@@ -39,14 +39,14 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
     <TiptapBubbleMenu
       editor={editor}
       tippyOptions={{ duration: 100 }}
-      className="bg-neutral-900 rounded p-2"
+      className="rounded bg-neutral-900 p-2"
     >
       {/* Bold */}
       <Button
         onClick={() => editor.chain().focus().toggleBold().run()}
         variant={variant("bold", { level: 1 })}
         type="button"
-        className="hover:bg-neutral-700 bg-neutral-800"
+        className="bg-neutral-800 hover:bg-neutral-700"
       >
         <FontBoldIcon />
       </Button>
@@ -56,7 +56,7 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
         onClick={() => editor.chain().focus().toggleItalic().run()}
         variant={variant("italic")}
         type="button"
-        className="hover:bg-neutral-700 bg-neutral-800"
+        className="bg-neutral-800 hover:bg-neutral-700"
       >
         <span className="italic">I</span>
       </Button>
@@ -64,7 +64,7 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
       {/* Highlight */}
       <Popover>
         <PopoverTrigger>
-          <Button type="button" className="hover:bg-neutral-700 bg-neutral-800">
+          <Button type="button" className="bg-neutral-800 hover:bg-neutral-700">
             <span className="bg-yellow-300 text-neutral-900">H</span>
           </Button>
         </PopoverTrigger>
@@ -77,7 +77,7 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
               }
               variant={variant("highlight", { color: value })}
               type="button"
-              className={`hover:bg-neutral-700 bg-neutral-800`}
+              className={`bg-neutral-800 hover:bg-neutral-700`}
               style={{ backgroundColor: value }}
             >
               <span className={`bg-${color}-300 text-neutral-900`}>
@@ -93,7 +93,7 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
         onClick={() => editor.chain().focus().toggleStrike().run()}
         variant={variant("strike")}
         type="button"
-        className="hover:bg-neutral-700 bg-neutral-800"
+        className="bg-neutral-800 hover:bg-neutral-700"
       >
         <StrikethroughIcon />
       </Button>
@@ -103,7 +103,7 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
         onClick={() => editor.chain().focus().toggleSubscript().run()}
         variant={variant("subscript")}
         type="button"
-        className="hover:bg-neutral-700 bg-neutral-800"
+        className="bg-neutral-800 hover:bg-neutral-700"
       >
         <FaSubscript />
       </Button>
@@ -113,7 +113,7 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
         onClick={() => editor.chain().focus().toggleSuperscript().run()}
         variant={variant("superscript")}
         type="button"
-        className="hover:bg-neutral-700 bg-neutral-800"
+        className="bg-neutral-800 hover:bg-neutral-700"
       >
         <FaSuperscript />
       </Button>
@@ -123,7 +123,7 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
         onClick={() => editor.chain().focus().toggleUnderline().run()}
         variant={variant("underline")}
         type="button"
-        className="hover:bg-neutral-700 bg-neutral-800"
+        className="bg-neutral-800 hover:bg-neutral-700"
       >
         <FaUnderline />
       </Button>
@@ -131,8 +131,8 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
       {/* Link */}
       <Popover>
         <PopoverTrigger>
-          <Button type="button" className="hover:bg-neutral-700 bg-neutral-800">
-            <span className="underline text-white">L</span>
+          <Button type="button" className="bg-neutral-800 hover:bg-neutral-700">
+            <span className="text-white underline">L</span>
           </Button>
         </PopoverTrigger>
         <PopoverContent>
@@ -176,7 +176,7 @@ export const BubbleMenu = ({ editor }: { editor: Editor | null }) => {
         onClick={() => editor.chain().focus().toggleCode().run()}
         variant={variant("code")}
         type="button"
-        className="hover:bg-neutral-700 bg-neutral-800"
+        className="bg-neutral-800 hover:bg-neutral-700"
       >
         <CodeIcon />
       </Button>

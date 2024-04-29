@@ -7,13 +7,16 @@ export const PostSchema = z.object({
   }),
   cover: z.string().optional(),
   summary: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+  techs: z.array(z.string()).optional(),
+  authors: z.array(z.string()).optional(),
   content: z.any(),
   readTime: z.number().optional(),
 });
 
 export type PostFormValue = z.infer<typeof PostSchema>;
 
-export const CreatePostSchema = z.object({
-  title: z.string().min(1),
-  content: z.string().min(1),
-});
+// export const CreatePostSchema = z.object({
+//   title: z.string().min(1),
+//   content: z.string().min(1),
+// });

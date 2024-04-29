@@ -26,20 +26,29 @@ export default async function PostPageId({ params }: Props) {
     redirect("/tags");
   }
 
-  const post = await api.post.getById({ id });
-
-  if (!post && id !== "new") {
-    redirect("/tags");
+  const post = (await api.post.getById({ id })) as any;
+  if ((!post && id !== "new") || post === null) {
+    redirect("/posts");
   }
+
+  post.tags = post!.tags.map((tag: any) => tag.id);
+  post.techs = post!.stack.map((tech: any) => tech.id);
+
+  console.log(post);
+
+  const tags = await api.tag.getAllMetaProtect();
+  const techs = await api.tech.getAllMetaProtect();
 
   return (
     <>
       <ResizablePanel defaultSize={defaultLayout[2]}>
-        <section>
-          <ScrollArea className="h-[calc(83vh)]">
-            <PostForm initialData={nullsToUndefined(post)} />
-          </ScrollArea>
-        </section>
+        <ScrollArea className="h-[calc(83vh)]">
+          <PostForm
+            initialData={nullsToUndefined(post)}
+            tags={tags}
+            techs={techs}
+          />
+        </ScrollArea>
       </ResizablePanel>
     </>
   );

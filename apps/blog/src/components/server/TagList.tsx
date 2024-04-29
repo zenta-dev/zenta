@@ -2,9 +2,15 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@packages/ui";
 import Image from "next/image";
 import Link from "next/link";
 
-export const TagList = ({ tags }: { tags: any[] }) => {
+export const TagList = ({
+  tags,
+  className,
+}: {
+  tags: any[];
+  className?: string;
+}) => {
   return (
-    <section aria-labelledby="tag-list-heading">
+    <section aria-labelledby="tag-list-heading" className={className}>
       <h2 id="tag-list-heading" className="sr-only">
         Tag List
       </h2>
@@ -18,7 +24,7 @@ export const TagList = ({ tags }: { tags: any[] }) => {
               >
                 <figure className="inline-flex flex-col items-center   relative w-full drop-shadow-2xl p-4">
                   <Image
-                    className="rounded-xl object-cover object-center h-28 md:h-48"
+                    className="rounded-xl object-cover transition-all duration-300 object-center h-28 md:h-48"
                     src={tag.photo ?? "https://via.placeholder.com/360/144"}
                     alt={tag.name}
                     priority={false}

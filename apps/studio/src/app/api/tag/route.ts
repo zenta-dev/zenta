@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       });
     }
 
-    const { name, description, photo } = parse.data;
+    const { name, description, photo, color } = parse.data;
 
     const find = await db.tag.findFirst({
       where: {
@@ -47,6 +47,7 @@ export async function POST(req: Request) {
         name,
         description,
         photo,
+        color,
         creatorId: ses?.user?.id,
       },
     });

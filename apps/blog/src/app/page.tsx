@@ -80,8 +80,10 @@ export default async function Home() {
       <section className="inline-flex flex-col space-y-3 items-center overflow-hidden relative w-full drop-shadow-2xl group-hover:scale-105 transition-transform duration-200 ease-out px-5">
         <Image
           src={banner}
-          className="rounded-3xl object-cover object-center h-48 md:h-72 max-w-7xl"
+          className=" transition-all duration-300 rounded-3xl object-cover object-center h-48 md:h-72 max-w-5xl"
           alt={`Banner image for ${title} landing page`}
+          width={1024}
+          height={288}
           priority
         />
         <Logo

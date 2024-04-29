@@ -22,7 +22,8 @@ export async function POST(req: Request) {
       });
     }
 
-    const { title, summary, cover, content, readTime } = parse.data;
+    const { title, summary, cover, content, readTime, tags, techs } =
+      parse.data;
 
     const find = await db.post.findFirst({
       where: {
@@ -56,6 +57,12 @@ export async function POST(req: Request) {
           connect: {
             id: ses?.user?.id,
           },
+        },
+        tags: {
+          connect: tags?.map((tag: string) => ({ id: tag })),
+        },
+        stack: {
+          connect: techs?.map((tech: string) => ({ id: tech })),
         },
       },
     });

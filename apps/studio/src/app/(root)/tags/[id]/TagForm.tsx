@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { env } from "@packages/env";
 import {
   Button,
+  ColorPicker,
   Form,
   FormControl,
   FormField,
@@ -204,6 +205,21 @@ export const TagForm: FC<TagFormProps> = ({ initialData }) => {
                 <FormLabel htmlFor="description">Description</FormLabel>
                 <FormControl>
                   <Textarea disabled={loading} {...field} />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="color"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2">
+                <FormLabel htmlFor="color">Color</FormLabel>
+                <FormControl>
+                  <ColorPicker
+                    value={field.value || "#000000"}
+                    onChange={(color) => field.onChange(color)}
+                  />
                 </FormControl>
               </FormItem>
             )}

@@ -102,7 +102,7 @@
     @apply transition-all duration-300 ease-in-out bg-background text-foreground;
   }
 
-  h1 {
+  /* h1 {
     @apply font-bold text-3xl my-4;
   }
 
@@ -196,5 +196,5 @@
         @apply p-2 text-black;
       }
     }
-  }
+  } */
 }

@@ -5,6 +5,7 @@ export const TagSchema = z.object({
   name: z.string({
     required_error: "Name is required",
   }),
+  color: z.string().optional(),
   description: z.string().optional(),
   photo: z.string().optional(),
 });

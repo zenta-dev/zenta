@@ -142,7 +142,7 @@ export default async function PostPage({ params }: Props) {
         <section>
           <figure className="inline-flex flex-col items-center relative w-full drop-shadow-2xl p-4">
             <Image
-              className="rounded-xl object-cover object-center h-48 sm:h-64 md:h-96"
+              className="rounded-xl transition-all duration-300 object-cover object-center h-48 sm:h-64 md:h-96 shadow-lg"
               src={post?.cover ?? "https://via.placeholder.com/360/144"}
               alt={post?.title ?? "Post photo"}
               width={1024}
@@ -177,15 +177,16 @@ export default async function PostPage({ params }: Props) {
               ))}
             </div>
           )}
-          <div className="grid grid-cols-4 items-center justify-center gap-2 mt-4">
+          <div className="grid grid-cols-2 p-4 lg:p-0 md:grid-cols-4 transition-all duration-300 items-center justify-center gap-2 mt-4">
             {post?.tags.map((item) => {
               return (
                 <Link
                   href={`/tag/${item.id}`}
                   key={item.id}
                   className="p-2 rounded bg-emerald-900"
+                  style={{ backgroundColor: item.color || "#064E3B" }}
                 >
-                  <p className="text-sm">#{item.name}</p>
+                  <p className="text-sm text-white">#{item.name}</p>
                 </Link>
               );
             })}

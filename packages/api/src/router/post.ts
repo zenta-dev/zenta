@@ -82,6 +82,18 @@ export const postRouter = createTRPCRouter({
         where: {
           id: input.id,
         },
+        include: {
+          tags: {
+            select: {
+              id: true,
+            },
+          },
+          stack: {
+            select: {
+              id: true,
+            },
+          },
+        },
       });
     }),
 

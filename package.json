@@ -12,6 +12,7 @@
     "clean:workspaces": "turbo clean",
     "db:push": "bun -F db push",
     "db:studio": "bun -F db studio",
+    "db:seed": "turbo run db:seed",
     "dev": "turbo dev --parallel",
     "start": "turbo start",
     "generate": "turbo run generate",

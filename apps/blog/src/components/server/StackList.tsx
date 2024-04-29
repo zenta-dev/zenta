@@ -18,7 +18,7 @@ export const StackList = async ({ stacks }: { stacks: any[] }) => {
               >
                 <figure className="inline-flex flex-col items-center   relative w-full drop-shadow-2xl p-4">
                   <Image
-                    className="rounded-xl object-cover object-center h-28 md:h-48"
+                    className="rounded-xl transition-all duration-300 object-cover object-center h-28 md:h-48"
                     src={stack.photo ?? "https://via.placeholder.com/360/144"}
                     alt={stack.name}
                     priority={false}

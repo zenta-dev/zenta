@@ -148,6 +148,7 @@ model Tech {
     homepage    String?
     founders    TechFounder[]
     versions    TechVersion[]
+    color       String?
     heat        Int           @default(0)
     tags        Tag[]
     posts       Post[]
@@ -162,6 +163,7 @@ model Tag {
     photo       String?
     techs       Tech[]
     posts       Post[]
+    color       String?
     heat        Int       @default(0)
     createBy    User?     @relation("createBy", fields: [creatorId], references: [id], onDelete: Cascade)
     creatorId   String?

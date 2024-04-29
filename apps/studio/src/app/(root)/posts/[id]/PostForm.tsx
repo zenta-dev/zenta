@@ -9,6 +9,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { env } from "@packages/env";
 import {
   Button,
+  cn,
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
   Form,
   FormControl,
   FormField,
@@ -16,18 +23,25 @@ import {
   FormLabel,
   ImageUpload,
   Input,
+  Label,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Separator,
   Textarea,
 } from "@packages/ui";
 import { PostFormValue, PostSchema } from "@packages/validators";
+import { Check, ChevronsUpDown } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaTrash } from "react-icons/fa6";
 import { toast } from "sonner";
 
-export const PostForm: FC<PostFormProps> = ({ initialData }) => {
+export const PostForm: FC<PostFormProps> = ({ initialData, tags, techs }) => {
+  console.log(initialData);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -43,8 +57,20 @@ export const PostForm: FC<PostFormProps> = ({ initialData }) => {
     defaultValues: initialData || {
       title: "",
       summary: "",
+      cover: "",
+      tags: [],
+      techs: [],
       content: {},
     },
+  });
+
+  const useTagsFieldArray = useFieldArray({
+    control: form.control,
+    name: "tags",
+  });
+  const useTechsFieldArray = useFieldArray({
+    control: form.control,
+    name: "techs",
   });
 
   const onSubmit = async (data: PostFormValue) => {
@@ -189,6 +215,287 @@ export const PostForm: FC<PostFormProps> = ({ initialData }) => {
               </FormItem>
             )}
           />
+          <Label>Tags</Label>
+          <Separator />
+          <section className="grid grid-cols-2 gap-2">
+            {useTagsFieldArray.fields?.map((tag, index) => (
+              <FormField
+                control={form.control}
+                name={`tags.${index}`}
+                key={tag.id}
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel htmlFor={`tags.${tag.id}.name`} className="p-0">
+                      Tag {index + 1}
+                    </FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              "h-16 w-full justify-between",
+                              !field.value && "text-muted-foreground",
+                            )}
+                          >
+                            <div className="flex items-center gap-2">
+                              {field.value && (
+                                <Image
+                                  src={
+                                    tags.find((tags) => tags.id === field.value)
+                                      ?.photo ||
+                                    "https://via.placeholder.com/32"
+                                  }
+                                  alt={
+                                    tags.find((tags) => tags.id === field.value)
+                                      ?.name || "Tag"
+                                  }
+                                  className="h-8 w-8 rounded-full"
+                                  width={32}
+                                  height={32}
+                                />
+                              )}
+                              <p className="truncate">
+                                {field.value
+                                  ? tags.find((tags) => tags.id === field.value)
+                                      ?.name
+                                  : "Select tags"}
+                            </p>
+                            </div>
+                            <div className="flex items-center">
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => {
+                                  useTagsFieldArray.remove(index);
+                                }}
+                              >
+                                <FaTrash className="mr-1" />
+                              </Button>
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </div>
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Search tag" />
+                          <CommandList>
+                            <CommandEmpty>No tags found</CommandEmpty>
+                            <CommandGroup>
+                              {tags.map((tag) => (
+                                <CommandItem
+                                  value={tag.name}
+                                  key={tag.id}
+                                  onSelect={() => {
+                                    const tags = form.getValues("tags") || [];
+                                    if (tags.includes(tag.id)) {
+                                      toast.error("Tag already selected");
+                                      return;
+                                    } else {
+                                      form.setValue(`tags.${index}`, tag.id);
+                                    }
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      tag.id === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0",
+                                    )}
+                                  />
+                                  <div className="flex items-center gap-2">
+                                    <Image
+                                      src={
+                                        tag.photo ||
+                                        "https://via.placeholder.com/32"
+                                      }
+                                      alt={tag.name}
+                                      className="h-8 w-8 rounded-full"
+                                      width={32}
+                                      height={32}
+                                    />
+                                    {tag.name}
+                                  </div>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                )}
+              />
+            ))}
+            <div>
+              <Label>&nbsp;</Label>
+              <Button
+                variant="outline"
+                type="button"
+                className="h-16 w-full"
+                onClick={() => {
+                  const tags = form.getValues("tags") || [];
+                  const lastTag = tags[tags.length - 1];
+                  if (tags.length === 0 || tags.length === null) {
+                    useTagsFieldArray.append("");
+                    return;
+                  }
+                  if (!lastTag || lastTag === "") {
+                    toast.error("Please fill the previous tag");
+                    return;
+                  }
+                  useTagsFieldArray.append("");
+                }}
+              >
+                Add tag
+              </Button>
+            </div>
+          </section>{" "}
+          <Label className="m-0 p-0">Techs</Label>
+          <Separator className="m-0 p-0" />
+          <section className="grid grid-cols-2 gap-2">
+            {useTechsFieldArray.fields?.map((tech, index) => (
+              <FormField
+                control={form.control}
+                name={`techs.${index}`}
+                key={tech.id}
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel
+                      htmlFor={`techs.${tech.id}.name`}
+                      className="p-0"
+                    >
+                      Tech {index + 1}
+                    </FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant="outline"
+                            role="combobox"
+                            className={cn(
+                              "h-16 w-full justify-between",
+                              !field.value && "text-muted-foreground",
+                            )}
+                          >
+                            <div className="flex items-center gap-2">
+                              {field.value && (
+                                <Image
+                                  src={
+                                    techs.find(
+                                      (techs) => techs.id === field.value,
+                                    )?.logo || "https://via.placeholder.com/32"
+                                  }
+                                  alt={
+                                    techs.find(
+                                      (techs) => techs.id === field.value,
+                                    )?.name || "tech"
+                                  }
+                                  className="h-8 w-8 rounded-full"
+                                  width={32}
+                                  height={32}
+                                />
+                              )}
+                              <p className="truncate">
+                                {field.value
+                                  ? techs.find(
+                                      (techs) => techs.id === field.value,
+                                    )?.name
+                                  : "Select techs"}
+                              </p>
+                            </div>
+                            <div className="flex items-center">
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => {
+                                  useTechsFieldArray.remove(index);
+                                }}
+                              >
+                                <FaTrash className="mr-1" />
+                              </Button>
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </div>
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Search tech" />
+                          <CommandList>
+                            <CommandEmpty>No techs found</CommandEmpty>
+                            <CommandGroup>
+                              {techs.map((tech) => (
+                                <CommandItem
+                                  value={tech.name}
+                                  key={tech.id}
+                                  onSelect={() => {
+                                    const techs = form.getValues("techs") || [];
+                                    if (techs.includes(tech.id)) {
+                                      toast.error("Tech already selected");
+                                      return;
+                                    } else {
+                                      form.setValue(`techs.${index}`, tech.id);
+                                    }
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      tech.id === field.value
+                                        ? "opacity-100"
+                                        : "opacity-0",
+                                    )}
+                                  />
+                                  <div className="flex items-center gap-2">
+                                    <Image
+                                      src={tech.logo}
+                                      alt={tech.name}
+                                      className="h-8 w-8 rounded-full"
+                                      width={32}
+                                      height={32}
+                                    />
+                                    {tech.name}
+                                  </div>
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </FormItem>
+                )}
+              />
+            ))}
+            <div>
+              <Label>&nbsp;</Label>
+              <Button
+                variant="outline"
+                type="button"
+                className="h-16 w-full"
+                onClick={() => {
+                  const techs = form.getValues("techs") || [];
+                  const lasttech = techs[techs.length - 1];
+                  if (techs.length === 0 || techs.length === null) {
+                    useTechsFieldArray.append("");
+                    return;
+                  }
+                  if (!lasttech || lasttech === "") {
+                    toast.error("Please fill the previous tech");
+                    return;
+                  }
+                  useTechsFieldArray.append("");
+                }}
+              >
+                Add tech
+              </Button>
+            </div>
+          </section>
+          <Separator />
           <FormField
             control={form.control}
             name="summary"
