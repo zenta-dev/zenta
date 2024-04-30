@@ -14,13 +14,42 @@ export async function POST(req: Request) {
     });
 
     if (find) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "User already exists",
+      const account = await db.account.findFirst({
+        where: {
+          userId: find.id,
         },
-        { status: 400 },
-      );
+      });
+
+      if (account) {
+        const user = db.user.update({
+          where: {
+            id: find.id,
+          },
+          data: {
+            password,
+          },
+        });
+
+        if (!user) {
+          return defaultErrorResponse();
+        }
+
+        return NextResponse.json(
+          {
+            success: true,
+            message: "User was registered, but the password was updated",
+          },
+          { status: 200 },
+        );
+      } else {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "User already exists",
+          },
+          { status: 400 },
+        );
+      }
     }
 
     const user = register({
