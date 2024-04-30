@@ -46,6 +46,7 @@ export default async function TagPage({ params }: Props) {
   ).map((post) => ({
     id: post.id,
     name: post.title,
+    slug: post.slug,
     photo: post.cover,
     description: post.summary,
     updatedAt: post.updatedAt,

@@ -17,7 +17,7 @@ export const PostList = async ({
       <ul role="list" className="grid grid-cols-2 md:gap-4 gap-2">
         {posts.map((post) => (
           <li key={post.id}>
-            <Link href={`/post/${post.id}`}>
+            <Link href={`/post/${post.slug}`}>
               <Card
                 role="article"
                 className="transition-transform duration-300 hover:shadow-lg hover:scale-105 hover:ring-1 min-h-full overflow-hidden"
