@@ -1,19 +1,14 @@
-import { getServerSession } from "@packages/supabase";
-import { cookies } from "next/headers";
+import { defaultLayout } from "@/helpers";
+import { ResizableHandle, ResizablePanel } from "@packages/ui";
 
 export default async function Page(): Promise<JSX.Element> {
-  const ses = await getServerSession({ cookies: cookies() });
-
-  const user = ses?.user.user_metadata;
-
-  if (!user) {
-    // redirect("/");
-  }
+  const total = (defaultLayout[1] as number) + (defaultLayout[2] as number);
   return (
-    <main>
-      {user?.full_name
-        ? `Welcome back, ${user.full_name}`
-        : "Sign in to continue"}
-    </main>
+    <>
+      <ResizableHandle disabled />
+      <ResizablePanel defaultSize={total}>
+        <h1>woyoo</h1>
+      </ResizablePanel>
+    </>
   );
 }

@@ -13,8 +13,6 @@ export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
   const next = searchParams.get("next") ?? "";
-  console.log("code", code);
-  console.log("next", next);
 
   if (code) {
     const supabase = createAuthServer({ cookies: cookies() });
@@ -23,7 +21,6 @@ export async function GET(request: Request) {
     if (!error) {
       // match the known origins with next to redirect the user
 
-      console.log("redirecting to", knownOrigins.includes(next));
       return NextResponse.redirect(`${origin}/${next}`);
     }
   }

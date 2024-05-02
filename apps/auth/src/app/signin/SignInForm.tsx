@@ -42,10 +42,9 @@ export default function SignInForm({
 
   useEffect(() => {
     if (callbackUri) {
-      console.log(callbackUri);
       if (data) {
         const localcallbackUri = localStorage.getItem("callbackUri");
-        console.log(localcallbackUri);
+
         window.location.href = localcallbackUri as string;
       } else {
         localStorage.setItem("callbackUri", callbackUri);

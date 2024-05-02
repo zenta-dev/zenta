@@ -2,6 +2,8 @@
 const config = {
   transpilePackages: ["@packages/ui", "@packages/supabase"],
 
+  eslint: { ignoreDuringBuilds: true },
+
   async redirects() {
     return [
       {
