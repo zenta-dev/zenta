@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const config = {
   transpilePackages: ["@packages/ui", "@packages/supabase"],
 };
+
+export default config;

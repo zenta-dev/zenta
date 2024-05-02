@@ -39,7 +39,7 @@ export const RegisterForm = () => {
     });
 
     const json = JSON.parse(res);
-    console.log(json);
+
     if (json.success) {
       setLoading(false);
       const origin = localStorage.getItem("origin");

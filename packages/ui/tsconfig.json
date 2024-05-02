@@ -10,10 +10,12 @@
   },
   "include": [
     ".",
-    "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/components",
+    "src/custom.d.ts"
   ],
   "exclude": [
     "node_modules"

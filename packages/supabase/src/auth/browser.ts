@@ -1,8 +1,12 @@
 import { env } from "@/env";
 import { createBrowserClient } from "@supabase/ssr";
+import { useMemo } from "react";
 
 export const createAuthBrowser = () => {
-  const sb = createBrowserClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY);
+  const sb = createBrowserClient(
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  );
 
   return sb;
 };
@@ -23,3 +27,7 @@ export const getBrowserSession = async () => {
 
   return data;
 };
+
+export function useSupabaseClient() {
+  return useMemo(createAuthBrowser, []);
+}

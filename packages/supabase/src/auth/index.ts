@@ -6,6 +6,7 @@ export type {
   OAuthResponse,
   Session,
   SupabaseClient,
+  User,
 } from "@supabase/supabase-js";
 
 export * from "./browser";

@@ -1,6 +1,7 @@
 "use server";
 
-import createSupabaseServerClient from "@/lib/supabase/server";
+import { createAuthServer } from "@packages/supabase";
+import { cookies } from "next/headers";
 import { RegisterSchemaType } from "./_schema";
 
 export async function signUpWithEmailAndPassword({
@@ -10,8 +11,8 @@ export async function signUpWithEmailAndPassword({
   data: RegisterSchemaType;
   emailRedirectTo?: string;
 }) {
-  const supabase = await createSupabaseServerClient();
-  const result = await supabase.auth.signUp({
+  const sb = createAuthServer({ cookies: cookies() });
+  const result = await sb.auth.signUp({
     email: data.email,
     password: data.password,
     options: {

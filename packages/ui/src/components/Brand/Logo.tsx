@@ -1,17 +1,9 @@
 import { cn } from "@packages/ui";
 import Image from "next/image";
 import Link from "next/link";
-import logo from "../../../public/logo.svg";
+import logo from "./logo.svg";
 
-export const Logo = ({
-  className,
-  width,
-  height,
-}: {
-  className?: string;
-  width?: number;
-  height?: number;
-}) => {
+export const Logo = ({ className }: { className?: string }) => {
   return (
     <Link href="/">
       <Image src={logo} alt="Logo" className={cn("rounded-lg", className)} />

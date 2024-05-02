@@ -1,18 +1,17 @@
 import { getServerSession } from "@packages/supabase";
-import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 export default async function Page(): Promise<JSX.Element> {
-  4;
-  const ses = await getServerSession();
-  console.log("[STUDIO APP] ses", ses);
+  const ses = await getServerSession({ cookies: cookies() });
+
   const user = ses?.user.user_metadata;
 
   if (!user) {
-    redirect("/");
+    // redirect("/");
   }
   return (
     <main>
-      {user.full_name
+      {user?.full_name
         ? `Welcome back, ${user.full_name}`
         : "Sign in to continue"}
     </main>

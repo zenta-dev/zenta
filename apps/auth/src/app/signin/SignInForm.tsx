@@ -1,8 +1,7 @@
 "use client";
 
-import useSupabaseClient from "@/lib/supabase/client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AuthProviderType, Session } from "@packages/supabase";
+import { AuthProviderType, User, useSupabaseClient } from "@packages/supabase";
 import {
   Button,
   CardContent,
@@ -25,11 +24,11 @@ import { signInWithEmailAndPassword } from "./_actions";
 import { LoginSchema, LoginSchemaType } from "./_schema";
 
 export default function SignInForm({
-  session,
-  origin,
+  data,
+  callbackUri,
 }: {
-  session: Session | null;
-  origin: string | undefined;
+  data: User | undefined;
+  callbackUri: string | undefined;
 }) {
   const supabase = useSupabaseClient();
   const [loading, setLoading] = useState(false);
@@ -42,12 +41,14 @@ export default function SignInForm({
   });
 
   useEffect(() => {
-    if (origin) {
-      if (session) {
-        const localOrigin = localStorage.getItem("origin");
-        window.location.href = localOrigin as string;
+    if (callbackUri) {
+      console.log(callbackUri);
+      if (data) {
+        const localcallbackUri = localStorage.getItem("callbackUri");
+        console.log(localcallbackUri);
+        window.location.href = localcallbackUri as string;
       } else {
-        localStorage.setItem("origin", origin);
+        localStorage.setItem("callbackUri", callbackUri);
       }
     }
   }, []);
@@ -63,15 +64,16 @@ export default function SignInForm({
     } else {
       setLoading(false);
       toast.success("Logged in successfully");
-      window.location.href = localStorage.getItem("origin") as string;
+      window.location.href = localStorage.getItem("callbackUri") as string;
     }
   }
 
   const handleOauthLogin = (provider: AuthProviderType) => {
+    const localcallbackUri = localStorage.getItem("callbackUri");
     supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${location.origin}/auth/callback`,
+        redirectTo: `${location.origin}/auth/callback?next=${localcallbackUri}`,
       },
     });
   };

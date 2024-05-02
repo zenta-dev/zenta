@@ -24,7 +24,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     ".next/types/**/*.ts",
-    "../../packages/ui/src/components/BrandLink.tsx"
+    "../../packages/ui"
   ],
   "exclude": [
     "node_modules"
