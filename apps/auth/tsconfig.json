@@ -1,0 +1,32 @@
+{
+  "extends": "@configs/tsconfig/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "allowJs": true,
+  },
+  "include": [
+    ".",
+    "next-env.d.ts",
+    "next.config.js",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next/types/**/*.ts",
+    "../../packages/ui/src/components/BrandLink.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

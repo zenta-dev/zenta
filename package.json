@@ -3,13 +3,14 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "dev": "turbo dev",
+    "dev": "turbo dev --parallel",
+    "start": "turbo start",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@configs/eslint-config": "*",
+    "@configs/tsconfig": "*",
     "prettier": "^3.2.5",
     "turbo": "latest"
   },
@@ -19,6 +20,14 @@
   "packageManager": "bun@1.1.4",
   "workspaces": [
     "apps/*",
+    "configs/*",
     "packages/*"
-  ]
+  ],
+  "eslintConfig": {
+    "extends": [
+      "@configs/eslint-config/base",
+      "@configs/eslint-config/react"
+    ]
+  },
+  "prettier": "@configs/prettier-config"
 }
