@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { dev, env } from "@/env";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
 export const createAuthServer = ({ cookies }: { cookies: any }) => {
@@ -20,6 +20,15 @@ export const createAuthServer = ({ cookies }: { cookies: any }) => {
             cookies.set({ name, value: "", ...options });
           } catch (error) {}
         },
+      },
+      cookieOptions: {
+        name: "sb",
+        sameSite: "lax",
+        secure: true,
+        httpOnly: true,
+        path: "/",
+        domain: dev ? ".zenta.local" : ".zenta.dev",
+        maxAge: 60 * 60 * 24 * 30, // 30 days
       },
     },
   );

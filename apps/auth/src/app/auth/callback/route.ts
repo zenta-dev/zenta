@@ -1,30 +1,32 @@
+import { dev, env } from "@/env";
 import { createAuthServer } from "@packages/supabase";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-const knownOrigins = [
-  "studio.zenta.dev",
-  "auth.zenta.dev",
-  "cv.zenta.dev",
-  "zenta.dev",
-];
+export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url);
-  const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "";
+  const baseURL = dev ? "https://zenta.local:3000" : env.NEXT_PUBLIC_APP_URL;
+  try {
+    const { searchParams } = new URL(request.url);
+    const code = searchParams.get("code");
+    const next = searchParams.get("next") ?? "";
 
-  if (code) {
-    const supabase = createAuthServer({ cookies: cookies() });
+    if (code) {
+      const supabase = createAuthServer({ cookies: cookies() });
 
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      // match the known origins with next to redirect the user
+      const { error } = await supabase.auth.exchangeCodeForSession(code);
 
-      return NextResponse.redirect(`${origin}/${next}`);
+      console.log("[STUDIO APP] Auth code exchange error", error);
+      if (!error) {
+        return NextResponse.redirect(`${baseURL}/${next}`);
+      }
     }
-  }
 
-  // return the user to an error page with instructions
-  return NextResponse.redirect(`${origin}/auth/auth-code-error`);
+    // return the user to an error page with instructions
+    return NextResponse.redirect(`${baseURL}/auth/auth-code-error`);
+  } catch (e) {
+    console.error(e);
+    return NextResponse.redirect(`${baseURL}/auth/auth-code-error`);
+  }
 }
