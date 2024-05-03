@@ -71,8 +71,9 @@ export default function SignInForm({
   const handleOauthLogin = (provider: AuthProviderType) => {
     const localcallbackUri = localStorage.getItem("callbackUri");
     const baseURL = dev
-      ? "https://zenta.local:3000"
+      ? "https://auth.zenta.local:3000"
       : process.env.NEXT_PUBLIC_APP_URL;
+
     supabase.auth.signInWithOAuth({
       provider,
       options: {

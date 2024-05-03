@@ -25,7 +25,7 @@ export const env = createEnv({
 
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
     NEXT_PUBLIC_APP_URL: dev
-      ? "https://zenta.local:3000"
+      ? "https://auth.zenta.local:3000"
       : process.env.NEXT_PUBLIC_APP_URL,
   },
 

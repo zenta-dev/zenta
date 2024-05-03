@@ -1,8 +1,10 @@
 import { authUpdateSession } from "@packages/supabase";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(request: NextRequest) {
-  return await authUpdateSession(request);
+export async function middleware(req: NextRequest) {
+  const res: NextResponse = await authUpdateSession(req);
+
+  return res;
 }
 
 export const config = {

@@ -20,7 +20,7 @@ export default async function RootLayout({
     "use server";
     const sb = createAuthServer({ cookies: cookies() });
     await sb.auth.signOut();
-    redirect("/redirect/auth");
+    redirect("/");
   };
 
   return (

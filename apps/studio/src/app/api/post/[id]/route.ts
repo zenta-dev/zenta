@@ -34,18 +34,19 @@ export async function PATCH(req: Request, { params }: Props) {
 
     const totalTime = calculateReadTime(readTime);
 
-    // unconnect all tags and techs from post
-    const postTags = await api.post.getById({
+    const postFind = await api.post.getById({
       id,
     });
     if (tags) {
       await api.post.unlinkTags({
         id,
+        tags: postFind?.tags.map((tag) => tag.id) || [],
       });
     }
     if (techs) {
       await api.post.unlinkTechs({
         id,
+        techs: postFind?.stack.map((tech) => tech.id) || [],
       });
     }
 
@@ -55,8 +56,7 @@ export async function PATCH(req: Request, { params }: Props) {
       summary,
       cover,
       content,
-      readTime: totalTime,
-      authors: [ses.user.id],
+      readTime: totalTime, 
       tags,
       techs,
     });

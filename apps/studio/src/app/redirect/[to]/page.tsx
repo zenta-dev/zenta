@@ -14,7 +14,7 @@ function determineRedirectUrl(to: string) {
     case "auth":
       return new URL(
         process.env.NODE_ENV === "development"
-          ? "https://zenta.local:3000/signin?callbackUri=studio.zenta.dev"
+          ? "https://auth.zenta.local:3000/signin?callbackUri=studio.zenta.dev"
           : "https://auth.zenta.dev/signin?callbackUri=studio.zenta.dev",
       );
     default:

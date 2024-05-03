@@ -4,6 +4,7 @@
   "scripts": {
     "postinstall": "turbo postinstall",
     "db:push": "turbo db:push",
+    "db:seed": "turbo db:seed",
     "build": "turbo build",
     "dev": "turbo dev --parallel",
     "start": "turbo start",

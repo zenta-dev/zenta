@@ -10,8 +10,8 @@ export const Header = async ({
 }: {
   name: string;
   className?: string;
-  data: User | undefined;
-  handleLogout: () => void;
+  data?: User | null;
+  handleLogout?: () => void;
 }) => {
   return (
     <header

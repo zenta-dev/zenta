@@ -5,13 +5,15 @@ import { useRouter } from "next/navigation";
 export const LogoutButton = ({
   handleLogout,
 }: {
-  handleLogout: () => void;
+  handleLogout?: () => void;
 }) => {
   const router = useRouter();
   return (
     <button
       onClick={() => {
-        handleLogout();
+        if (handleLogout) {
+          handleLogout();
+        }
         router.push("/redirect/auth");
       }}
     >

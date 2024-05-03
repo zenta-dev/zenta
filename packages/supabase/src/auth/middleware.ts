@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { dev, env } from "@/env";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -52,8 +52,15 @@ export const authUpdateSession = async (request: NextRequest) => {
           });
         },
       },
+
+      cookieOptions: {
+        domain: dev ? ".zenta.local" : ".zenta.dev",
+        path: "/",
+        sameSite: "lax",
+        secure: true,
+      },
     },
-  );
+  ); 
 
   await sb.auth.getUser();
 

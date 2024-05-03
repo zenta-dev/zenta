@@ -22,6 +22,9 @@
     },
     "db:push": {
       "dependsOn": ["^db:push"]
+    },
+    "db:seed": {
+      "dependsOn": ["^db:seed"]
     }
   }
 }

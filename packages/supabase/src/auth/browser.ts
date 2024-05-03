@@ -1,11 +1,19 @@
-import { env } from "@/env";
+import { dev, env } from "@/env";
 import { createBrowserClient } from "@supabase/ssr";
 import { useMemo } from "react";
 
 export const createAuthBrowser = () => {
   const sb = createBrowserClient(
     env.NEXT_PUBLIC_SUPABASE_URL,
-    env.NEXT_PUBLIC_SUPABASE_ANON_KEY, 
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookieOptions: { 
+        domain: dev ? ".zenta.local" : ".zenta.dev",
+        path: "/",
+        sameSite: "lax",
+        secure: true,
+      },
+    },
   );
 
   return sb;

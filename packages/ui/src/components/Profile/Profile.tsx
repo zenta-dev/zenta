@@ -19,7 +19,7 @@ export function Profile({
   handleLogout,
 }: {
   data: User | null;
-  handleLogout: () => void;
+  handleLogout?: () => void;
 }) {
   if (!data || data === null) return null;
   let user = data?.user_metadata;

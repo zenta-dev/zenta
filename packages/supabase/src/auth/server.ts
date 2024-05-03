@@ -21,14 +21,12 @@ export const createAuthServer = ({ cookies }: { cookies: any }) => {
           } catch (error) {}
         },
       },
-      cookieOptions: {
-        name: "sb",
+
+      cookieOptions: { 
+        domain: dev ? ".zenta.local" : ".zenta.dev",
+        path: "/",
         sameSite: "lax",
         secure: true,
-        httpOnly: true,
-        path: "/",
-        domain: dev ? ".zenta.local" : ".zenta.dev",
-        maxAge: 60 * 60 * 24 * 30, // 30 days
       },
     },
   );

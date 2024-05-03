@@ -63,7 +63,7 @@ export const postRouter = createTRPCRouter({
     }),
 
   unlinkTags: publicProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ id: z.string(), tags: z.array(z.string()) }))
     .mutation(({ input, ctx }) => {
       return ctx.db.post.update({
         where: {
@@ -71,14 +71,14 @@ export const postRouter = createTRPCRouter({
         },
         data: {
           tags: {
-            set: [],
+            disconnect: input.tags.map((tag) => ({ id: tag })),
           },
         },
       });
     }),
 
   unlinkTechs: publicProcedure
-    .input(z.object({ id: z.string() }))
+    .input(z.object({ id: z.string(), techs: z.array(z.string()) }))
     .mutation(({ input, ctx }) => {
       return ctx.db.post.update({
         where: {
@@ -86,7 +86,7 @@ export const postRouter = createTRPCRouter({
         },
         data: {
           stack: {
-            set: [],
+            disconnect: input.techs.map((tech) => ({ id: tech })),
           },
         },
       });
