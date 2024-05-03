@@ -1,5 +1,6 @@
 "use client";
 
+import { dev } from "@/env";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthProviderType, User, useSupabaseClient } from "@packages/supabase";
 import {
@@ -69,10 +70,13 @@ export default function SignInForm({
 
   const handleOauthLogin = (provider: AuthProviderType) => {
     const localcallbackUri = localStorage.getItem("callbackUri");
+    const baseURL = dev
+      ? "https://zenta.local:3000"
+      : process.env.NEXT_PUBLIC_APP_URL;
     supabase.auth.signInWithOAuth({
       provider,
       options: {
-        redirectTo: `${location.origin}/auth/callback?next=${localcallbackUri}`,
+        redirectTo: `${baseURL}/auth/callback?next=${localcallbackUri}`,
       },
     });
   };

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev --experimental-https --hostname zenta.local --port 3000",
     "build": "next build",
-    "start": "next start --hostname zenta.local --port 3000",
+    "start": "next start",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
