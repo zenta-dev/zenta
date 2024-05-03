@@ -17,7 +17,7 @@ import banner from "../../public/cover.webp";
 const title = env.NEXT_PUBLIC_APP_NAME;
 const url = env.NEXT_PUBLIC_APP_URL;
 
-export const revalidate = 60 * 12;
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title,
@@ -79,6 +79,8 @@ export default async function Home() {
     description: post.summary,
     updatedAt: post.updatedAt,
   }));
+
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return (
     <main className="mt-4">

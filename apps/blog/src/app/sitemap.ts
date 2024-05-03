@@ -1,4 +1,4 @@
-import { api } from "@/trpc/server";
+import { db } from "@/server/db";
 import { MetadataRoute } from "next";
 
 function calculateChangeFrequency(
@@ -39,7 +39,12 @@ function determineAllLastChanges(post: any[], tag: any[], stack: any[]) {
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const post = await api.post.getAllMetaPublic();
+  const post = await db.post.findMany({
+    select: {
+      slug: true,
+      updatedAt: true,
+    },
+  });
 
   const postSitemap = post.map((post) => {
     return {
@@ -50,24 +55,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     };
   });
 
-  const tags = await api.tag.getAllMetaPublic();
+  const tags = await db.tag.findMany({
+    select: {
+      id: true,
+      createdAt: true,
+    },
+  });
 
   const tagSitemap = tags.map((tag) => {
     return {
       url: `${siteUrl}/tag/${tag.id}`,
-      lastModified: tag.updatedAt as Date,
-      changeFrequency: calculateChangeFrequency(tag.updatedAt as Date),
+      lastModified: tag.createdAt as Date,
+      changeFrequency: calculateChangeFrequency(tag.createdAt as Date),
       priority: 0.5,
     };
   });
 
-  const tech = await api.tech.getAllMetaPublic();
+  const tech = await db.tech.findMany({
+    select: {
+      id: true,
+      createdAt: true,
+    },
+  });
 
   const techSitemap = tech.map((tech) => {
     return {
       url: `${siteUrl}/stack/${tech.id}`,
-      lastModified: tech.updatedAt as Date,
-      changeFrequency: calculateChangeFrequency(tech.updatedAt as Date),
+      lastModified: tech.createdAt as Date,
+      changeFrequency: calculateChangeFrequency(tech.createdAt as Date),
       priority: 0.5,
     };
   });

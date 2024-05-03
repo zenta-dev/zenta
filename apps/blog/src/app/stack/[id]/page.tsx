@@ -8,7 +8,8 @@ type Props = {
     id: string;
   };
 };
-export const revalidate = 60 * 6;
+
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const techs = await db.tech.findMany({
@@ -39,6 +40,8 @@ export default async function TechPage({ params }: Props) {
   const tech = await api.tech.getById({ id: params.id });
 
   await api.tech.incrementHeat({ id: params.id });
+
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return (
     <main className="mx-auto my-2 max-w-5xl">

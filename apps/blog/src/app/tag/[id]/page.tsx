@@ -10,7 +10,8 @@ type Props = {
     id: string;
   };
 };
-export const revalidate = 60 * 6;
+
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   const tags = await db.tag.findMany({
@@ -20,11 +21,7 @@ export async function generateStaticParams() {
   });
   return tags.map((tag) => ({
     id: tag.id,
-  }));
-  // const tags = await api.tag.getAllMetaPublic();
-  // return tags.map((tag) => ({
-  //   id: tag.id,
-  // }));
+  })); 
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -47,6 +44,8 @@ export default async function TagPage({ params }: Props) {
     description: post.summary,
     updatedAt: post.updatedAt,
   }));
+
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   return (
     <main className="mx-auto my-2 max-w-5xl">

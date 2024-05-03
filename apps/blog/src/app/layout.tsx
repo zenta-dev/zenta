@@ -1,6 +1,6 @@
 import { env } from "@/env";
 import { TRPCReactProvider } from "@/trpc/react";
-import { Header, Separator, ThemeProvider, Toaster } from "@packages/ui";
+import { cn, Header, ThemeProvider, Toaster } from "@packages/ui";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { ReactNode } from "react";
@@ -25,12 +25,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={montserrat.className}>
+      <body className={cn(montserrat.className, "h-screen")}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TRPCReactProvider>
             <Header name="blog" />
             {children}
-            <Separator />
             <Toaster richColors closeButton />
           </TRPCReactProvider>
         </ThemeProvider>

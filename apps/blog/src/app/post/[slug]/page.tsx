@@ -130,6 +130,8 @@ export default async function PostPage({ params }: Props) {
     });
   }
 
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   return (
     <>
       <main className="mx-auto my-2 max-w-5xl">

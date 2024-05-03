@@ -8,3 +8,4 @@ export * from "./ImageUpload";
 export * from "./Profile";
 export * from "./SupermanLoader";
 export * from "./ui";
+export * from "./ZentaLoader";

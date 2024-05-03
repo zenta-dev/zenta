@@ -2,21 +2,21 @@
 <rss version="2.0">
     <channel>
         <title>Zenta Blog</title>
-        <link>https://blog.zenta.dev</link>
+        <link>https://auth.zenta.local:3000</link>
         <description>Zenta Blog is a website about programming 🧑‍💻 . I will be posting about my programming progress, good and bad days and more. Also, I might have some videos of me coding 🎥 .</description>
-        <lastBuildDate>Fri, 03 May 2024 15:22:13 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 03 May 2024 19:59:19 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>en</language>
         <image>
             <title>Zenta Blog</title>
-            <url>https://blog.zenta.dev/favicon.ico</url>
-            <link>https://blog.zenta.dev</link>
+            <url>https://auth.zenta.local:3000/favicon.ico</url>
+            <link>https://auth.zenta.local:3000</link>
         </image>
         <copyright>All rights reserved 2024, Zenta Blog</copyright>
         <item>
             <title><![CDATA[The History of Java]]></title>
-            <link>https://blog.zenta.dev/post/the-history-of-java</link>
+            <link>https://auth.zenta.local:3000/post/the-history-of-java</link>
             <guid>74973905-97c4-4a71-a391-218daa63cbb1</guid>
         </item>
     </channel>
