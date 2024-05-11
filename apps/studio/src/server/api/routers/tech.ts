@@ -37,6 +37,7 @@ export const techRouter = createTRPCRouter({
   update: publicProcedure
     .input(z.object({ id: z.string() }).merge(StackSchema))
     .mutation(({ input, ctx }) => {
+      console.log("input", input);
       return ctx.db.tech.update({
         where: {
           id: input.id,
@@ -51,7 +52,7 @@ export const techRouter = createTRPCRouter({
             connectOrCreate: input.versions.map((version) => ({
               where: { hash: version.hash },
               create: {
-                hash: name + version.version,
+                hash: input.name + version.version,
                 version: version.version,
                 whatNews: version.whatNews,
                 description: version.description,

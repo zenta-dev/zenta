@@ -45,6 +45,10 @@ export async function PATCH(req: Request, { params }: Props) {
       id,
     });
 
+    console.log("find", find);
+
+    console.log("PARSE", parse);
+
     if (!find) {
       return NextResponse.json(
         {
@@ -84,6 +88,17 @@ export async function PATCH(req: Request, { params }: Props) {
         ids: deleteVersionsIds,
       });
     }
+
+    console.log("Update Data", {
+      id,
+      name,
+      description,
+      logo,
+      url,
+      homepage,
+      versions: versions,
+      founders: founders,
+    });
 
     const tech = await api.tech.update({
       id,
