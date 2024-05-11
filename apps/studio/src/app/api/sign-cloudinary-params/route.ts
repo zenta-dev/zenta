@@ -2,6 +2,9 @@ import { env } from "@/env";
 import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
 
+export const runtime = "edge";
+export const preferredRegion = ["sin1", "syd1", "hnd1"];
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();

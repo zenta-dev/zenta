@@ -5,11 +5,15 @@ import { getServerSession } from "@packages/supabase";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+export const runtime = "edge";
+export const preferredRegion = ["sin1", "syd1", "hnd1"];
+
 type Props = {
   params: {
     id: string;
   };
 };
+
 export async function PATCH(req: Request, { params }: Props) {
   try {
     const ses = await getServerSession({ cookies: cookies() });
@@ -56,7 +60,7 @@ export async function PATCH(req: Request, { params }: Props) {
       summary,
       cover,
       content,
-      readTime: totalTime, 
+      readTime: totalTime,
       tags,
       techs,
     });
