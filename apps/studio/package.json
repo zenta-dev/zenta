@@ -7,7 +7,7 @@
     "db:push": "prisma db push",
     "db:seed": "bun run src/server/seed.ts",
     "postinstall": "prisma generate",
-    "dev": "next dev --experimental-https --hostname studio.zenta.local --port 3001",
+    "dev": "next dev --experimental-https --port 3001",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0"

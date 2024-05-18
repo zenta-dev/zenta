@@ -6,7 +6,7 @@
   "scripts": {
     "db:push": "prisma db push",
     "postinstall": "prisma generate",
-    "dev": "next dev --experimental-https --hostname cv.zenta.local --port 3003",
+    "dev": "next dev --experimental-https --port 3003",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0"

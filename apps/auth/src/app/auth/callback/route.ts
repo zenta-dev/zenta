@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const baseURL = dev
-    ? "https://auth.zenta.local:3000"
+    ? "https://localhost:3000"
     : env.NEXT_PUBLIC_APP_URL;
   const { searchParams } = new URL(request.url);
   const code = searchParams.get("code");

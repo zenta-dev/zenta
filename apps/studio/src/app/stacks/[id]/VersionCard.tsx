@@ -143,7 +143,7 @@ export const VersionCard = ({
           />
         </div>
       ))}
-      <AddCardButton onClick={addNewVersion} />
+      <AddCardButton name="Version" onClick={addNewVersion} />
     </>
   );
 };

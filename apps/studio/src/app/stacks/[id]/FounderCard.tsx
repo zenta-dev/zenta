@@ -205,7 +205,7 @@ export const FounderCard = ({
           />
         </div>
       ))}
-      <AddCardButton onClick={addNewFounder} />
+      <AddCardButton name="Founder" onClick={addNewFounder} />
     </>
   );
 };

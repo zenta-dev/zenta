@@ -5,9 +5,11 @@ import { TiPlus } from "react-icons/ti";
 export const AddCardButton = ({
   onClick,
   className,
+  name
 }: {
   onClick: () => void;
   className?: string;
+  name: string;
 }) => {
   return (
     <div
@@ -20,7 +22,7 @@ export const AddCardButton = ({
         className="mx-auto py-4 h-16 gap-2"
       >
         <TiPlus className="h-8 w-8" />
-        <span>Add Founder</span>
+        <span>Add {name}</span>
       </Button>
     </div>
   );
