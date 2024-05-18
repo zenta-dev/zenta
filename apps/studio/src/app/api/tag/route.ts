@@ -1,12 +1,15 @@
-import { normalizeZodError } from "@/lib/utils";
-import { auth } from "@packages/auth";
-import { db } from "@packages/db";
-import { TagSchema } from "@packages/validators";
+import { TagSchema } from "@/app/tags/[id]/_schema";
+import { normalizeZodError } from "@/helpers";
+import { api } from "@/trpc/server";
+import { getServerSession } from "@packages/supabase";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+
+export const preferredRegion = ["sin1", "syd1", "hnd1"];
 
 export async function POST(req: Request) {
   try {
-    const ses = await auth();
+    const ses = await getServerSession({ cookies: cookies() });
     if (!ses) {
       return NextResponse.json(ses);
     }
@@ -24,10 +27,8 @@ export async function POST(req: Request) {
 
     const { name, description, photo, color } = parse.data;
 
-    const find = await db.tag.findFirst({
-      where: {
-        name,
-      },
+    const find = await api.tag.getByName({
+      name,
     });
 
     if (find) {
@@ -42,14 +43,11 @@ export async function POST(req: Request) {
       );
     }
 
-    const tag = await db.tag.create({
-      data: {
-        name,
-        description,
-        photo,
-        color,
-        creatorId: ses?.user?.id,
-      },
+    const tag = await api.tag.create({
+      name,
+      description,
+      photo,
+      color,
     });
 
     if (!tag) {

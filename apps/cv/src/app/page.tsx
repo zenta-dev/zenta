@@ -1,25 +1,19 @@
-import { LoginButton } from "@/components/LoginButton";
-import { auth } from "@packages/auth";
-import { env } from "@packages/env";
+import { getServerSession } from "@packages/supabase";
+import { cookies } from "next/headers";
 
-export default async function Home() {
-  const ses = await auth();
+export default async function Page(): Promise<JSX.Element> {
+  const ses = await getServerSession({ cookies: cookies() });
 
+  const user = ses?.user.user_metadata;
+
+  if (!user) {
+    // redirect("/");
+  }
   return (
     <main>
-      <h1>CV App</h1>
-      <div>
-        {ses?.user ? (
-          <div>
-            <h1>Logged in as {ses.user.email}</h1>
-          </div>
-        ) : (
-          <div>
-            <h1>Not logged in</h1>
-            <LoginButton />
-          </div>
-        )}
-      </div>
+      {user?.full_name
+        ? `Welcome back, ${user.full_name}`
+        : "Sign in to continue"}
     </main>
   );
 }

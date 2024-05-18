@@ -1,13 +1,15 @@
-import { normalizeZodError } from "@/lib/utils";
-import { auth } from "@packages/auth";
-import { db } from "@packages/db";
-import { StackSchema } from "@packages/validators";
+import { StackSchema } from "@/app/stacks/[id]/_schema";
+import { normalizeZodError } from "@/helpers";
+import { api } from "@/trpc/server";
+import { getServerSession } from "@packages/supabase";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
+export const preferredRegion = ["sin1", "syd1", "hnd1"];
 
 export async function POST(req: Request) {
   try {
-    const ses = await auth();
+    const ses = await getServerSession({ cookies: cookies() });
     if (!ses) {
       return NextResponse.json(ses);
     }
@@ -34,10 +36,8 @@ export async function POST(req: Request) {
     const { name, description, logo, url, versions, homepage, founders } =
       parse.data;
 
-    const find = await db.tech.findFirst({
-      where: {
-        name,
-      },
+    const find = await api.tech.getByName({
+      name,
     });
 
     if (find) {
@@ -48,42 +48,18 @@ export async function POST(req: Request) {
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
-    const tech = await db.tech.create({
-      data: {
-        name,
-        description,
-        logo,
-        url,
-        homepage,
-        versions: {
-          connectOrCreate: versions.map((version) => ({
-            where: { hash: version.hash },
-            create: {
-              hash: name + version.version,
-              version: version.version,
-              whatNews: version.whatNews,
-              description: version.description,
-              url: version.url,
-            },
-          })),
-        },
-        founders: {
-          connectOrCreate: founders.map((founder) => ({
-            where: { name: founder.name },
-            create: {
-              name: founder.name,
-              type: founder.type,
-              url: founder.url,
-              photo: founder.photo,
-            },
-          })),
-        },
-        creatorId: ses?.user?.id,
-      },
+    const tech = await api.tech.create({
+      name,
+      description,
+      logo,
+      url,
+      homepage,
+      versions,
+      founders,
     });
 
     if (!tech) {
@@ -94,7 +70,7 @@ export async function POST(req: Request) {
         },
         {
           status: 400,
-        }
+        },
       );
     } else {
       return NextResponse.json({
@@ -112,7 +88,7 @@ export async function POST(req: Request) {
       },
       {
         status: 400,
-      }
+      },
     );
   }
 }

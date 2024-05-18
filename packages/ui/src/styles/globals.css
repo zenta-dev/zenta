@@ -33,8 +33,6 @@
     --ring: 0 0% 3.9%;
 
     --radius: 0.5rem;
-
-
   }
 
   .dark {
@@ -66,8 +64,6 @@
     --input: 0 0% 14.9%;
     --ring: 0 0% 83.1%;
   }
-
-
 }
 
 @layer base {
@@ -99,102 +95,6 @@
   }
 
   body {
-    @apply transition-all duration-300 ease-in-out bg-background text-foreground;
-  }
-
-  h1 {
-    @apply font-bold text-3xl my-4;
-  }
-
-  h2 {
-    @apply font-bold text-2xl my-3;
-  }
-
-  h3 {
-    @apply font-bold text-xl my-2;
-  }
-
-  ul[data-type="taskList"] {
-    @apply list-none p-0;
-
-    p {
-      @apply m-0;
-    }
-
-    li {
-      @apply flex;
-
-      >label {
-        @apply flex-initial mr-2 select-none;
-      }
-
-      >div {
-        @apply flex-1;
-      }
-
-      ul li,
-      ol li {
-        @apply list-item;
-      }
-
-      ul[data-type="taskList"]>li {
-        @apply flex;
-      }
-    }
-  }
-
-  hr {
-    @apply border-t border-border my-4;
-  }
-
-  ul {
-    @apply p-2
-  }
-
-  ul li {
-    @apply list-disc p-2;
-  }
-
-  ol {
-    @apply p-2
-  }
-
-  ol li {
-    @apply list-decimal p-2;
-  }
-
-  table {
-    @apply w-full;
-  }
-
-  table th {
-    @apply font-bold text-left dark:bg-neutral-800;
-  }
-
-  table th,
-  table td {
-    @apply border border-border p-2;
-  }
-
-  div[data-youtube-video] {
-    @apply flex items-center justify-center w-full p-4;
-  }
-
-  p {
-    a {
-      @apply text-blue-500 hover:underline;
-    }
-
-    code {
-      @apply bg-gray-200 dark:bg-gray-800 p-1 rounded;
-    }
-
-    mark {
-      @apply rounded;
-
-      em {
-        @apply p-2 text-black;
-      }
-    }
+    @apply bg-background text-foreground transition-all duration-300 ease-in-out;
   }
 }

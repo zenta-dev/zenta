@@ -1,17 +1,21 @@
-import { calculateReadTime, normalizeZodError } from "@/lib/utils";
-import { auth } from "@packages/auth";
-import { db } from "@packages/db";
-import { PostSchema } from "@packages/validators";
+import { PostSchema } from "@/app/posts/[id]/_schema";
+import { calculateReadTime, normalizeZodError } from "@/helpers";
+import { api } from "@/trpc/server";
+import { getServerSession } from "@packages/supabase";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+
+export const preferredRegion = ["sin1", "syd1", "hnd1"];
 
 type Props = {
   params: {
     id: string;
   };
 };
+
 export async function PATCH(req: Request, { params }: Props) {
   try {
-    const ses = await auth();
+    const ses = await getServerSession({ cookies: cookies() });
     if (!ses) {
       return NextResponse.json(ses);
     }
@@ -33,72 +37,31 @@ export async function PATCH(req: Request, { params }: Props) {
 
     const totalTime = calculateReadTime(readTime);
 
-    // unconnect all tags and techs from post
-    const postTags = await db.post.findUnique({
-      where: {
-        id,
-      },
-      select: {
-        tags: {
-          select: {
-            id: true,
-          },
-        },
-        stack: {
-          select: {
-            id: true,
-          },
-        },
-      },
+    const postFind = await api.post.getById({
+      id,
     });
     if (tags) {
-      await db.post.update({
-        where: {
-          id,
-        },
-        data: {
-          tags: {
-            disconnect: postTags?.tags,
-          },
-        },
+      await api.post.unlinkTags({
+        id,
+        tags: postFind?.tags.map((tag) => tag.id) || [],
       });
     }
     if (techs) {
-      await db.post.update({
-        where: {
-          id,
-        },
-        data: {
-          stack: {
-            disconnect: postTags?.stack,
-          },
-        },
+      await api.post.unlinkTechs({
+        id,
+        techs: postFind?.stack.map((tech) => tech.id) || [],
       });
     }
 
-    const post = await db.post.update({
-      where: {
-        id,
-      },
-      data: {
-        title,
-        slug: title.toLowerCase().replace(/ /g, "-"),
-        summary,
-        cover,
-        content,
-        readTime: totalTime,
-        authors: {
-          connect: {
-            id: ses?.user?.id,
-          },
-        },
-        tags: {
-          connect: tags?.map((tag: string) => ({ id: tag })),
-        },
-        stack: {
-          connect: techs?.map((tech: string) => ({ id: tech })),
-        },
-      },
+    const post = await api.post.update({
+      id,
+      title,
+      summary,
+      cover,
+      content,
+      readTime: totalTime,
+      tags,
+      techs,
     });
 
     if (!post) {
@@ -134,17 +97,15 @@ export async function PATCH(req: Request, { params }: Props) {
 
 export async function DELETE(_: Request, { params }: Props) {
   try {
-    const ses = await auth();
+    const ses = await getServerSession({ cookies: cookies() });
     if (!ses) {
       return NextResponse.json(ses);
     }
 
     const { id } = params;
 
-    const post = await db.post.delete({
-      where: {
-        id,
-      },
+    const post = await api.post.delete({
+      id,
     });
 
     if (!post) {

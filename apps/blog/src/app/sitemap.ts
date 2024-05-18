@@ -1,8 +1,8 @@
-import { db } from "@packages/db";
+import { db } from "@/server/db";
 import { MetadataRoute } from "next";
 
 function calculateChangeFrequency(
-  date: Date
+  date: Date,
 ): "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never" {
   const diff = Date.now() - date.getTime();
   if (diff < 1000 * 60 * 60 * 24) {

@@ -1,19 +1,23 @@
-import { Separator } from "@/components/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@packages/ui";
+import { PostList, StackList, TagList } from "@/components";
+import { env } from "@/env";
+import { api } from "@/trpc/server";
+import {
+  cn,
+  Logo,
+  Separator,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@packages/ui";
 import { Metadata } from "next";
 import Image from "next/image";
-
-import { Logo } from "@/components/brand";
-import { PostList, StackList, TagList } from "@/components/server";
-import { getMetaPosts, getMetaTags, getMetaTechs } from "@/lib/server";
-import { cn } from "@/lib/utils";
-import { env } from "@packages/env";
 import banner from "../../public/cover.webp";
 
-const title = env.NEXT_PUBLIC_BLOG_APP_NAME;
-const url = env.NEXT_PUBLIC_BLOG_APP_URL;
+const title = env.NEXT_PUBLIC_APP_NAME;
+const url = env.NEXT_PUBLIC_APP_URL;
 
-export const revalidate = 3600 * 12;
+export const revalidate = 60;
 
 export const metadata: Metadata = {
   title,
@@ -52,46 +56,46 @@ const tabList = [
 ];
 
 export default async function Home() {
-  const tags = (await getMetaTags({ page: 1 })).map((tag) => ({
+  const tags = (await api.tag.getAllMetaPublic()).map((tag) => ({
     id: tag.id,
     name: tag.name,
     photo: tag.photo,
     description: tag.description,
     updatedAt: tag.updatedAt,
   }));
-
-  const posts = (await getMetaPosts({ page: 1 })).map((post) => ({
-    id: post.id,
-    name: post.name,
-    photo: post.photo,
-    description: post.description,
-    updatedAt: post.updatedAt,
-  }));
-  const stacks = (await getMetaTechs({ page: 1 })).map((stack) => ({
+  const stacks = (await api.tech.getAllMetaPublic()).map((stack) => ({
     id: stack.id,
     name: stack.name,
-    photo: stack.photo,
+    photo: stack.logo,
     description: stack.description,
     updatedAt: stack.updatedAt,
   }));
 
+  const posts = (await api.post.getAllMetaPublic()).map((post) => ({
+    id: post.id,
+    name: post.title,
+    slug: post.slug,
+    photo: post.cover,
+    description: post.summary,
+    updatedAt: post.updatedAt,
+  }));
+
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   return (
     <main className="mt-4">
-      <section className="inline-flex flex-col space-y-3 items-center overflow-hidden relative w-full drop-shadow-2xl group-hover:scale-105 transition-transform duration-200 ease-out px-5">
+      <section className="relative inline-flex w-full flex-col items-center space-y-3 overflow-hidden px-5 drop-shadow-2xl transition-transform duration-200 ease-out group-hover:scale-105">
         <Image
           src={banner}
-          className=" transition-all duration-300 rounded-3xl object-cover object-center h-48 md:h-72 max-w-5xl"
+          className=" h-48 max-w-5xl rounded-3xl object-cover object-center transition-all duration-300 md:h-72"
           alt={`Banner image for ${title} landing page`}
           width={1024}
           height={288}
           priority
         />
-        <Logo
-          width={86}
-          className="relative z-50 w-20 h-20 -mt-12 bg-transparent rounded-xl"
-        />
+        <Logo className="relative z-50 -mt-12 h-20 w-20 rounded-xl bg-transparent" />
         <h1 className="my-4 text-3xl font-semibold">{title}</h1>
-        <p className="max-w-3xl my-2">
+        <p className="my-2 max-w-3xl">
           Welcome to {title} , your friendly corner of the internet dedicated to
           all things programming! 🌟.{" "}
           <span className="hidden md:inline">
@@ -104,10 +108,10 @@ export default async function Home() {
           Let&apos;s embark on this coding adventure together! 🧑‍💻🎥.
         </p>
       </section>
-      <section className="max-w-3xl mx-auto mt-8">
+      <section className="mx-auto mt-8 max-w-3xl">
         <Tabs defaultValue="post">
           <TabsList
-            className="justify-around w-full mx-auto bg-transparent"
+            className="mx-auto w-full justify-around bg-transparent"
             role="tablist"
           >
             {tabList.map((tab) => (
@@ -117,15 +121,15 @@ export default async function Home() {
                 role="tab"
                 aria-controls={tab.ariaControls}
                 className={cn(
-                  "px-4 py-2 text-lg font-medium cursor-pointer hover:bg-neutral-800 hover:scale-105 transition-transform duration-200 ease-out",
-                  "data-[state=active]:bg-neutral-800 data-[state=active]:text-emerald-500 data-[state=active]:shadow"
+                  "cursor-pointer px-4 py-2 text-lg font-medium transition-transform duration-200 ease-out hover:scale-105 hover:bg-neutral-800",
+                  "data-[state=active]:bg-neutral-800 data-[state=active]:text-emerald-500 data-[state=active]:shadow",
                 )}
               >
                 {tab.name}
               </TabsTrigger>
             ))}
           </TabsList>
-          <Separator className="max-w-3xl md:my-4 my-2" />
+          <Separator className="my-2 max-w-3xl md:my-4" />
           <TabsContent
             value="post"
             id="post-tab"

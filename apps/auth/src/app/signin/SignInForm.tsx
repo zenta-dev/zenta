@@ -1,14 +1,11 @@
 "use client";
 
+import { dev } from "@/env";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Session } from "@packages/auth";
+import { AuthProviderType, User, useSupabaseClient } from "@packages/supabase";
 import {
   Button,
-  Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
   Form,
   FormControl,
   FormField,
@@ -19,23 +16,24 @@ import {
   Separator,
   toast,
 } from "@packages/ui";
-import { LoginForm, LoginSchema } from "@packages/validators";
-import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { FaDiscord } from "react-icons/fa";
+import { FaDiscord, FaGithub, FaGoogle } from "react-icons/fa";
+import { signInWithEmailAndPassword } from "./_actions";
+import { LoginSchema, LoginSchemaType } from "./_schema";
 
 export default function SignInForm({
-  session,
-  origin,
+  data,
+  callbackUri,
 }: {
-  session: Session | null;
-  origin: string | undefined;
+  data: User | undefined;
+  callbackUri: string | undefined;
 }) {
+  const supabase = useSupabaseClient();
   const [loading, setLoading] = useState(false);
-  const form = useForm<LoginForm>({
+  const form = useForm<LoginSchemaType>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: "",
@@ -44,117 +42,129 @@ export default function SignInForm({
   });
 
   useEffect(() => {
-    if (origin) {
-      if (session) {
-        const localOrigin = localStorage.getItem("origin");
-        window.location.href = localOrigin as string;
+    if (callbackUri) {
+      if (data) {
+        const localcallbackUri = localStorage.getItem("callbackUri");
+
+        window.location.href = localcallbackUri as string;
       } else {
-        localStorage.setItem("origin", origin);
+        localStorage.setItem("callbackUri", callbackUri);
       }
     }
   }, []);
 
-  async function onSubmit(data: LoginForm) {
+  async function onSubmit(data: LoginSchemaType) {
     setLoading(true);
-    const req = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const res = await signInWithEmailAndPassword(data);
+    const json = JSON.parse(res);
 
-    const res = await req.json();
-
-    if (res?.error) {
+    if (json?.error) {
       setLoading(false);
       toast.error("Invalid credentials");
     } else {
       setLoading(false);
       toast.success("Logged in successfully");
-      window.location.href = localStorage.getItem("origin") as string;
+      window.location.href = localStorage.getItem("callbackUri") as string;
     }
   }
 
+  const handleOauthLogin = (provider: AuthProviderType) => {
+    const localcallbackUri = localStorage.getItem("callbackUri");
+    const baseURL = dev
+      ? "https://auth.zenta.local:3000"
+      : process.env.NEXT_PUBLIC_APP_URL;
+
+    supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo: `${baseURL}/auth/callback?next=${localcallbackUri}`,
+      },
+    });
+  };
+
   return (
-    <main className="flex h-screen items-center justify-center">
-      <Card className="w-96">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
-        </CardHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <CardContent className="flex flex-col gap-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor={field.name}>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor={field.name}>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <CardContent className="flex flex-col gap-4">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor={field.name}>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor={field.name}>Password</FormLabel>
+                <FormControl>
+                  <Input type="password" placeholder="Password" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <p className="text-center text-sm">
-                Don&apos;t have an account?{" "}
-                <Link href="/signup">
-                  <Button
-                    variant="link"
-                    className="text-blue-500"
-                    type="button"
-                  >
-                    Sign up
-                  </Button>
-                </Link>
-              </p>
+          <p className="text-center text-sm">
+            Don&apos;t have an account?{" "}
+            <Link href="/signup">
+              <Button variant="link" className="text-blue-500" type="button">
+                Sign up
+              </Button>
+            </Link>
+          </p>
 
-              <Button type="submit">
-                {loading ? (
-                  <AiOutlineLoading3Quarters className=" animate-spin" />
-                ) : (
-                  "Sign in"
-                )}
-              </Button>
-              <div className="mx-auto flex items-center justify-center gap-2">
-                <Separator className="w-full" />
-                <p className="text-sm text-gray-500">Or</p>
-                <Separator className="w-full" />
-              </div>
-              <Button
-                variant="outline"
-                onClick={() => signIn("discord")}
-                type="button"
-                className="flex items-center justify-center gap-2"
-              >
-                <FaDiscord />
-                Sign in with Discord
-              </Button>
-            </CardContent>
-          </form>
-        </Form>
-      </Card>
-    </main>
+          <Button type="submit">
+            {loading ? (
+              <AiOutlineLoading3Quarters className=" animate-spin" />
+            ) : (
+              "Sign in"
+            )}
+          </Button>
+          <div className="mx-auto flex items-center justify-center gap-2">
+            <Separator className="w-full" />
+            <p className="text-sm text-gray-500">Or</p>
+            <Separator className="w-full" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Button
+              variant="outline"
+              onClick={() => handleOauthLogin("google")}
+              type="button"
+              className="flex items-center justify-center gap-2"
+            >
+              <FaGoogle />
+              Sign in with Google
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => handleOauthLogin("github")}
+              type="button"
+              className="flex items-center justify-center gap-2"
+            >
+              <FaGithub />
+              Sign in with GitHub
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => handleOauthLogin("discord")}
+              type="button"
+              className="flex items-center justify-center gap-2"
+            >
+              <FaDiscord />
+              Sign in with Discord
+            </Button>
+          </div>
+        </CardContent>
+      </form>
+    </Form>
   );
 }

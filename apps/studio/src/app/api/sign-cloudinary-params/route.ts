@@ -1,3 +1,4 @@
+import { env } from "@/env";
 import { v2 as cloudinary } from "cloudinary";
 import { NextResponse } from "next/server";
 
@@ -7,14 +8,16 @@ export async function POST(req: Request) {
     const { paramsToSign } = body;
 
     cloudinary.config({
-      cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
-      api_key: process.env.NEXT_CLOUDINARY_API_KEY,
-      api_secret: process.env.CLOUDINARY_API_SECRET,
+      cloud_name: env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+      api_key: env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+      api_secret: env.CLOUDINARY_API_SECRET,
     });
+
+    console.log("Signing params", paramsToSign);
 
     const signature = cloudinary.utils.api_sign_request(
       paramsToSign,
-      process.env.CLOUDINARY_API_SECRET || ""
+      env.CLOUDINARY_API_SECRET,
     );
 
     return NextResponse.json({ signature });
@@ -23,7 +26,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(
       { error: "An error occurred while signing the request" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

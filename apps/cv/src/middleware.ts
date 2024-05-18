@@ -1,27 +1,20 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-
-const useSecureCookies = !!process.env.VERCEL_URL;
-const authUrl = useSecureCookies
-  ? "https://auth.zenta.dev"
-  : "https://zenta.local:3000";
+import { authUpdateSession, getServerSession } from "@packages/supabase";
+import { cookies } from "next/headers";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
-  const res = await fetch(authUrl + "/api/auth/session", {
-    headers: {
-      cookie: req.headers.get("cookie") || "",
-    },
-  });
-  const ses = await res.json();
+  const res: NextResponse = await authUpdateSession(req);
 
-  if (!ses?.user) {
+  const ses = await getServerSession({ cookies: cookies() });
+  if (!ses) {
     const url = new URL(`/redirect/auth`, req.url).toString();
     return NextResponse.rewrite(url, { request: req });
   }
-
-  return NextResponse.next({ request: req });
+  return res;
 }
 
 export const config = {
-  matcher: "/dashboard/:path*",
+  matcher: [
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+  ],
 };

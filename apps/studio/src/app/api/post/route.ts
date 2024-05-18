@@ -1,12 +1,15 @@
-import { calculateReadTime, normalizeZodError } from "@/lib/utils";
-import { auth } from "@packages/auth";
-import { db } from "@packages/db";
-import { PostSchema } from "@packages/validators";
+import { PostSchema } from "@/app/posts/[id]/_schema";
+import { calculateReadTime, normalizeZodError } from "@/helpers";
+import { api } from "@/trpc/server";
+import { getServerSession } from "@packages/supabase";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+
+export const preferredRegion = ["sin1", "syd1", "hnd1"];
 
 export async function POST(req: Request) {
   try {
-    const ses = await auth();
+    const ses = await getServerSession({ cookies: cookies() });
     if (!ses) {
       return NextResponse.json(ses);
     }
@@ -25,10 +28,8 @@ export async function POST(req: Request) {
     const { title, summary, cover, content, readTime, tags, techs } =
       parse.data;
 
-    const find = await db.post.findFirst({
-      where: {
-        title,
-      },
+    const find = await api.post.getBySlug({
+      slug: title.toLowerCase().replace(/ /g, "-"),
     });
 
     if (find) {
@@ -45,26 +46,15 @@ export async function POST(req: Request) {
 
     const totalTime = calculateReadTime(readTime);
 
-    const post = await db.post.create({
-      data: {
-        title,
-        slug: title.toLowerCase().replace(/ /g, "-"),
-        summary,
-        cover,
-        content,
-        readTime: totalTime,
-        authors: {
-          connect: {
-            id: ses?.user?.id,
-          },
-        },
-        tags: {
-          connect: tags?.map((tag: string) => ({ id: tag })),
-        },
-        stack: {
-          connect: techs?.map((tech: string) => ({ id: tech })),
-        },
-      },
+    const post = await api.post.create({
+      title,
+      summary,
+      cover,
+      content,
+      readTime: totalTime,
+      tags,
+      techs,
+      authors: [ses.user.id],
     });
 
     if (!post) {

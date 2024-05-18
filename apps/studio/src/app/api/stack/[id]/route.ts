@@ -1,8 +1,11 @@
-import { normalizeZodError } from "@/lib/utils";
-import { auth } from "@packages/auth";
-import { db } from "@packages/db";
-import { StackSchema } from "@packages/validators";
+import { StackSchema } from "@/app/stacks/[id]/_schema";
+import { normalizeZodError } from "@/helpers";
+import { api } from "@/trpc/server";
+import { getServerSession } from "@packages/supabase";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+
+export const preferredRegion = ["sin1", "syd1", "hnd1"];
 
 type Props = {
   params: {
@@ -12,7 +15,7 @@ type Props = {
 
 export async function PATCH(req: Request, { params }: Props) {
   try {
-    const ses = await auth();
+    const ses = await getServerSession({ cookies: cookies() });
     if (!ses) {
       return NextResponse.json(ses);
     }
@@ -40,15 +43,13 @@ export async function PATCH(req: Request, { params }: Props) {
     const { name, description, logo, url, versions, homepage, founders } =
       parse.data;
 
-    const find = await db.tech.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        founders: true,
-        versions: true,
-      },
+    const find = await api.tech.getById({
+      id,
     });
+
+    console.log("find", find);
+
+    console.log("PARSE", parse);
 
     if (!find) {
       return NextResponse.json(
@@ -78,59 +79,38 @@ export async function PATCH(req: Request, { params }: Props) {
       )
       .map((version) => version.id);
 
-    await db.techFounder.deleteMany({
-      where: {
-        id: {
-          in: deleteFoundersIds,
-        },
-      },
+    if (deleteFoundersIds.length) {
+      await api.tech.deleteManyTechFounder({
+        ids: deleteFoundersIds,
+      });
+    }
+
+    if (deleteVersionsIds.length) {
+      await api.tech.deleteManyTechVersion({
+        ids: deleteVersionsIds,
+      });
+    }
+
+    console.log("Update Data", {
+      id,
+      name,
+      description,
+      logo,
+      url,
+      homepage,
+      versions: versions,
+      founders: founders,
     });
 
-    await db.techVersion.deleteMany({
-      where: {
-        id: {
-          in: deleteVersionsIds,
-        },
-      },
-    });
-
-    const tech = await db.tech.update({
-      where: {
-        id,
-      },
-      data: {
-        name,
-        description,
-        logo,
-        url,
-        homepage,
-        versions: {
-          connectOrCreate: versions.map((version) => ({
-            where: { hash: version.hash },
-            create: {
-              hash: name + version.version,
-              version: version.version,
-              whatNews: version.whatNews,
-              description: version.description,
-              url: version.url,
-            },
-          })),
-        },
-        founders: {
-          connectOrCreate: founders.map((founder) => ({
-            where: { name: founder.name },
-            create: {
-              creatorId: ses?.user?.id,
-              name: founder.name,
-              type: founder.type,
-              url: founder.url,
-              photo: founder.photo,
-            },
-          })),
-        },
-        updaterId: ses?.user?.id,
-        updatedAt: new Date(),
-      },
+    const tech = await api.tech.update({
+      id,
+      name,
+      description,
+      logo,
+      url,
+      homepage,
+      versions: versions,
+      founders: founders,
     });
 
     if (!tech) {
@@ -166,17 +146,15 @@ export async function PATCH(req: Request, { params }: Props) {
 
 export async function DELETE(_: Request, { params }: Props) {
   try {
-    const ses = await auth();
+    const ses = await getServerSession({ cookies: cookies() });
     if (!ses) {
       return NextResponse.json(ses);
     }
 
     const { id } = params;
 
-    const tech = await db.tech.delete({
-      where: {
-        id,
-      },
+    const tech = await api.tech.delete({
+      id,
     });
 
     if (!tech) {

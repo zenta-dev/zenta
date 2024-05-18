@@ -1,17 +1,21 @@
-import { normalizeZodError } from "@/lib/utils";
-import { auth } from "@packages/auth";
-import { db } from "@packages/db";
-import { TagSchema } from "@packages/validators";
+import { TagSchema } from "@/app/tags/[id]/_schema";
+import { normalizeZodError } from "@/helpers";
+import { api } from "@/trpc/server";
+import { getServerSession } from "@packages/supabase";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+
+export const preferredRegion = ["sin1", "syd1", "hnd1"];
 
 type Props = {
   params: {
     id: string;
   };
 };
+
 export async function PATCH(req: Request, { params }: Props) {
   try {
-    const ses = await auth();
+    const ses = await getServerSession({ cookies: cookies() });
     if (!ses) {
       return NextResponse.json(ses);
     }
@@ -30,17 +34,12 @@ export async function PATCH(req: Request, { params }: Props) {
     const { id } = params;
     const { name, description, photo, color } = parse.data;
 
-    const tag = await db.tag.update({
-      where: {
-        id,
-      },
-      data: {
-        name,
-        description,
-        photo,
-        color,
-        updaterId: ses?.user?.id,
-      },
+    const tag = await api.tag.update({
+      id,
+      name,
+      description,
+      photo,
+      color,
     });
 
     if (!tag) {
@@ -76,17 +75,15 @@ export async function PATCH(req: Request, { params }: Props) {
 
 export async function DELETE(_: Request, { params }: Props) {
   try {
-    const ses = await auth();
+    const ses = await getServerSession({ cookies: cookies() });
     if (!ses) {
       return NextResponse.json(ses);
     }
 
     const { id } = params;
 
-    const tag = await db.tag.delete({
-      where: {
-        id,
-      },
+    const tag = await api.tag.delete({
+      id,
     });
 
     if (!tag) {

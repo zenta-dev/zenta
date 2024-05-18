@@ -1,21 +1,13 @@
-import { extensions } from "@/components/client/editor";
-import { Separator } from "@/components/separator";
-import {
-  generateRSS,
-  getAllMetaPosts,
-  getPostBySlug,
-  heatCountPost,
-  RSSQuery,
-} from "@/lib/server";
-import { addImageSize } from "@/lib/utils";
-import { env } from "@packages/env";
-import { Avatar, AvatarImage } from "@packages/ui";
+import { env } from "@/env";
+import { db } from "@/server/db";
+import { generateRSS } from "@/server/rss";
+import { api } from "@/trpc/server";
+import { extensions, Separator } from "@packages/ui";
 import { generateHTML } from "@tiptap/html";
 import parse from "html-react-parser";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { PiUserCircleBold } from "react-icons/pi";
 import Code from "./Code";
 import styles from "./style.module.css";
 
@@ -25,16 +17,20 @@ type Props = {
   };
 };
 
-export const revalidate = 3600;
+export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const posts = await getAllMetaPosts();
+  const posts = await db.post.findMany({
+    include: {
+      tags: true,
+      authors: true,
+    },
+  });
 
-  const qPost: RSSQuery[] = posts.map((item) => {
+  const qPost = posts.map((item) => {
     const tags = item.tags ?? [];
     const authors = item.authors.map((author) => {
       return {
-        name: author.name || "",
         email: author.email || "",
         link: `mailto:${author.email}`,
       };
@@ -60,12 +56,11 @@ export async function generateStaticParams() {
   }));
 }
 
-const siteName = env.NEXT_PUBLIC_BLOG_APP_NAME;
-const siteUrl = env.NEXT_PUBLIC_BLOG_APP_URL;
+const siteName = env.NEXT_PUBLIC_APP_NAME;
+const siteUrl = env.NEXT_PUBLIC_APP_URL;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
-  // const post = await api.post.getBySlug({ slug: params.slug });
+  const post = await api.post.getBySlug({ slug: params.slug });
   const authors = post?.authors ?? [];
   const tags = post?.tags ?? [];
   return {
@@ -81,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ],
     authors: authors.map((author) => {
       return {
-        name: author.name ?? "",
+        // name: author.name ?? "",
         url: `mailto:${author.email}`,
       };
     }),
@@ -113,10 +108,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PostPage({ params }: Props) {
-  const post = await getPostBySlug(params.slug);
-  // const post = await api.post.getBySlug({ slug: params.slug });
+  const post = await api.post.getBySlug({ slug: params.slug });
   const content = post?.content as any;
-  await heatCountPost(post?.id);
+  await api.post.incrementHeat({ id: post?.id });
 
   let html = generateHTML(content, extensions);
   const pre = getPre(html);
@@ -136,13 +130,15 @@ export default async function PostPage({ params }: Props) {
     });
   }
 
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   return (
     <>
-      <main className="max-w-5xl mx-auto my-2">
+      <main className="mx-auto my-2 max-w-5xl">
         <section>
-          <figure className="inline-flex flex-col items-center relative w-full drop-shadow-2xl p-4">
+          <figure className="relative inline-flex w-full flex-col items-center p-4 drop-shadow-2xl">
             <Image
-              className="rounded-xl transition-all duration-300 object-cover object-center h-48 sm:h-64 md:h-96 shadow-lg"
+              className="h-48 rounded-xl object-cover object-center shadow-lg transition-all duration-300 sm:h-64 md:h-96"
               src={post?.cover ?? "https://via.placeholder.com/360/144"}
               alt={post?.title ?? "Post photo"}
               width={1024}
@@ -150,13 +146,13 @@ export default async function PostPage({ params }: Props) {
             />
           </figure>
           <h1
-            className={`my-4 text-4xl font-bold text-center ${styles.gradient_text}`}
+            className={`my-4 text-center text-4xl font-bold ${styles.gradient_text}`}
           >
             {post?.title}
           </h1>
           {post?.authors && (
             <div className="flex items-center justify-center">
-              {post.authors.map((user) => (
+              {/* {post.authors.map((user) => (
                 <Link key={user.id} href={`mailto:${user.email}`}>
                   <div className="flex items-center justify-center">
                     <p className="mr-2">Written by :</p>
@@ -171,19 +167,19 @@ export default async function PostPage({ params }: Props) {
                         <PiUserCircleBold className="text-4xl" />
                       )}
                     </Avatar>
-                    <h5 className="font-medium text-lg">{user.name}</h5>
+                    <h5 className="text-lg font-medium">{user.name}</h5>
                   </div>
                 </Link>
-              ))}
+              ))} */}
             </div>
           )}
-          <div className="grid grid-cols-2 p-4 lg:p-0 md:grid-cols-4 transition-all duration-300 items-center justify-center gap-2 mt-4">
+          <div className="mt-4 grid grid-cols-2 items-center justify-center gap-2 p-4 transition-all duration-300 md:grid-cols-4 lg:p-0">
             {post?.tags.map((item) => {
               return (
                 <Link
                   href={`/tag/${item.id}`}
                   key={item.id}
-                  className="p-2 rounded bg-emerald-900"
+                  className="rounded bg-emerald-900 p-2"
                   style={{ backgroundColor: item.color || "#064E3B" }}
                 >
                   <p className="text-sm text-white">#{item.name}</p>
@@ -206,6 +202,9 @@ function getPre(html: string) {
     return { lang: "javascript", code: "" };
   }
   const [, lang, code] = matches;
+  if (!code) {
+    return { lang: "javascript", code: "" };
+  }
   const newCode = replace(code);
   return { lang, code: newCode };
 }
@@ -234,17 +233,16 @@ function getImg(html: string) {
 
 function imageReplace(html: string) {
   const { src, alt, title } = getImg(html);
-  const publicId = urlToPublicId(src);
   return (
-    <figure className="flex items-center justify-center flex-col my-4">
+    <figure className="my-4 flex flex-col items-center justify-center">
       <Image
-        className="rounded-xl object-cover object-center mb-2"
-        src={src}
-        alt={alt}
+        className="mb-2 rounded-xl object-cover object-center"
+        src={src || "https://via.placeholder.com/360/144"}
+        alt={alt || "Post photo"}
         width={480}
         height={360}
       />
-      <figcaption className="text-center text-sm text-neutral-500 font-light w-full italic font-serif">
+      <figcaption className="w-full text-center font-serif text-sm font-light italic text-neutral-500">
         {title}
       </figcaption>
     </figure>
@@ -253,6 +251,7 @@ function imageReplace(html: string) {
 
 function urlToPublicId(url: string) {
   const parts = url.split("/");
-  const publicId = parts[parts.length - 1].split(".")[0];
+  const length = parts.length;
+  const publicId = parts[length - 1]?.split(".")[0];
   return publicId;
 }

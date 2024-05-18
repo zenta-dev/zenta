@@ -1,7 +1,7 @@
 "use client";
 
+import { SupermanLoader } from "@packages/ui";
 import { useEffect } from "react";
-import "./redirect.css";
 
 type Props = {
   params: {
@@ -14,8 +14,8 @@ function determineRedirectUrl(to: string) {
     case "auth":
       return new URL(
         process.env.NODE_ENV === "development"
-          ? "https://zenta.local:3000/signin?origin=studio.zenta.dev"
-          : "https://auth.zenta.dev/signin?origin=studio.zenta.dev",
+          ? "https://auth.zenta.local:3000/signin?callbackUri=studio.zenta.dev"
+          : "https://auth.zenta.dev/signin?callbackUri=studio.zenta.dev",
       );
     default:
       return to;
@@ -32,26 +32,8 @@ export default function RedirectPage({ params }: Props) {
     };
   }, []);
   return (
-    <>
-      <div className="body">
-        <span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </span>
-        <div className="base">
-          <span></span>
-          <div className="face"></div>
-        </div>
-      </div>
-      <div className="longfazers">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <h1>Redirecting</h1>
-    </>
+    <main className="h-[calc(100vh-20vh)] w-screen">
+      <SupermanLoader />
+    </main>
   );
 }

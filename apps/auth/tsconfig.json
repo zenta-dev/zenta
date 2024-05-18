@@ -2,22 +2,31 @@
   "extends": "@configs/tsconfig/base.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
+    "allowJs": true,
   },
   "include": [
     ".",
     "next-env.d.ts",
+    "next.config.js",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "../cv/src/middleware.ts"  ],
-  "exclude": ["node_modules"]
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    ".next/types/**/*.ts",
+    "../../packages/ui"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

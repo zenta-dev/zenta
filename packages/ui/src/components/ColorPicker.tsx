@@ -52,7 +52,7 @@ export const ColorPicker = ({
             style={{ backgroundColor: value }}
           >
             <span className={`bg-${color}-300 text-neutral-900`}>
-              {color[0].toUpperCase()}
+              {color.charAt(0).toUpperCase() + color.slice(1)}
             </span>
           </Button>
         ))}

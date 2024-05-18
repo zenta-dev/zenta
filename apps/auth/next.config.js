@@ -1,35 +1,34 @@
-// Importing env files here to validate on build
-import "@packages/env";
-
-/** @type {import("next").NextConfig} */
+/** @type {import('next').NextConfig} */
 const config = {
-  reactStrictMode: true,
-  webpack: (config) => {
-    config.resolve.extensionAlias = {
-      ".js": [".ts", ".tsx", ".js", ".jsx"],
-      ".mjs": [".mts", ".mjs"],
-      ".cjs": [".cts", ".cjs"],
-    };
-    return config;
-  },
-  transpilePackages: [
-    "@packages/api",
-    "@packages/auth",
-    "@packages/db",
-    "@packages/ui",
-    "@packages/validators",
-  ],
+  transpilePackages: ["@packages/ui", "@packages/supabase"],
 
   eslint: { ignoreDuringBuilds: true },
-  typescript: { ignoreBuildErrors: true },
 
   async redirects() {
     return [
       {
+        source: "/auth.zenta.dev",
+        destination:
+          process.env.NODE_ENV === "development"
+            ? "https://auth.zenta.local:3000"
+            : "https://auth.zenta.dev",
+        permanent: false,
+        basePath: false,
+      },
+      {
+        source: "/studio.zenta.dev",
+        destination:
+          process.env.NODE_ENV === "development"
+            ? "https://studio.zenta.local:3001"
+            : "https://studio.zenta.dev",
+        permanent: false,
+        basePath: false,
+      },
+      {
         source: "/blog.zenta.dev",
         destination:
           process.env.NODE_ENV === "development"
-            ? "https://zenta.local:3001"
+            ? "https://blog.zenta.local:3002"
             : "https://blog.zenta.dev",
         permanent: false,
         basePath: false,
@@ -38,41 +37,10 @@ const config = {
         source: "/cv.zenta.dev",
         destination:
           process.env.NODE_ENV === "development"
-            ? "https://zenta.local:3002"
+            ? "https://cv.zenta.local:3003"
             : "https://cv.zenta.dev",
         permanent: false,
         basePath: false,
-      },
-      {
-        source: "/studio.zenta.dev",
-        destination:
-          process.env.NODE_ENV === "development"
-            ? "https://zenta.local:3003"
-            : "https://studio.zenta.dev",
-        permanent: false,
-        basePath: false,
-      },
-    ];
-  },
-
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        source: "/api/:path*",
-        headers: [
-          { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" },
-          {
-            key: "Access-Control-Allow-Methods",
-            value: "GET,DELETE,PATCH,POST,PUT",
-          },
-          {
-            key: "Access-Control-Allow-Headers",
-            value:
-              "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
-          },
-        ],
       },
     ];
   },

@@ -1,65 +1,30 @@
 {
-  "$schema": "https://turborepo.org/schema.json",
-  "globalDependencies": ["**/.env"],
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
   "pipeline": {
-    "topo": {
-      "dependsOn": ["^topo"]
-    },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "next-env.d.ts",
-        ".expo/**",
-        ".output/**",
-        ".vercel/output/**"
-      ]
-    },
-    "dev": {
-      "persistent": true,
-      "cache": false
+      "outputs": [".next/**", "!.next/cache/**"]
     },
     "start": {
       "persistent": true,
       "cache": false
     },
-    "format": {
-      "outputs": ["node_modules/.cache/.prettiercache"],
-      "outputMode": "new-only"
-    },
     "lint": {
-      "dependsOn": ["^topo"],
-      "outputs": ["node_modules/.cache/.eslintcache"]
+      "dependsOn": ["^lint"]
     },
-    "typecheck": {
-      "dependsOn": ["^topo"],
-      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
+    "dev": {
+      "cache": false,
+      "persistent": true
     },
-    "clean": {
-      "cache": false
+    "postinstall": {
+      "dependsOn": ["^postinstall"]
     },
-    "//#clean": {
-      "cache": false
+    "db:push": {
+      "dependsOn": ["^db:push"]
     },
-
-    "db:migrate:deploy": {},
-    "db:push": {},
-    "db:seed": {},
-    "generate": {
-      "dependsOn": ["^generate"]
+    "db:seed": {
+      "dependsOn": ["^db:seed"]
     }
-  },
-  "globalEnv": [
-    "DATABASE_URL",
-    "AUTH_SECRET",
-    "AUTH_URL",
-    "AUTH_JWT_SECRET",
-    "NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME",
-    "NEXT_PUBLIC_CLOUDINARY_API_KEY",
-    "NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET",
-    "CLOUDINARY_API_SECRET",
-    "DISCORD_CLIENT_ID",
-    "DISCORD_CLIENT_SECRET"
-  ]
+  }
 }

@@ -31,6 +31,9 @@ export const SupermanLoader = ({
         <span className={style.longfazers_span}></span>
         <span className={style.longfazers_span}></span>
       </div>
+      <h1 className="absolute left-1/2 top-1/2 mt-12 -translate-x-1/2 -translate-y-1/2 transform text-2xl font-bold transition-all duration-300 sm:mt-16">
+        Redirecting...
+      </h1>
     </div>
   );
 };
