@@ -13,21 +13,21 @@
     "@configs/eslint-config": "*",
     "@configs/prettier-config": "*",
     "@configs/tsconfig": "*",
-    "@turbo/gen": "^1.12.4",
-    "@types/node": "^20.11.24",
-    "@types/eslint": "^8.56.5",
-    "@types/react": "^18.2.61",
-    "@types/react-dom": "^18.2.19",
-    "eslint": "^8.57.0",
-    "react": "^18.2.0",
-    "typescript": "^5.3.3",
+    "@turbo/gen": "^1.13.3",
+    "@types/node": "^20.12.12",
+    "@types/eslint": "^8.56.10",
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^9.3.0",
+    "react": "^18.3.1",
+    "typescript": "^5.4.5",
     "@types/bun": "latest"
   },
   "dependencies": {
     "@supabase/ssr": "^0.3.0",
-    "@supabase/supabase-js": "^2.43.0",
+    "@supabase/supabase-js": "^2.43.2",
     "@t3-oss/env-nextjs": "^0.10.1",
-    "zod": "^3.23.5"
+    "zod": "^3.23.8"
   },
   "prettier": "@configs/prettier-config"
 }

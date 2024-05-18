@@ -5,7 +5,6 @@ import { getServerSession } from "@packages/supabase";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export const runtime = "edge";
 export const preferredRegion = ["sin1", "syd1", "hnd1"];
 
 export async function POST(req: Request) {
