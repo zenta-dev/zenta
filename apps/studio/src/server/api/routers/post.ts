@@ -1,4 +1,4 @@
-import { PostSchema } from "@/app/posts/[id]/_schema";
+import { PostSchema } from "@/app/(root)/posts/[id]/_schema";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 

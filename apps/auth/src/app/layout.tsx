@@ -15,6 +15,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const res = await getServerSession({ cookies: cookies() });
+  console.log(res);
 
   const handleLogout = async () => {
     "use server";

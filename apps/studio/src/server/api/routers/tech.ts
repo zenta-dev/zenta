@@ -1,4 +1,4 @@
-import { StackSchema } from "@/app/stacks/[id]/_schema";
+import { StackSchema } from "@/app/(root)/stacks/[id]/_schema";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
@@ -22,14 +22,12 @@ export const techRouter = createTRPCRouter({
         },
         founders: {
           create: input.founders?.map((founder) => ({
-            creatorId: ctx.user?.id,
             name: founder.name,
             type: founder.type,
             url: founder.url,
             photo: founder.photo,
           })),
         },
-        creatorId: ctx.user?.id,
       },
     });
   }),
@@ -64,7 +62,6 @@ export const techRouter = createTRPCRouter({
             connectOrCreate: input.founders?.map((founder) => ({
               where: { id: founder.id },
               create: {
-                creatorId: ctx.user?.id,
                 name: founder.name,
                 type: founder.type,
                 url: founder.url,

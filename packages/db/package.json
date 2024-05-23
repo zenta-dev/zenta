@@ -1,0 +1,26 @@
+{
+  "name": "@packages/db",
+  "version": "0.0.0",
+  "private": true,
+  "module": "src/index.ts",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "db:push": "prisma db push",
+    "db:seed": "bun run src/seed.ts",
+    "postinstall": "prisma generate"
+  },
+  "devDependencies": {
+    "@configs/eslint-config": "*",
+    "@configs/prettier-config": "*",
+    "@configs/tsconfig": "*",
+    "@types/bun": "latest",
+    "prisma": "^5.14.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {},
+  "prettier": "@configs/prettier-config"
+}

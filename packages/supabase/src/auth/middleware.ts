@@ -54,13 +54,13 @@ export const authUpdateSession = async (request: NextRequest) => {
       },
 
       cookieOptions: {
-        domain: dev ? ".zenta.local" : ".zenta.dev",
+        domain: dev ? "localhost" : ".zenta.dev",
         path: "/",
         sameSite: "lax",
         secure: true,
       },
     },
-  ); 
+  );
 
   await sb.auth.getUser();
 

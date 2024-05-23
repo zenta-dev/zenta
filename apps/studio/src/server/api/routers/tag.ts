@@ -1,4 +1,4 @@
-import { TagSchema } from "@/app/tags/[id]/_schema";
+import { TagSchema } from "@/app/(root)/tags/[id]/_schema";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
@@ -10,7 +10,6 @@ export const tagRouter = createTRPCRouter({
         description: input.description,
         photo: input.photo,
         color: input.color,
-        creatorId: ctx.user?.id,
       },
     });
   }),
@@ -27,7 +26,6 @@ export const tagRouter = createTRPCRouter({
           description: input.description,
           photo: input.photo,
           color: input.color,
-          updaterId: ctx.user?.id,
         },
       });
     }),

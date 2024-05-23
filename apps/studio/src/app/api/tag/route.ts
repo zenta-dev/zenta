@@ -1,4 +1,4 @@
-import { TagSchema } from "@/app/tags/[id]/_schema";
+import { TagSchema } from "@/app/(root)/tags/[id]/_schema";
 import { normalizeZodError } from "@/helpers";
 import { api } from "@/trpc/server";
 import { getServerSession } from "@packages/supabase";

@@ -6,7 +6,7 @@
     "db:push": "turbo db:push",
     "db:seed": "turbo db:seed",
     "build": "turbo build",
-    "dev": "turbo dev --parallel",
+    "dev": "turbo dev --parallel --concurrency=100%",
     "start": "turbo start",
     "lint": "turbo lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
@@ -32,5 +32,11 @@
       "@configs/eslint-config/react"
     ]
   },
-  "prettier": "@configs/prettier-config"
+  "prettier": "@configs/prettier-config",
+  "trustedDependencies": [
+    "@apps/blog",
+    "@apps/cv",
+    "@apps/studio",
+    "core-js-pure"
+  ]
 }

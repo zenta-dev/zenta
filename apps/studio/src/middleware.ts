@@ -6,6 +6,7 @@ export async function middleware(req: NextRequest) {
   const res: NextResponse = await authUpdateSession(req);
 
   const ses = await getServerSession({ cookies: cookies() });
+  console.log("SESSION", ses);
   if (!ses) {
     const url = new URL(`/redirect/auth`, req.url).toString();
     return NextResponse.rewrite(url, { request: req });

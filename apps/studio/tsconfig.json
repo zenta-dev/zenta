@@ -25,7 +25,8 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     ".next/types/**/*.ts",
-    "../../packages/ui"
+    "../../packages/ui",
+    "../../packages/db/src/seed.ts"
   ],
   "exclude": [
     "node_modules"

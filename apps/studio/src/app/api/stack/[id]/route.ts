@@ -1,4 +1,4 @@
-import { StackSchema } from "@/app/stacks/[id]/_schema";
+import { StackSchema } from "@/app/(root)/stacks/[id]/_schema";
 import { normalizeZodError } from "@/helpers";
 import { api } from "@/trpc/server";
 import { getServerSession } from "@packages/supabase";

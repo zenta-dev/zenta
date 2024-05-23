@@ -4,17 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "db:push": "prisma db push",
-    "postinstall": "prisma generate",
     "dev": "next dev --experimental-https --port 3003",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.4.0",
+    "@packages/db": "*",
     "@packages/supabase": "*",
     "@packages/ui": "*",
+    "@hookform/resolvers": "^3.4.0",
     "@prisma/client": "^5.14.0",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.37.1",

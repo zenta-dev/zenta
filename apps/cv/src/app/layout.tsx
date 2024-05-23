@@ -1,6 +1,6 @@
 import { env } from "@/env";
 import { createAuthServer, getServerSession } from "@packages/supabase";
-import { Header, ThemeProvider, Toaster } from "@packages/ui";
+import { cn, Header, ThemeProvider, Toaster } from "@packages/ui";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { cookies } from "next/headers";
@@ -22,13 +22,18 @@ export default async function RootLayout({
   };
   return (
     <html lang="en">
-      <body className={montserrat.className}>
+      <body className={cn(montserrat.className)}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem={true}
         >
-          <Header name="studio" data={res?.user} handleLogout={handleLogout} />
+          <Header
+            name="cv"
+            data={res?.user}
+            handleLogout={handleLogout}
+            className="max-w-full bg-background-100"
+          />
           {children}
           <Toaster richColors />
         </ThemeProvider>

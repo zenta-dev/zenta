@@ -1,0 +1,337 @@
+generator client {
+    provider        = "prisma-client-js"
+    previewFeatures = ["multiSchema", "views"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+    schemas  = ["public", "cv", "blog"]
+}
+
+// 
+//  SHARED SCHEMA FOR AUTHENTICATION
+//
+view AuthUser {
+    instance_id                 String?   @db.Uuid
+    id                          String    @id @unique @db.Uuid
+    aud                         String?   @db.VarChar(255)
+    role                        String?   @db.VarChar(255)
+    email                       String?   @unique @db.VarChar(255)
+    encrypted_password          String?   @db.VarChar(255)
+    email_confirmed_at          DateTime? @db.Timestamptz(6)
+    invited_at                  DateTime? @db.Timestamptz(6)
+    confirmation_token          String?   @db.VarChar(255)
+    confirmation_sent_at        DateTime? @db.Timestamptz(6)
+    recovery_token              String?   @db.VarChar(255)
+    recovery_sent_at            DateTime? @db.Timestamptz(6)
+    email_change_token_new      String?   @db.VarChar(255)
+    email_change                String?   @db.VarChar(255)
+    email_change_sent_at        DateTime? @db.Timestamptz(6)
+    last_sign_in_at             DateTime? @db.Timestamptz(6)
+    raw_app_meta_data           Json?
+    raw_user_meta_data          Json?
+    is_super_admin              Boolean?
+    created_at                  DateTime? @db.Timestamptz(6)
+    updated_at                  DateTime? @db.Timestamptz(6)
+    phone                       String?   @unique
+    phone_confirmed_at          DateTime? @db.Timestamptz(6)
+    phone_change                String?   @default("")
+    phone_change_token          String?   @default("") @db.VarChar(255)
+    phone_change_sent_at        DateTime? @db.Timestamptz(6)
+    confirmed_at                DateTime? @default(dbgenerated("LEAST(email_confirmed_at, phone_confirmed_at)")) @db.Timestamptz(6)
+    email_change_token_current  String?   @default("") @db.VarChar(255)
+    email_change_confirm_status Int?      @default(0) @db.SmallInt
+    banned_until                DateTime? @db.Timestamptz(6)
+    reauthentication_token      String?   @default("") @db.VarChar(255)
+    reauthentication_sent_at    DateTime? @db.Timestamptz(6)
+    is_sso_user                 Boolean   @default(false)
+    deleted_at                  DateTime? @db.Timestamptz(6)
+
+    // --------------- BEGINS Relationships TO CV SCHEMA ---------------
+    cv Cv[]
+    // --------------- END Relationships TO CV SCHEMA ---------------
+
+    // --------------- BEGINS Relationships TO BLOG SCHEMA ---------------
+    comments PostComment[]
+    posts    PostAuthor[]
+    // --------------- END Relationships TO BLOG SCHEMA --------------- 
+
+    @@index([instance_id])
+    @@map("auth_users")
+    @@schema("public")
+}
+
+// 
+//  ------------------------ CV SCHEMA BEGINS ------------------------
+//
+model Other {
+    id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    cvId String @db.Uuid
+    cv   Cv     @relation(fields: [cvId], references: [id], onDelete: Cascade)
+
+    category     String
+    name         String
+    description  String
+    month        Int?
+    year         Int?
+    achievements String[] @db.Text
+    document     String?
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+    @@map("other")
+    @@schema("cv")
+}
+
+model Organization {
+    id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    cvId String @db.Uuid
+    cv   Cv     @relation(fields: [cvId], references: [id], onDelete: Cascade)
+
+    name         String
+    address      String
+    description  String   @db.Text
+    start        DateTime
+    end          DateTime
+    active       Boolean
+    achievements String[] @db.Text
+    document     String?
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+    @@map("organization")
+    @@schema("cv")
+}
+
+model Experince {
+    id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    name         String
+    address      String
+    description  String    @db.Text
+    start        DateTime
+    end          DateTime?
+    active       Boolean
+    achievements String[]  @db.Text
+    document     String?
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+    cv   Cv     @relation(fields: [cvId], references: [id], onDelete: Cascade)
+    cvId String @db.Uuid
+
+    @@map("experince")
+    @@schema("cv")
+}
+
+model Education {
+    id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+    name       String
+    address    String
+    level      String
+    major      String
+    gpa        Float
+    maxGPA     Float
+    start      DateTime
+    graduate   DateTime?
+    activities String[]  @db.Text
+    active     Boolean
+    document   String?
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+    cv   Cv     @relation(fields: [cvId], references: [id], onDelete: Cascade)
+    cvId String @db.Uuid
+
+    @@map("education")
+    @@schema("cv")
+}
+
+model Personal {
+    id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    name         String
+    email        String
+    phone        String
+    linkedinUrl  String?
+    portfolioUrl String?
+    address      String?
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+    cv Cv[]
+
+    @@map("personal")
+    @@schema("cv")
+}
+
+model Cv {
+    id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+    personal     Personal?      @relation(fields: [personalId], references: [id])
+    personalId   String?        @db.Uuid
+    educations   Education[]
+    experinces   Experince[]
+    Organization Organization[]
+    Other        Other[]
+
+    user       AuthUser @relation(fields: [authUserId], references: [id])
+    authUserId String   @db.Uuid
+
+    @@map("cv")
+    @@schema("cv")
+}
+
+//
+//  ------------------------ CV SCHEMA ENDS ------------------------
+//
+
+//
+//  ------------------------ BLOG SCHEMA BEGINS ------------------------
+//
+
+enum TechFounderType {
+    PERSON
+    ORGANIZATION
+    COMPANY
+
+    @@map("tech_founder_type")
+    @@schema("blog")
+}
+
+model TechFounder {
+    id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+    name  String          @unique
+    type  TechFounderType @default(PERSON)
+    url   String
+    photo String?
+
+    techs Tech[]
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+    @@map("tech_founder")
+    @@schema("blog")
+}
+
+model TechVersion {
+    id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    hash        String  @unique
+    version     Float
+    whatNews    String?
+    description String?
+    url         String?
+
+    techId String @db.Uuid
+    tech   Tech   @relation(fields: [techId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+    @@map("tech_version")
+    @@schema("blog")
+}
+
+model Tech {
+    id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+    name        String  @unique
+    description String
+    logo        String
+    url         String
+    homepage    String?
+    color       String?
+    heat        Int     @default(0)
+
+    posts    Post[]
+    versions TechVersion[]
+    founders TechFounder[]
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+    @@map("tech")
+    @@schema("blog")
+}
+
+model Tag {
+    id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+    name        String  @unique
+    description String?
+    photo       String?
+    color       String?
+    heat        Int     @default(0)
+    posts       Post[]
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+    @@map("tag")
+    @@schema("blog")
+}
+
+model PostComment {
+    id       String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+    content  Json
+    children PostComment[] @relation("ParentComment")
+
+    parentId String?      @db.Uuid
+    parent   PostComment? @relation("ParentComment", fields: [parentId], references: [id])
+
+    postId String @db.Uuid
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+    user   AuthUser? @relation(fields: [userId], references: [id])
+    userId String?   @db.Uuid
+
+    @@map("post_comment")
+    @@schema("blog")
+}
+
+model PostAuthor {
+    postId String @db.Uuid
+    userId String @db.Uuid
+
+    post Post     @relation(fields: [postId], references: [id])
+    user AuthUser @relation(fields: [userId], references: [id])
+
+    @@id([postId, userId])
+    @@map("post_author")
+    @@schema("blog")
+}
+
+model Post {
+    id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+    title     String
+    slug      String   @unique
+    published Boolean  @default(false)
+    cover     String?
+    content   Json
+    summary   String?
+    related   String[]
+    heat      Int      @default(0)
+    readTime  Float    @default(0)
+
+    comments PostComment[]
+    tags     Tag[]
+    stack    Tech[]
+    authors  PostAuthor[]
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
+
+    @@map("post")
+    @@schema("blog")
+}

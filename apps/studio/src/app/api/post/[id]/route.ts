@@ -1,4 +1,4 @@
-import { PostSchema } from "@/app/posts/[id]/_schema";
+import { PostSchema } from "@/app/(root)/posts/[id]/_schema";
 import { calculateReadTime, normalizeZodError } from "@/helpers";
 import { api } from "@/trpc/server";
 import { getServerSession } from "@packages/supabase";

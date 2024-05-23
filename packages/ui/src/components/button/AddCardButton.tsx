@@ -5,7 +5,7 @@ import { TiPlus } from "react-icons/ti";
 export const AddCardButton = ({
   onClick,
   className,
-  name
+  name,
 }: {
   onClick: () => void;
   className?: string;

@@ -22,8 +22,8 @@ export const createAuthServer = ({ cookies }: { cookies: any }) => {
         },
       },
 
-      cookieOptions: { 
-        domain: dev ? ".zenta.local" : ".zenta.dev",
+      cookieOptions: {
+        domain: dev ? "localhost" : ".zenta.dev",
         path: "/",
         sameSite: "lax",
         secure: true,

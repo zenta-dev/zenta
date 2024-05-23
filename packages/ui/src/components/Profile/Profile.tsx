@@ -11,7 +11,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@packages/ui";
-import { addImageSize } from "../../lib/utils";
 import { LogoutButton } from "../client/LogoutButton";
 
 export function Profile({
@@ -22,12 +21,13 @@ export function Profile({
   handleLogout?: () => void;
 }) {
   if (!data || data === null) return null;
-  let user = data?.user_metadata;
+  const user = data?.user_metadata;
+  console.log("PROFILE", user);
   function determineAvatar() {
     if (user?.avatar_url) {
       return (
         <AvatarImage
-          src={addImageSize(user.avatar_url, 32, 32)}
+          src={user.avatar_url}
           alt={user.firstName || user.email || ""}
         />
       );
