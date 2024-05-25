@@ -8,11 +8,11 @@ type Props = {
 };
 export default function CVPage({ params }: Props) {
   return (
-    <main className="flex w-full items-center justify-between">
-      <section className="w-1/2 justify-start p-4">
+    <main className=" flex w-full items-start justify-between">
+      <section className="m-9 w-1/2 justify-start p-4">
         <FormStepper />
       </section>
-      <section className="w-1/2">
+      <section className="m-6 w-1/2">
         <Image
           src="https://via.placeholder.com/720x1280"
           alt="placeholder"

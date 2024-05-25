@@ -91,6 +91,7 @@ model Organization {
     cv   Cv     @relation(fields: [cvId], references: [id], onDelete: Cascade)
 
     name         String
+    role         String
     address      String
     description  String   @db.Text
     start        DateTime
@@ -106,9 +107,10 @@ model Organization {
     @@schema("cv")
 }
 
-model Experince {
+model Experience {
     id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     name         String
+    role         String
     address      String
     description  String    @db.Text
     start        DateTime
@@ -123,7 +125,7 @@ model Experince {
     cv   Cv     @relation(fields: [cvId], references: [id], onDelete: Cascade)
     cvId String @db.Uuid
 
-    @@map("experince")
+    @@map("experience")
     @@schema("cv")
 }
 
@@ -160,6 +162,7 @@ model Personal {
     linkedinUrl  String?
     portfolioUrl String?
     address      String?
+    description  String
 
     createdAt DateTime @default(now()) @db.Timestamptz(6)
     updatedAt DateTime @default(now()) @db.Timestamptz(6)
@@ -176,7 +179,7 @@ model Cv {
     personal     Personal?      @relation(fields: [personalId], references: [id])
     personalId   String?        @db.Uuid
     educations   Education[]
-    experinces   Experince[]
+    experiences  Experience[]
     Organization Organization[]
     Other        Other[]
 

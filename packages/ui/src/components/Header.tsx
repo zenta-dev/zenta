@@ -1,5 +1,5 @@
 import { User } from "@packages/supabase";
-import { BrandLink, cn, Profile } from "@packages/ui";
+import { BrandLink, cn, Profile, ThemeButton } from "@packages/ui";
 import { Logo } from "./Brand/Logo";
 
 export const Header = async ({
@@ -26,6 +26,7 @@ export const Header = async ({
       </div>
       <div className="flex items-center gap-2">
         {data && <Profile data={data} handleLogout={handleLogout} />}
+        <ThemeButton/>
       </div>
     </header>
   );
