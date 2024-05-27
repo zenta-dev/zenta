@@ -1,6 +1,7 @@
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = ["multiSchema", "views"]
+    output          = "../src/client"
 }
 
 datasource db {
@@ -48,13 +49,13 @@ view AuthUser {
     is_sso_user                 Boolean   @default(false)
     deleted_at                  DateTime? @db.Timestamptz(6)
 
-    // --------------- BEGINS Relationships TO CV SCHEMA ---------------
-    cv Cv[]
+    // --------------- BEGIN Relationships TO CV SCHEMA ---------------
+    cv Cv[] @relation("user_to_cv")
     // --------------- END Relationships TO CV SCHEMA ---------------
 
-    // --------------- BEGINS Relationships TO BLOG SCHEMA ---------------
-    comments PostComment[]
-    posts    PostAuthor[]
+    // --------------- BEGIN Relationships TO BLOG SCHEMA ---------------
+    comments PostComment[] @relation("user_to_comment")
+    posts    PostAuthor[]  @relation("user_to_post")
     // --------------- END Relationships TO BLOG SCHEMA --------------- 
 
     @@index([instance_id])
@@ -63,12 +64,12 @@ view AuthUser {
 }
 
 // 
-//  ------------------------ CV SCHEMA BEGINS ------------------------
+//  ------------------------ CV SCHEMA BEGIN ------------------------
 //
 model Other {
     id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     cvId String @db.Uuid
-    cv   Cv     @relation(fields: [cvId], references: [id], onDelete: Cascade)
+    cv   Cv     @relation("cv_to_other", fields: [cvId], references: [id], onDelete: Cascade)
 
     category     String
     name         String
@@ -88,16 +89,16 @@ model Other {
 model Organization {
     id   String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
     cvId String @db.Uuid
-    cv   Cv     @relation(fields: [cvId], references: [id], onDelete: Cascade)
+    cv   Cv     @relation("cv_to_organization", fields: [cvId], references: [id], onDelete: Cascade)
 
     name         String
     role         String
     address      String
-    description  String   @db.Text
+    description  String    @db.Text
     start        DateTime
-    end          DateTime
+    end          DateTime?
     active       Boolean
-    achievements String[] @db.Text
+    achievements String[]  @db.Text
     document     String?
 
     createdAt DateTime @default(now()) @db.Timestamptz(6)
@@ -122,7 +123,7 @@ model Experience {
     createdAt DateTime @default(now()) @db.Timestamptz(6)
     updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
-    cv   Cv     @relation(fields: [cvId], references: [id], onDelete: Cascade)
+    cv   Cv     @relation("cv_to_experience", fields: [cvId], references: [id], onDelete: Cascade)
     cvId String @db.Uuid
 
     @@map("experience")
@@ -147,7 +148,7 @@ model Education {
     createdAt DateTime @default(now()) @db.Timestamptz(6)
     updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
-    cv   Cv     @relation(fields: [cvId], references: [id], onDelete: Cascade)
+    cv   Cv     @relation("cv_to_education", fields: [cvId], references: [id], onDelete: Cascade)
     cvId String @db.Uuid
 
     @@map("education")
@@ -167,7 +168,7 @@ model Personal {
     createdAt DateTime @default(now()) @db.Timestamptz(6)
     updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
-    cv Cv[]
+    cv Cv[] @relation("cv_to_personal")
 
     @@map("personal")
     @@schema("cv")
@@ -176,15 +177,21 @@ model Personal {
 model Cv {
     id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-    personal     Personal?      @relation(fields: [personalId], references: [id])
-    personalId   String?        @db.Uuid
-    educations   Education[]
-    experiences  Experience[]
-    Organization Organization[]
-    Other        Other[]
+    title String
+    image String?
 
-    user       AuthUser @relation(fields: [authUserId], references: [id])
+    personal     Personal?      @relation("cv_to_personal", fields: [personalId], references: [id])
+    personalId   String?        @db.Uuid
+    educations   Education[]    @relation("cv_to_education")
+    experiences  Experience[]   @relation("cv_to_experience")
+    Organization Organization[] @relation("cv_to_organization")
+    Other        Other[]        @relation("cv_to_other")
+
+    user       AuthUser @relation("user_to_cv", fields: [authUserId], references: [id], onDelete: Cascade)
     authUserId String   @db.Uuid
+
+    createdAt DateTime @default(now()) @db.Timestamptz(6)
+    updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
     @@map("cv")
     @@schema("cv")
@@ -195,7 +202,7 @@ model Cv {
 //
 
 //
-//  ------------------------ BLOG SCHEMA BEGINS ------------------------
+//  ------------------------ BLOG SCHEMA BEGIN ------------------------
 //
 
 enum TechFounderType {
@@ -215,7 +222,7 @@ model TechFounder {
     url   String
     photo String?
 
-    techs Tech[]
+    techs Tech[] @relation("tech_to_founder")
 
     createdAt DateTime @default(now()) @db.Timestamptz(6)
     updatedAt DateTime @default(now()) @db.Timestamptz(6)
@@ -233,7 +240,7 @@ model TechVersion {
     url         String?
 
     techId String @db.Uuid
-    tech   Tech   @relation(fields: [techId], references: [id], onDelete: Cascade)
+    tech   Tech   @relation("tech_to_version", fields: [techId], references: [id], onDelete: Cascade)
 
     createdAt DateTime @default(now()) @db.Timestamptz(6)
     updatedAt DateTime @default(now()) @db.Timestamptz(6)
@@ -253,9 +260,9 @@ model Tech {
     color       String?
     heat        Int     @default(0)
 
-    posts    Post[]
-    versions TechVersion[]
-    founders TechFounder[]
+    posts    Post[]        @relation("post_to_tech")
+    versions TechVersion[] @relation("tech_to_version")
+    founders TechFounder[] @relation("tech_to_founder")
 
     createdAt DateTime @default(now()) @db.Timestamptz(6)
     updatedAt DateTime @default(now()) @db.Timestamptz(6)
@@ -272,7 +279,7 @@ model Tag {
     photo       String?
     color       String?
     heat        Int     @default(0)
-    posts       Post[]
+    posts       Post[]  @relation("post_to_tag")
 
     createdAt DateTime @default(now()) @db.Timestamptz(6)
     updatedAt DateTime @default(now()) @db.Timestamptz(6)
@@ -290,12 +297,12 @@ model PostComment {
     parent   PostComment? @relation("ParentComment", fields: [parentId], references: [id])
 
     postId String @db.Uuid
-    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+    post   Post   @relation("parent_comment", fields: [postId], references: [id], onDelete: Cascade)
 
     createdAt DateTime @default(now()) @db.Timestamptz(6)
     updatedAt DateTime @default(now()) @db.Timestamptz(6)
 
-    user   AuthUser? @relation(fields: [userId], references: [id])
+    user   AuthUser? @relation("user_to_comment", fields: [userId], references: [id])
     userId String?   @db.Uuid
 
     @@map("post_comment")
@@ -306,8 +313,8 @@ model PostAuthor {
     postId String @db.Uuid
     userId String @db.Uuid
 
-    post Post     @relation(fields: [postId], references: [id])
-    user AuthUser @relation(fields: [userId], references: [id])
+    post Post     @relation("post_to_author", fields: [postId], references: [id])
+    user AuthUser @relation("user_to_post", fields: [userId], references: [id])
 
     @@id([postId, userId])
     @@map("post_author")
@@ -327,10 +334,10 @@ model Post {
     heat      Int      @default(0)
     readTime  Float    @default(0)
 
-    comments PostComment[]
-    tags     Tag[]
-    stack    Tech[]
-    authors  PostAuthor[]
+    comments PostComment[] @relation("parent_comment")
+    tags     Tag[]         @relation("post_to_tag")
+    stack    Tech[]        @relation("post_to_tech")
+    authors  PostAuthor[]  @relation("post_to_author")
 
     createdAt DateTime @default(now()) @db.Timestamptz(6)
     updatedAt DateTime @default(now()) @db.Timestamptz(6)

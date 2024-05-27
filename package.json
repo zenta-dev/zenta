@@ -34,6 +34,7 @@
   },
   "prettier": "@configs/prettier-config",
   "trustedDependencies": [
+    "@apps/auth",
     "@apps/blog",
     "@apps/cv",
     "@apps/studio",

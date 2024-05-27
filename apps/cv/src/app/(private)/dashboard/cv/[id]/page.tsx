@@ -1,5 +1,5 @@
+import { FormStepper } from "@/components/cv/form-stepper";
 import Image from "next/image";
-import { FormStepper } from "./_components/FormStepper";
 
 type Props = {
   params: {
