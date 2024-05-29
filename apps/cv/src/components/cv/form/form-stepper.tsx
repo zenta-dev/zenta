@@ -1,6 +1,6 @@
 "use client";
 
-import { CVSchemaValue } from "@/schemas/cv";
+import { usePDF } from "@/provider/pdf-provider";
 import {
   Button,
   Card,
@@ -17,7 +17,7 @@ import {
   Stepper,
   useStepper,
 } from "@packages/ui";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { EducationForm } from "./education-form";
 import { ExperienceForm } from "./experience-form";
 import { OrganizationForm } from "./organization-form";
@@ -62,16 +62,15 @@ const STEPPER_ITEMS = [
   },
 ];
 
-export const FormStepper = ({
-  initialData,
-}: {
-  initialData?: CVSchemaValue;
-}) => {
-  if (!initialData) redirect("/dash");
-
+export const FormStepper = () => {
   return (
     <div className="flex w-full flex-col gap-4">
-      <Stepper variant="circle-alt" initialStep={0} steps={STEPPER_ITEMS}>
+      <Stepper
+        variant="circle-alt"
+        initialStep={0}
+        steps={STEPPER_ITEMS}
+        onClickStep={(step, setStep) => setStep(step)}
+      >
         {STEPPER_ITEMS.map((stepProps, index) => {
           if (index === 0) {
             return (
@@ -81,9 +80,9 @@ export const FormStepper = ({
                     <CardTitle>{stepProps.title}</CardTitle>
                     <CardDescription>{stepProps.desc}</CardDescription>
                   </CardHeader>
-                  <Separator className="mx-auto mb-4 w-[calc(100vw-8vw)]" />
+                  <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
                   <CardContent>
-                    <PersonalForm initialData={initialData} />
+                    <PersonalForm />
                   </CardContent>
                 </Card>
               </Step>
@@ -97,9 +96,9 @@ export const FormStepper = ({
                     <CardTitle>{stepProps.title}</CardTitle>
                     <CardDescription>{stepProps.desc}</CardDescription>
                   </CardHeader>
-                  <Separator className="mx-auto mb-4 w-[calc(100vw-8vw)]" />
+                  <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
                   <CardContent>
-                    <EducationForm initialData={initialData} />
+                    <EducationForm />
                   </CardContent>
                 </Card>
               </Step>
@@ -114,9 +113,9 @@ export const FormStepper = ({
                     <CardTitle>{stepProps.title}</CardTitle>
                     <CardDescription>{stepProps.desc}</CardDescription>
                   </CardHeader>
-                  <Separator className="mx-auto mb-4 w-[calc(100vw-8vw)]" />
+                  <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
                   <CardContent>
-                    <ExperienceForm initialData={initialData} />
+                    <ExperienceForm />
                   </CardContent>
                 </Card>
               </Step>
@@ -131,9 +130,9 @@ export const FormStepper = ({
                     <CardTitle>{stepProps.title}</CardTitle>
                     <CardDescription>{stepProps.desc}</CardDescription>
                   </CardHeader>
-                  <Separator className="mx-auto mb-4 w-[calc(100vw-8vw)]" />
+                  <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
                   <CardContent>
-                    <OrganizationForm initialData={initialData} />
+                    <OrganizationForm />
                   </CardContent>
                 </Card>
               </Step>
@@ -147,25 +146,28 @@ export const FormStepper = ({
                   <CardTitle>{stepProps.title}</CardTitle>
                   <CardDescription>{stepProps.desc}</CardDescription>
                 </CardHeader>
-                <Separator className="mx-auto mb-4 w-[calc(100vw-8vw)]" />
+                <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
                 <CardContent>
-                  <OtherForm initialData={initialData} />
+                  <OtherForm />
                 </CardContent>
               </Card>
             </Step>
           );
         })}
-        <MyStepperFooter slug={initialData.slug} />
+        <StepperFooter />
       </Stepper>
     </div>
   );
 };
 
-function MyStepperFooter({ slug }: { slug: string }) {
+function StepperFooter() {
+  const { initialData } = usePDF();
+  const { slug } = initialData;
+
   const { activeStep, steps } = useStepper();
   const router = useRouter();
 
-  if (activeStep !== steps.length) {
+  if (activeStep !== steps.length || !slug) {
     return null;
   }
 

@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  CVSchemaValue,
-  OtherFormSchema,
-  OtherFormSchemaValue,
-} from "@/schemas/cv";
+import { usePDF } from "@/provider/pdf-provider";
+import { OtherFormSchema, OtherFormSchemaValue } from "@/schemas/cv/index";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -30,7 +27,7 @@ import {
   toast,
   useStepper,
 } from "@packages/ui";
-import { nullsToUndefined } from "@packages/utils";
+import { nullsToUndefined, useDebouncedCallback } from "@packages/utils";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
@@ -52,9 +49,14 @@ const emptyOther = {
   achievements: [""],
 };
 
-export const OtherForm = ({ initialData }: { initialData: CVSchemaValue }) => {
+export const OtherForm = () => {
   const { isPending, isSuccess, isError, error, mutateAsync, reset } =
     api.cv.updateOther.useMutation();
+  const { initialData, setCvValue } = usePDF();
+
+  if (!initialData.id) {
+    return <div>Missing CV ID. Please reopen from the dashboard.</div>;
+  }
 
   const { others } = initialData;
   const form = useForm<OtherFormSchemaValue>({
@@ -77,6 +79,14 @@ export const OtherForm = ({ initialData }: { initialData: CVSchemaValue }) => {
     reset();
     nextStep();
   }
+  const debounced = useDebouncedCallback(() => {
+    setCvValue({
+      initialData: {
+        ...initialData,
+        others: nullsToUndefined(form.getValues().partial),
+      },
+    });
+  }, 100);
 
   const { nextStep, prevStep } = useStepper();
   useEffect(() => {
@@ -91,7 +101,11 @@ export const OtherForm = ({ initialData }: { initialData: CVSchemaValue }) => {
       toast.loading("Saving others information...");
       reset();
     }
-  }, [isSuccess, isError, isPending, error, reset]);
+    const sub = form.watch(() => {
+      debounced();
+    });
+    return () => sub.unsubscribe();
+  }, [isSuccess, isError, isPending, error, reset, form.watch]);
 
   const { fields, append, replace } = useFieldArray({
     control: form.control,

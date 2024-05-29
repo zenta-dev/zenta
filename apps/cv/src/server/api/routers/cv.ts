@@ -5,7 +5,7 @@ import {
   OrganizationFormSchema,
   OtherFormSchema,
   PersonalFormSchema,
-} from "@/schemas/cv";
+} from "@/schemas/cv/index";
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -18,6 +18,7 @@ export const cvRouter = createTRPCRouter({
       },
       select: {
         id: true,
+        slug: true,
         title: true,
         image: true,
         updatedAt: true,
@@ -42,6 +43,11 @@ export const cvRouter = createTRPCRouter({
           experiences: true,
           organizations: true,
           others: true,
+          user: {
+            select: {
+              raw_user_meta_data: true,
+            },
+          },
         },
       });
     }),
@@ -66,7 +72,7 @@ export const cvRouter = createTRPCRouter({
         });
       }
 
-      let slug = input.title.toLowerCase().replace(/\s+/g, "-"); 
+      let slug = input.title.toLowerCase().replace(/\s+/g, "-");
 
       const exists = await db.cv.findMany({
         where: {
@@ -74,7 +80,7 @@ export const cvRouter = createTRPCRouter({
         },
       });
 
-      if (exists.length > 0) { 
+      if (exists.length > 0) {
         const length = exists.length + 1;
         slug = `${slug}-${length}`;
       }

@@ -22,7 +22,7 @@ export default async function RootLayout({
   };
   return (
     <html lang="en">
-      <body className={cn(montserrat.className)}>
+      <body className={cn(montserrat.className, "h-full")}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

@@ -2,11 +2,13 @@ import { CreateCVDialog } from "@/components/cv/create/dialog";
 import { DeleteCVDialog } from "@/components/cv/delete/dialog";
 import { api } from "@/trpc/server";
 import {
+  Button,
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
+  EyeOpenIcon,
   Separator,
 } from "@packages/ui";
 import Image from "next/image";
@@ -46,7 +48,15 @@ export default async function DashboardPage() {
                     </p>
                   </CardHeader>
                 </Card>
-              </Link>{" "}
+              </Link>
+              <Link
+                href={`/p/${item.slug}`}
+                className="absolute right-14 top-2"
+              >
+                <Button size="icon" className="bg-blue-500">
+                  <EyeOpenIcon className="text-white" />
+                </Button>
+              </Link>
               <DeleteCVDialog
                 id={item.id}
                 title={item.title}

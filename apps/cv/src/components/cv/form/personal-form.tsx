@@ -1,8 +1,7 @@
-import {
-  CVSchemaValue,
-  PersonalFormSchema,
-  PersonalFormValue,
-} from "@/schemas/cv";
+"use client";
+
+import { usePDF } from "@/provider/pdf-provider";
+import { PersonalFormSchema, PersonalFormValue } from "@/schemas/cv/index";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -18,22 +17,24 @@ import {
   toast,
   useStepper,
 } from "@packages/ui";
-import { nullsToUndefined } from "@packages/utils";
+import { nullsToUndefined, useDebouncedCallback } from "@packages/utils";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-export const PersonalForm = ({
-  initialData,
-}: {
-  initialData: CVSchemaValue;
-}) => {
+export const PersonalForm = () => {
   const { isPending, isSuccess, isError, error, mutateAsync, reset } =
     api.cv.updatePersonal.useMutation();
+  const { initialData, setCvValue } = usePDF();
+
+  if (!initialData.id) {
+    return <div>Missing CV ID. Please reopen from the dashboard.</div>;
+  }
 
   const { personal } = initialData;
   const form = useForm<PersonalFormValue>({
     resolver: zodResolver(PersonalFormSchema),
     mode: "onSubmit",
+    delayError: 200,
     defaultValues:
       personal === undefined
         ? {
@@ -59,6 +60,15 @@ export const PersonalForm = ({
     nextStep();
   }
 
+  const debounced = useDebouncedCallback(() => {
+    setCvValue({
+      initialData: {
+        ...initialData,
+        personal: nullsToUndefined(form.getValues()),
+      },
+    });
+  }, 100);
+
   const { nextStep } = useStepper();
   useEffect(() => {
     toast.dismiss();
@@ -71,8 +81,11 @@ export const PersonalForm = ({
     if (isPending) {
       toast.loading("Saving personal information...");
     }
-    const errors = form.formState.errors;
-  }, [isSuccess, isError, isPending, error, reset]);
+    const sub = form.watch(() => {
+      debounced();
+    });
+    return () => sub.unsubscribe();
+  }, [isSuccess, isError, isPending, error, reset, form.watch]);
 
   const onSubmit = async (data: PersonalFormValue) => {
     if (!initialData.id) {
@@ -94,6 +107,7 @@ export const PersonalForm = ({
     form.setValue("address", res.personal?.address || "");
     form.setValue("description", res.personal?.description || "");
     initialData.personal = nullsToUndefined(res.personal);
+    setCvValue({ initialData });
     if (res.personal) {
       handleSuccess();
     }

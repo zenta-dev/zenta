@@ -1,5 +1,7 @@
 import { Button } from "@packages/ui";
 
+export const dynamic = "force-static";
+
 export default function HomePage() {
   return (
     <main>
@@ -9,10 +11,10 @@ export default function HomePage() {
             Crafting Careers, Crafting Futures – Zenta, where every CV is a
             masterpiece in progress!
           </div>
-          <div  className="text-2xl font-normal">
+          <div className="text-2xl font-normal">
             Get a free review of your CV, in just 30 seconds. Save time and
             money🌟
-          </div >
+          </div>
           <Button>Get Started</Button>
         </div>
       </section>

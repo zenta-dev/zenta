@@ -1,10 +1,10 @@
 "use client";
 
+import { usePDF } from "@/provider/pdf-provider";
 import {
-  CVSchemaValue,
   OrganizationFormSchema,
   OrganizationFormSchemaValue,
-} from "@/schemas/cv";
+} from "@/schemas/cv/index";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -30,7 +30,7 @@ import {
   toast,
   useStepper,
 } from "@packages/ui";
-import { nullsToUndefined } from "@packages/utils";
+import { nullsToUndefined, useDebouncedCallback } from "@packages/utils";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
@@ -44,13 +44,14 @@ const emptyOrganization = {
   achievements: [""],
 };
 
-export const OrganizationForm = ({
-  initialData,
-}: {
-  initialData: CVSchemaValue;
-}) => {
+export const OrganizationForm = () => {
   const { isPending, isSuccess, isError, error, mutateAsync, reset } =
     api.cv.updateOrganization.useMutation();
+  const { initialData, setCvValue } = usePDF();
+
+  if (!initialData.id) {
+    return <div>Missing CV ID. Please reopen from the dashboard.</div>;
+  }
 
   const { organizations } = initialData;
   const form = useForm<OrganizationFormSchemaValue>({
@@ -74,6 +75,15 @@ export const OrganizationForm = ({
     nextStep();
   }
 
+  const debounced = useDebouncedCallback(() => {
+    setCvValue({
+      initialData: {
+        ...initialData,
+        organizations: nullsToUndefined(form.getValues().partial),
+      },
+    });
+  }, 100);
+
   const { nextStep, prevStep } = useStepper();
   useEffect(() => {
     toast.dismiss();
@@ -87,7 +97,11 @@ export const OrganizationForm = ({
       toast.loading("Saving organization information...");
       reset();
     }
-  }, [isSuccess, isError, isPending, error, reset]);
+    const sub = form.watch(() => {
+      debounced();
+    });
+    return () => sub.unsubscribe();
+  }, [isSuccess, isError, isPending, error, reset, form.watch]);
 
   const { fields, append, replace } = useFieldArray({
     control: form.control,

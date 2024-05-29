@@ -1,10 +1,10 @@
 "use client";
 
+import { usePDF } from "@/provider/pdf-provider";
 import {
-  CVSchemaValue,
-  EducationFormSchema,
-  EducationFormSchemaValue,
-} from "@/schemas/cv";
+  ExperienceFormSchema,
+  ExperienceFormSchemaValue,
+} from "@/schemas/cv/index";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -13,8 +13,6 @@ import {
   CalendarIcon,
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
   Checkbox,
   cn,
   Form,
@@ -28,97 +26,93 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-  Separator,
+  Textarea,
   toast,
-  TrashIcon,
   useStepper,
 } from "@packages/ui";
-import { nullsToUndefined } from "@packages/utils";
+import { nullsToUndefined, useDebouncedCallback } from "@packages/utils";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 
-const EDUCATION_LEVELS = [
-  { value: "certificate", label: "Certificate" },
-  { value: "senior_high_school", label: "Senior High School" },
-  { value: "associates_degree", label: "Associate's Degree" },
-  { value: "diploma", label: "Diploma" },
-  { value: "undergraduate", label: "Undergraduate" },
-  { value: "bachelor", label: "Bachelor" },
-  { value: "master", label: "Master" },
-  { value: "professor", label: "Professor" },
-] as const;
-
-const emptyEducation = {
+const emptyExperience = {
   name: "",
+  role: "",
   address: "",
-  level: "",
-  major: "",
-  gpa: 0,
-  maxGPA: 0,
+  description: "",
   start: new Date(),
-  activities: [""],
   active: false,
+  achievements: [""],
 };
 
-export const EducationForm = ({
-  initialData,
-}: {
-  initialData: CVSchemaValue;
-}) => {
-  const { isPending, isSuccess, isError, error, mutateAsync, reset, data } =
-    api.cv.updateEducations.useMutation();
+export const ExperienceForm = () => {
+  const { isPending, isSuccess, isError, error, mutateAsync, reset } =
+    api.cv.updateExperience.useMutation();
 
-  const { educations } = initialData;
-  const form = useForm<EducationFormSchemaValue>({
-    resolver: zodResolver(EducationFormSchema),
+  const { initialData, setCvValue } = usePDF();
+
+  if (!initialData.id) {
+    return <div>Missing CV ID. Please reopen from the dashboard.</div>;
+  }
+
+  const { experiences } = initialData;
+  const form = useForm<ExperienceFormSchemaValue>({
+    resolver: zodResolver(ExperienceFormSchema),
     mode: "onSubmit",
     defaultValues:
-      educations.length > 0
+      experiences.length > 0
         ? {
             cvId: initialData.id,
-            partial: educations,
+            partial: experiences,
           }
         : {
             cvId: initialData.id,
-            partial: [emptyEducation],
+            partial: [emptyExperience],
           },
   });
 
   function handleSuccess() {
     toast.dismiss();
-    toast.success("Educations information updated successfully");
+    toast.success("Experinces information updated successfully");
     reset();
     nextStep();
   }
+
+  const debounced = useDebouncedCallback(() => {
+    setCvValue({
+      initialData: {
+        ...initialData,
+        experiences: nullsToUndefined(form.getValues().partial),
+      },
+    });
+  }, 100);
 
   const { nextStep, prevStep } = useStepper();
   useEffect(() => {
     toast.dismiss();
     if (isSuccess) {
-      handleSuccess();
+      toast.success("");
+      reset();
+      nextStep();
     }
     if (isError) {
       toast.error(error?.message);
     }
     if (isPending) {
-      toast.loading("Saving education information...");
+      toast.loading("Saving experiences information...");
       reset();
     }
-  }, [isSuccess, isError, isPending, error, reset]);
+    const sub = form.watch(() => {
+      debounced();
+    });
+    return () => sub.unsubscribe();
+  }, [isSuccess, isError, isPending, error, reset, form.watch]);
 
   const { fields, append, replace } = useFieldArray({
     control: form.control,
     name: "partial",
   });
 
-  const onSubmit = async (data: EducationFormSchemaValue) => {
+  const onSubmit = async (data: ExperienceFormSchemaValue) => {
     if (!initialData.id) {
       toast.error("Missing CV ID. Please reopen from the dashboard.");
       return;
@@ -128,9 +122,9 @@ export const EducationForm = ({
       cvId: initialData.id,
       ...rest,
     });
-    form.setValue("partial", nullsToUndefined(res.educations));
-    initialData.educations = nullsToUndefined(res.educations);
-    if (res.educations.length > 0) {
+    form.setValue("partial", nullsToUndefined(res.experiences));
+    initialData.experiences = nullsToUndefined(res.experiences);
+    if (res.experiences.length > 0) {
       handleSuccess();
     }
   };
@@ -139,130 +133,21 @@ export const EducationForm = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         {fields.map((field, index) => (
-          <Card key={field.id} className="mt-4">
+          <Card key={field.id} className="mt-4 pt-4">
             <CardContent>
-              <CardHeader className="mt-4 flex flex-row items-center justify-between p-0">
-                <CardTitle>Education {index + 1}</CardTitle>
-                <Button
-                  type="button"
-                  size="icon"
-                  variant="destructive"
-                  onClick={() => {
-                    replace([
-                      ...fields.slice(0, index),
-                      ...fields.slice(index + 1),
-                    ]);
-                  }}
-                >
-                  <TrashIcon className="  h-4 w-4" />
-                </Button>
-              </CardHeader>
-              <Separator className="mt-2" />
-              <FormField
-                control={form.control}
-                name={`partial.${index}.name`}
-                render={({ field }) => (
-                  <FormItem className="m-2 pb-4">
-                    <FormLabel htmlFor={`partial.${index}.name`}>
-                      School or University Name {index + 1}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your school or university name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name={`partial.${index}.address`}
-                render={({ field }) => (
-                  <FormItem className="m-2 pb-4">
-                    <FormLabel htmlFor={`partial.${index}.address`}>
-                      School or University Location (City, Country)
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter your school or university location"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="m-2 grid grid-cols-4 gap-4">
+              <div className="m-2 grid grid-cols-4 gap-4 sm:col-span-2 md:col-span-1">
                 <FormField
                   control={form.control}
-                  name={`partial.${index}.level`}
+                  name={`partial.${index}.name`}
                   render={({ field }) => (
-                    <FormItem className="col-span-4 pb-4 sm:col-span-2 md:col-span-1">
-                      <FormLabel htmlFor={`partial.${index}.level`}>
-                        Education Level
-                      </FormLabel>
-                      <Select
-                        onValueChange={(val) => {
-                          field.onChange(val);
-                        }}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select education level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>
-                              Education Level {index + 1}
-                            </SelectLabel>
-                            {EDUCATION_LEVELS.map((level) => (
-                              <SelectItem key={level.value} value={level.value}>
-                                {level.label}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name={`partial.${index}.major`}
-                  render={({ field }) => (
-                    <FormItem className="pb-4">
-                      <FormLabel htmlFor={`partial.${index}.major`}>
-                        Major
-                      </FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter your major" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name={`partial.${index}.gpa`}
-                  render={({ field }) => (
-                    <FormItem className="pb-4">
-                      <FormLabel htmlFor={`partial.${index}.gpa`}>
-                        GPA
+                    <FormItem className="col-span-2 w-full pb-4">
+                      <FormLabel htmlFor={`partial.${index}.name`}>
+                        Company Name
                       </FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="Enter your GPA"
-                          value={field.value}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
+                          placeholder="Enter your company name"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -272,20 +157,16 @@ export const EducationForm = ({
 
                 <FormField
                   control={form.control}
-                  name={`partial.${index}.maxGPA`}
+                  name={`partial.${index}.role`}
                   render={({ field }) => (
-                    <FormItem className="pb-4">
-                      <FormLabel htmlFor={`partial.${index}.maxGPA`}>
-                        Max GPA
+                    <FormItem className="col-span-2 w-full pb-4">
+                      <FormLabel htmlFor={`partial.${index}.role`}>
+                        Job Role or Position
                       </FormLabel>
                       <FormControl>
                         <Input
-                          type="number"
-                          placeholder="Enter your Max GPA"
-                          value={field.value}
-                          onChange={(e) =>
-                            field.onChange(parseFloat(e.target.value))
-                          }
+                          placeholder="Enter your job role or position"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -293,6 +174,44 @@ export const EducationForm = ({
                   )}
                 />
               </div>
+
+              <FormField
+                control={form.control}
+                name={`partial.${index}.address`}
+                render={({ field }) => (
+                  <FormItem className="m-2 pb-4">
+                    <FormLabel htmlFor={`partial.${index}.address`}>
+                      Company Location (City, Country)
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your company location"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name={`partial.${index}.description`}
+                render={({ field }) => (
+                  <FormItem className="m-2 pb-4">
+                    <FormLabel htmlFor={`partial.${index}.description`}>
+                      Company Description
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Describe your profile company"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <div className="m-2 grid grid-cols-4 gap-4 sm:col-span-2 md:col-span-1">
                 <FormField
@@ -338,13 +257,14 @@ export const EducationForm = ({
                     </FormItem>
                   )}
                 />
+
                 <FormField
                   control={form.control}
-                  name={`partial.${index}.graduate`}
+                  name={`partial.${index}.end`}
                   render={({ field }) => (
-                    <FormItem className="col-span-2 m-2 w-full pb-4">
-                      <FormLabel htmlFor={`partial.${index}.graduate`}>
-                        Graduation
+                    <FormItem className="col-span-2 w-full pb-4">
+                      <FormLabel htmlFor={`partial.${index}.end`}>
+                        End
                       </FormLabel>
                       <div className={cn("grid gap-2")}>
                         <Popover>
@@ -352,7 +272,7 @@ export const EducationForm = ({
                             <Button
                               variant={"outline"}
                               className={cn(
-                                "w-full justify-start text-center font-normal",
+                                "w-full justify-start text-left font-normal",
                                 !field.value && "text-muted-foreground",
                               )}
                             >
@@ -383,23 +303,44 @@ export const EducationForm = ({
                 />
               </div>
 
+              <FormField
+                control={form.control}
+                name={`partial.${index}.active`}
+                render={({ field }) => (
+                  <FormItem className="m-2 flex items-center gap-2 space-y-0 pb-4">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormLabel
+                      htmlFor={`partial.${index}.active`}
+                      className="p-0 text-xs text-muted-foreground"
+                    >
+                      I am currently working here
+                    </FormLabel>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Card>
                 <CardContent>
-                  {field.activities.map((activity, activityIndex) => (
+                  {field.achievements.map((achievement, achievementIndex) => (
                     <FormField
-                      key={activity + activityIndex}
+                      key={achievement + achievementIndex}
                       control={form.control}
-                      name={`partial.${index}.activities.${activityIndex}`}
+                      name={`partial.${index}.achievements.${achievementIndex}`}
                       render={({ field }) => (
                         <FormItem className="m-2 pb-4">
                           <FormLabel
-                            htmlFor={`partial.${index}.activities.${activityIndex}`}
+                            htmlFor={`partial.${index}.achievements.${achievementIndex}`}
                           >
-                            Activity {activityIndex + 1}
+                            Achievement {achievementIndex + 1}
                           </FormLabel>
                           <FormControl>
                             <Input
-                              placeholder="Describe your activity"
+                              placeholder="Describe your achievement"
                               value={field.value}
                               onChange={field.onChange}
                             />
@@ -416,41 +357,22 @@ export const EducationForm = ({
                     onClick={() => {
                       const prev = form.getValues().partial[index];
                       if (!prev) {
-                        toast.error("Please fill the previous activity first");
+                        toast.error(
+                          "Please fill the previous achievement first",
+                        );
                         return;
                       }
                       replace({
                         ...prev,
-                        activities: [...prev.activities, ""],
+                        achievements: [...prev.achievements, ""],
                       });
                     }}
                   >
                     <PlusCircledIcon className="mr-2 h-4 w-4" />
-                    Add Activity
+                    Add Achievement
                   </Button>
                 </CardContent>
               </Card>
-              <FormField
-                control={form.control}
-                name={`partial.${index}.active`}
-                render={({ field }) => (
-                  <FormItem className="m-2 flex items-center gap-2 space-y-0 pb-4">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel
-                      htmlFor={`partial.${index}.active`}
-                      className="p-0 text-xs text-muted-foreground"
-                    >
-                      I am currently studying here
-                    </FormLabel>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
               <FormField
                 control={form.control}
@@ -458,11 +380,11 @@ export const EducationForm = ({
                 render={({ field }) => (
                   <FormItem className="m-2 pb-4">
                     <FormLabel htmlFor={`partial.${index}.document`}>
-                      Supporting Document
+                      Supporting Documents
                     </FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Add your document or sertificate URL"
+                        placeholder="Add your documents or sertificate URL"
                         {...field}
                       />
                     </FormControl>
@@ -478,12 +400,12 @@ export const EducationForm = ({
           variant="outline"
           onClick={() =>
             append({
-              ...emptyEducation,
+              ...emptyExperience,
             })
           }
         >
-          Add Education
-        </Button>{" "}
+          Add Experience
+        </Button>
         {form.formState.errors.partial && (
           <FormMessage className="mt-4">
             {form.formState.errors.partial.message}

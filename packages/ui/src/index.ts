@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 export * from "@radix-ui/react-icons";
+export * as LR from "lucide-react";
 export * from "react-icons/io5";
 export * from "react-icons/md";
 export * from "react-icons/pi";
