@@ -1,37 +1,103 @@
-"use client";
-
 import {
-    PersonalSchema,
-    PersonalSchemaValue
+  CVSchemaValue,
+  PersonalFormSchema,
+  PersonalFormValue,
 } from "@/schemas/cv";
+import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-    Button,
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    Input,
-    Textarea
+  Button,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  Textarea,
+  toast,
+  useStepper,
 } from "@packages/ui";
+import { nullsToUndefined } from "@packages/utils";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
-export const PersonalForm = () => {
-  const form = useForm<PersonalSchemaValue>({
-    resolver: zodResolver(PersonalSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      linkedinUrl: "",
-      portfolioUrl: "",
-      address: "",
-      description: "",
-    },
+export const PersonalForm = ({
+  initialData,
+}: {
+  initialData: CVSchemaValue;
+}) => {
+  const { isPending, isSuccess, isError, error, mutateAsync, reset } =
+    api.cv.updatePersonal.useMutation();
+
+  const { personal } = initialData;
+  const form = useForm<PersonalFormValue>({
+    resolver: zodResolver(PersonalFormSchema),
+    mode: "onSubmit",
+    defaultValues:
+      personal === undefined
+        ? {
+            cvId: initialData.id,
+            name: "",
+            email: "",
+            phone: "",
+            linkedinUrl: "",
+            portfolioUrl: "",
+            address: "",
+            description: "",
+          }
+        : {
+            cvId: initialData.id,
+            ...personal,
+          },
   });
 
-  const onSubmit = async (data: PersonalSchemaValue) => {};
+  function handleSuccess() {
+    toast.dismiss();
+    toast.success("Personal information updated successfully");
+    reset();
+    nextStep();
+  }
+
+  const { nextStep } = useStepper();
+  useEffect(() => {
+    toast.dismiss();
+    if (isSuccess) {
+      handleSuccess();
+    }
+    if (isError) {
+      toast.error(error?.message);
+    }
+    if (isPending) {
+      toast.loading("Saving personal information...");
+    }
+    const errors = form.formState.errors;
+  }, [isSuccess, isError, isPending, error, reset]);
+
+  const onSubmit = async (data: PersonalFormValue) => {
+    if (!initialData.id) {
+      toast.error("Missing CV ID. Please reopen from the dashboard.");
+      return;
+    }
+
+    const { cvId, ...rest } = data;
+
+    const res = await mutateAsync({
+      cvId: initialData.id,
+      ...rest,
+    });
+    form.setValue("name", res.personal?.name || "");
+    form.setValue("email", res.personal?.email || "");
+    form.setValue("phone", res.personal?.phone || "");
+    form.setValue("linkedinUrl", res.personal?.linkedinUrl || "");
+    form.setValue("portfolioUrl", res.personal?.portfolioUrl || "");
+    form.setValue("address", res.personal?.address || "");
+    form.setValue("description", res.personal?.description || "");
+    initialData.personal = nullsToUndefined(res.personal);
+    if (res.personal) {
+      handleSuccess();
+    }
+  };
 
   return (
     <Form {...form}>
@@ -43,12 +109,14 @@ export const PersonalForm = () => {
             <FormItem className="m-2 pb-4">
               <FormLabel htmlFor="name">Name</FormLabel>
               <FormControl>
-                <Input id="name" placeholder="Enter your name" {...field} />
+                <Input placeholder="Enter your name" {...field} />
               </FormControl>
+              <FormMessage>
+                {form.formState.errors.name && "Name is required"}
+              </FormMessage>
             </FormItem>
           )}
         />
-
         <div className="m-2 grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -57,12 +125,9 @@ export const PersonalForm = () => {
               <FormItem>
                 <FormLabel htmlFor="email">Email Address</FormLabel>
                 <FormControl>
-                  <Input
-                    id="email"
-                    placeholder="Enter your email address"
-                    {...field}
-                  />
+                  <Input placeholder="Enter your email address" {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -74,12 +139,9 @@ export const PersonalForm = () => {
               <FormItem className="pb-4">
                 <FormLabel htmlFor="phone">Phone Number (Mobile)</FormLabel>
                 <FormControl>
-                  <Input
-                    id="phone"
-                    placeholder="Enter your phone number"
-                    {...field}
-                  />
+                  <Input placeholder="Enter your phone number" {...field} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -93,11 +155,11 @@ export const PersonalForm = () => {
               <FormLabel htmlFor="linkedinUrl">LinkedIn Profile URL</FormLabel>
               <FormControl>
                 <Input
-                  id="linkedinUrl"
                   placeholder="Enter your LinkedIn Profile URL"
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -112,11 +174,11 @@ export const PersonalForm = () => {
               </FormLabel>
               <FormControl>
                 <Input
-                  id="portfolioUrl"
                   placeholder="Enter your portfolio or website URL"
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -128,12 +190,9 @@ export const PersonalForm = () => {
             <FormItem className="m-2 pb-4">
               <FormLabel htmlFor="address">Address (Optional)</FormLabel>
               <FormControl>
-                <Input
-                  id="address"
-                  placeholder="Enter your address"
-                  {...field}
-                />
+                <Input placeholder="Enter your address" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -148,17 +207,18 @@ export const PersonalForm = () => {
               </FormLabel>
               <FormControl>
                 <Textarea
-                  id="description"
                   placeholder="Enter short description about yourself"
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
         <div className="flex justify-end gap-12">
-          <Button variant="outline">Cancel</Button>
-          <Button>Save & Continue</Button>
+          <Button variant={isPending ? "ghost" : "default"} type="submit">
+            Save & Continue
+          </Button>
         </div>
       </form>
     </Form>

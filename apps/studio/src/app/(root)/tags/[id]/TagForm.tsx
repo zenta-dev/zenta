@@ -87,7 +87,6 @@ export const TagForm: FC<TagFormProps> = ({ initialData }) => {
         }
       }
     } catch (error) {
-      console.error(error);
       toast.error("An error occurred");
     } finally {
       setLoading(false);
@@ -123,7 +122,6 @@ export const TagForm: FC<TagFormProps> = ({ initialData }) => {
         toast.error("No data to delete");
       }
     } catch (error) {
-      console.error(error);
       toast.error("An error occurred");
     } finally {
       setLoading(false);

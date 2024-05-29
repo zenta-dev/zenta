@@ -111,7 +111,6 @@ export const PostForm: FC<PostFormProps> = ({ initialData, tags, techs }) => {
         }
       }
     } catch (error) {
-      console.error(error);
       toast.error("An error occurred. Please try again later");
     } finally {
       setLoading(false);
@@ -145,7 +144,6 @@ export const PostForm: FC<PostFormProps> = ({ initialData, tags, techs }) => {
         toast.error("Post not found");
       }
     } catch (error) {
-      console.error(error);
       toast.error("An error occurred");
     } finally {
       setLoading(false);

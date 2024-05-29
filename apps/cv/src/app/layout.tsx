@@ -35,7 +35,7 @@ export default async function RootLayout({
             className="max-w-full bg-background-100"
           />
           {children}
-          <Toaster richColors />
+          <Toaster richColors closeButton />
         </ThemeProvider>
       </body>
     </html>

@@ -104,8 +104,9 @@ CREATE TABLE "cv"."cv" (
     "id" UUID NOT NULL DEFAULT gen_random_uuid(),
     "title" TEXT NOT NULL,
     "image" TEXT,
+    "slug" TEXT NOT NULL,
     "personalId" UUID,
-    "authUserId" UUID NOT NULL,
+    "userId" UUID NOT NULL,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -226,6 +227,9 @@ CREATE TABLE "blog"."_post_to_tech" (
     "A" UUID NOT NULL,
     "B" UUID NOT NULL
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "cv_slug_key" ON "cv"."cv"("slug");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "tech_founder_name_key" ON "blog"."tech_founder"("name");

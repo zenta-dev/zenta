@@ -13,8 +13,6 @@ export async function POST(req: Request) {
       api_secret: env.CLOUDINARY_API_SECRET,
     });
 
-    console.log("Signing params", paramsToSign);
-
     const signature = cloudinary.utils.api_sign_request(
       paramsToSign,
       env.CLOUDINARY_API_SECRET,
@@ -22,8 +20,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ signature });
   } catch (error) {
-    console.error(error);
-
     return NextResponse.json(
       { error: "An error occurred while signing the request" },
       { status: 500 },

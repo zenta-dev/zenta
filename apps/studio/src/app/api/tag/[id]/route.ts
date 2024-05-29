@@ -60,7 +60,6 @@ export async function PATCH(req: Request, { params }: Props) {
       });
     }
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
       {
         success: false,
@@ -103,7 +102,6 @@ export async function DELETE(_: Request, { params }: Props) {
       });
     }
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
       {
         success: false,

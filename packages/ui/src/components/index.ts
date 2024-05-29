@@ -6,6 +6,7 @@ export * from "./Header";
 export * from "./Heading";
 export * from "./ImageUpload";
 export * from "./Profile";
+export * from "./stepper";
 export * from "./SupermanLoader";
 export * from "./ui";
 export * from "./ZentaLoader";

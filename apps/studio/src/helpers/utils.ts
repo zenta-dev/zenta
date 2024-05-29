@@ -13,7 +13,7 @@ export function generateHTML(json: any | undefined) {
 
   let html = "";
   const data = json as any;
-  console.clear();
+
   for (const node of data.content) {
     const item = determineHTML(node);
     html += item;

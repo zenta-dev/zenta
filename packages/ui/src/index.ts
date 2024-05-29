@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 export * from "@radix-ui/react-icons";
 export * from "react-icons/io5";
 export * from "react-icons/md";
+export * from "react-icons/pi";
 export * from "./components";
 
 export function cn(...inputs: ClassValue[]) {

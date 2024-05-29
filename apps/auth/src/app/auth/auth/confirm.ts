@@ -29,7 +29,6 @@ export default async function handler(
       token_hash,
     });
     if (error) {
-      console.error(error);
     } else {
       next = stringOrFirstString(queryParams.next) || "/";
     }

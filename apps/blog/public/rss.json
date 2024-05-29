@@ -1,17 +1,17 @@
 {
     "version": "https://jsonfeed.org/version/1",
     "title": "Zenta Blog",
-    "home_page_url": "https://localhost:3000",
-    "feed_url": "https://localhost:3000/rss.json",
+    "home_page_url": "https://blog.zenta.dev/",
+    "feed_url": "https://blog.zenta.dev//rss.json",
     "description": "Zenta Blog is a website about programming 🧑‍💻 . I will be posting about my programming progress, good and bad days and more. Also, I might have some videos of me coding 🎥 .",
-    "icon": "https://localhost:3000/favicon.ico",
+    "icon": "https://blog.zenta.dev//favicon.ico",
     "author": {
         "name": "Rahmat Hidayataullah",
         "url": "mailto:bokirsianpar95@gmail.com"
     },
     "items": [
         {
-            "url": "https://localhost:3000/post/the-history-of-java",
+            "url": "https://blog.zenta.dev//post/the-history-of-java",
             "title": "The History of Java",
             "tags": []
         }

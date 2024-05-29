@@ -14,7 +14,8 @@
     ],
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json",
     "allowJs": true,
-    "strict": true
+    "strict": true,
+    "noErrorTruncation": true
   },
   "include": [
     ".",

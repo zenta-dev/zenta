@@ -89,7 +89,6 @@ export const StackForm: FC<StackFormProps> = ({ initialData }) => {
         }
       }
     } catch (error) {
-      console.error(error);
       toast.error("An error occurred");
     } finally {
       setLoading(false);
@@ -125,7 +124,6 @@ export const StackForm: FC<StackFormProps> = ({ initialData }) => {
         toast.error("No data to delete");
       }
     } catch (error) {
-      console.error(error);
       toast.error("An error occurred");
     } finally {
       setLoading(false);

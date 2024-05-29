@@ -36,12 +36,7 @@ export const postRouter = createTRPCRouter({
             name: true,
           },
         },
-        authors: {
-          select: {
-            id: true,
-            email: true,
-          },
-        },
+        authors: true,
       },
       orderBy: {
         updatedAt: "desc",
@@ -68,7 +63,11 @@ export const postRouter = createTRPCRouter({
           slug: input.slug,
         },
         include: {
-          authors: true,
+          authors: {
+            select: {
+              user: true,
+            },
+          },
           tags: true,
         },
       });

@@ -5,9 +5,15 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
-    schemas  = ["public", "cv", "blog"]
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
+    // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+    schemas   = ["public", "cv", "blog"]
+}
+
+generator zod {
+    provider = "bunx zod-prisma-types"
 }
 
 // 
@@ -179,16 +185,17 @@ model Cv {
 
     title String
     image String?
+    slug  String  @unique
 
-    personal     Personal?      @relation("cv_to_personal", fields: [personalId], references: [id])
-    personalId   String?        @db.Uuid
-    educations   Education[]    @relation("cv_to_education")
-    experiences  Experience[]   @relation("cv_to_experience")
-    Organization Organization[] @relation("cv_to_organization")
-    Other        Other[]        @relation("cv_to_other")
+    personal      Personal?      @relation("cv_to_personal", fields: [personalId], references: [id])
+    personalId    String?        @db.Uuid
+    educations    Education[]    @relation("cv_to_education")
+    experiences   Experience[]   @relation("cv_to_experience")
+    organizations Organization[] @relation("cv_to_organization")
+    others        Other[]        @relation("cv_to_other")
 
-    user       AuthUser @relation("user_to_cv", fields: [authUserId], references: [id], onDelete: Cascade)
-    authUserId String   @db.Uuid
+    user   AuthUser @relation("user_to_cv", fields: [userId], references: [id], onDelete: Cascade)
+    userId String   @db.Uuid
 
     createdAt DateTime @default(now()) @db.Timestamptz(6)
     updatedAt DateTime @default(now()) @db.Timestamptz(6)

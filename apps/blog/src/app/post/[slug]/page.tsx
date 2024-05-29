@@ -2,7 +2,14 @@ import { env } from "@/env";
 import { db } from "@/server/db";
 import { generateRSS } from "@/server/rss";
 import { api } from "@/trpc/server";
-import { extensions, Separator } from "@packages/ui";
+import {
+  Avatar,
+  AvatarImage,
+  extensions,
+  PiUserCircleBold,
+  Separator,
+} from "@packages/ui";
+import { RawUserMetaData } from "@packages/utils";
 import { generateHTML } from "@tiptap/html";
 import parse from "html-react-parser";
 import { Metadata } from "next";
@@ -23,16 +30,19 @@ export async function generateStaticParams() {
   const posts = await db.post.findMany({
     include: {
       tags: true,
-      authors: true,
+      authors: {
+        select: {
+          user: true,
+        },
+      },
     },
   });
-
   const qPost = posts.map((item) => {
     const tags = item.tags ?? [];
     const authors = item.authors.map((author) => {
       return {
-        email: author.email || "",
-        link: `mailto:${author.email}`,
+        email: author.user.email || "",
+        link: `mailto:${author.user.email}`,
       };
     });
     return {
@@ -76,8 +86,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ],
     authors: authors.map((author) => {
       return {
-        // name: author.name ?? "",
-        url: `mailto:${author.email}`,
+        name: (author.user.raw_user_meta_data as any).name ?? "",
+        url: `mailto:${author.user.email}`,
       };
     }),
     alternates: {
@@ -152,25 +162,37 @@ export default async function PostPage({ params }: Props) {
           </h1>
           {post?.authors && (
             <div className="flex items-center justify-center">
-              {/* {post.authors.map((user) => (
-                <Link key={user.id} href={`mailto:${user.email}`}>
-                  <div className="flex items-center justify-center">
-                    <p className="mr-2">Written by :</p>
-                    <Avatar className="flex items-center">
-                      {user.image ? (
-                        <AvatarImage
-                          className="size-8 rounded-full"
-                          src={addImageSize(user.image, 32, 32)}
-                          alt={user.name || user.email || ""}
-                        />
-                      ) : (
-                        <PiUserCircleBold className="text-4xl" />
-                      )}
-                    </Avatar>
-                    <h5 className="text-lg font-medium">{user.name}</h5>
-                  </div>
-                </Link>
-              ))} */}
+              {post.authors.map((user) => {
+                const author = user.user;
+                const rawMetaUser = user.user
+                  .raw_user_meta_data as RawUserMetaData;
+                return (
+                  <Link key={author.id} href={`mailto:${author.email}`}>
+                    <div className="flex items-center justify-center">
+                      <p className="mr-2">Written by :</p>
+                      <Avatar className="flex items-center">
+                        {rawMetaUser.avatar_url ? (
+                          <AvatarImage
+                            className="size-8 rounded-full"
+                            src={rawMetaUser.avatar_url}
+                            alt={
+                              rawMetaUser.name ||
+                              rawMetaUser.full_name ||
+                              author.email ||
+                              ""
+                            }
+                          />
+                        ) : (
+                          <PiUserCircleBold className="text-4xl" />
+                        )}
+                      </Avatar>
+                      <h5 className="text-lg font-medium">
+                        {rawMetaUser.name || rawMetaUser.full_name}
+                      </h5>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           )}
           <div className="mt-4 grid grid-cols-2 items-center justify-center gap-2 p-4 transition-all duration-300 md:grid-cols-4 lg:p-0">
@@ -247,11 +269,4 @@ function imageReplace(html: string) {
       </figcaption>
     </figure>
   );
-}
-
-function urlToPublicId(url: string) {
-  const parts = url.split("/");
-  const length = parts.length;
-  const publicId = parts[length - 1]?.split(".")[0];
-  return publicId;
 }

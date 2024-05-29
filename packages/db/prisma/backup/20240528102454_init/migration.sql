@@ -105,7 +105,7 @@ CREATE TABLE "cv"."cv" (
     "title" TEXT NOT NULL,
     "image" TEXT,
     "personalId" UUID,
-    "authUserId" UUID NOT NULL,
+    "userId" UUID NOT NULL,
     "createdAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

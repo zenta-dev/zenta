@@ -47,10 +47,6 @@ export async function PATCH(req: Request, { params }: Props) {
       id,
     });
 
-    console.log("find", find);
-
-    console.log("PARSE", parse);
-
     if (!find) {
       return NextResponse.json(
         {
@@ -91,17 +87,6 @@ export async function PATCH(req: Request, { params }: Props) {
       });
     }
 
-    console.log("Update Data", {
-      id,
-      name,
-      description,
-      logo,
-      url,
-      homepage,
-      versions: versions,
-      founders: founders,
-    });
-
     const tech = await api.tech.update({
       id,
       name,
@@ -131,7 +116,6 @@ export async function PATCH(req: Request, { params }: Props) {
       });
     }
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
       {
         success: false,
@@ -174,7 +158,6 @@ export async function DELETE(_: Request, { params }: Props) {
       });
     }
   } catch (error) {
-    console.error(error);
     return NextResponse.json(
       {
         success: false,
