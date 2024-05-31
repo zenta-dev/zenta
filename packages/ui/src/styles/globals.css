@@ -14,6 +14,7 @@
     /*#ccceff*/
     --background-400: 230 46% 70%;
     /*#8f9bd6*/
+    --background-500: 135 134% 136%;
     --foreground: 0 0% 3.9%;
     /*putih*/
 
@@ -108,4 +109,17 @@
   body {
     @apply bg-background text-foreground transition-all duration-300 ease-in-out;
   }
+}
+
+.linear-gradient-bg-1 {
+  background: linear-gradient(to bottom,
+      rgba(15, 7, 22, 1) 0%,
+      rgba(35, 27, 70, 0.78) 50%,
+      rgba(15, 7, 22, 1) 100%);
+}
+
+.linear-gradient-bg-2 {
+  background: linear-gradient(to left,
+      rgba(95, 1, 247, 1) 0%,
+      rgba(204, 1, 238, 1) 100%);
 }

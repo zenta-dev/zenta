@@ -39,5 +39,8 @@
     "@apps/cv",
     "@apps/studio",
     "core-js-pure"
-  ]
+  ],
+  "dependencies": {
+    "use-debounce": "^10.0.1"
+  }
 }

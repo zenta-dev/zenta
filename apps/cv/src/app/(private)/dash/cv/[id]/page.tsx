@@ -12,6 +12,7 @@ type Props = {
 
 export default async function CVPage({ params }: Props) {
   const cv = await api.cv.getById({ id: params.id });
+  console.log("=== CV Data ===", cv);
 
   const nulledCv = nullsToUndefined(cv) as InitialPDFDataProps["initialData"];
   if (!nulledCv.id) {
