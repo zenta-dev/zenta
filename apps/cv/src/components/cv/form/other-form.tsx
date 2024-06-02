@@ -1,7 +1,7 @@
 "use client";
 
 import { usePDF } from "@/provider/pdf-provider";
-import { OtherFormSchema, OtherFormSchemaValue } from "@/schemas/cv/index";
+import { OtherFormSchema, OtherFormSchemaValue } from "@/schemas/cv";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -272,17 +272,20 @@ export const OtherForm = () => {
                     className="m-2"
                     variant="outline"
                     onClick={() => {
-                      const prev = form.getValues().partial[index];
-                      if (!prev) {
-                        toast.error(
-                          "Please fill the previous achievement first",
-                        );
-                        return;
-                      }
-                      replace({
-                        ...prev,
-                        achievements: [...prev.achievements, ""],
-                      });
+                      const data = form.getValues().partial[index];
+                      if (!data) return;
+
+                      const { achievements, ...rest } = data;
+
+                      replace([
+                        ...fields.slice(0, index),
+                        {
+                          ...rest,
+                          achievements: [...achievements, ""],
+                        },
+                        ...fields.slice(index + 1),
+                      ]);
+                      debounced();
                     }}
                   >
                     <PlusCircledIcon className="mr-2 h-4 w-4" />
@@ -312,6 +315,7 @@ export const OtherForm = () => {
           </Card>
         ))}
         <Button
+          type="button"
           className="mt-4 w-full border-2 border-dashed border-blue-500"
           variant="outline"
           onClick={() =>

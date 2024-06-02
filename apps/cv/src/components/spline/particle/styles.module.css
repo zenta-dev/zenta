@@ -1,0 +1,19 @@
+ @keyframes breath {
+     0% {
+         opacity: 0.2;
+     }
+
+     50% {
+         opacity: 0.4;
+     }
+
+     100% {
+         opacity: 0.2;
+     }
+ }
+
+
+ .nebula {
+     @apply relative w-full h-full overflow-hidden;
+     animation: breath 30s infinite;
+ }

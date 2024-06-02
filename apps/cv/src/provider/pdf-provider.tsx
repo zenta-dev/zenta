@@ -1,6 +1,6 @@
 "use client";
 
-import { CVSchemaValue } from "@/schemas/cv/index";
+import { CVSchemaValue } from "@/schemas/cv";
 import { RawUserMetaData } from "@packages/utils";
 import {
   createContext,

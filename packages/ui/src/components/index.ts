@@ -5,6 +5,7 @@ export * from "./ColorPicker";
 export * from "./Header";
 export * from "./Heading";
 export * from "./ImageUpload";
+export * from "./loader";
 export * from "./Profile";
 export * from "./stepper";
 export * from "./SupermanLoader";

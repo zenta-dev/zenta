@@ -49,3 +49,55 @@ export type RawUserMetaData = {
 };
 
 export * from "use-debounce";
+
+export function makeNoun(text: string) {
+  console.log("makeNoun", text);
+  const lower = text.toLowerCase();
+  const vocal = ["a", "e", "i", "o", "u"];
+
+  const firstChar = lower.charAt(0);
+  if (vocal.includes(firstChar)) {
+    return `an ${text}`;
+  } else {
+    return `a ${text}`;
+  }
+}
+
+export function sanitizeGDriveURL(url: string) {
+  if (url.includes("drive.google.com/file/d/")) {
+    return url.replace("view", "preview");
+  }
+
+  return url;
+}
+
+export function intMonthToString(month: number) {
+  switch (month) {
+    case 1:
+      return "January";
+    case 2:
+      return "February";
+    case 3:
+      return "March";
+    case 4:
+      return "April";
+    case 5:
+      return "May";
+    case 6:
+      return "June";
+    case 7:
+      return "July";
+    case 8:
+      return "August";
+    case 9:
+      return "September";
+    case 10:
+      return "October";
+    case 11:
+      return "November";
+    case 12:
+      return "December";
+    default:
+      return "";
+  }
+}

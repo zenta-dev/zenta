@@ -2,7 +2,7 @@
 
 import { env } from "@/env";
 import { usePDF } from "@/provider/pdf-provider";
-import { PersonalFormSchema, PersonalFormValue } from "@/schemas/cv/index";
+import { PersonalFormSchema, PersonalFormValue } from "@/schemas/cv";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -183,7 +183,6 @@ export const PersonalForm = () => {
             )}
           />
         </div>
-
         <FormField
           control={form.control}
           name="linkedinUrl"
@@ -200,7 +199,6 @@ export const PersonalForm = () => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="portfolioUrl"
@@ -219,7 +217,21 @@ export const PersonalForm = () => {
             </FormItem>
           )}
         />
-
+        <FormField
+          control={form.control}
+          name="currentJob"
+          render={({ field }) => (
+            <FormItem className="m-2 pb-4">
+              <FormLabel htmlFor="currentJob">
+                Current Job Title (Optional)
+              </FormLabel>
+              <FormControl>
+                <Input placeholder="Enter your current job title" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="address"
@@ -233,7 +245,6 @@ export const PersonalForm = () => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
           name="description"

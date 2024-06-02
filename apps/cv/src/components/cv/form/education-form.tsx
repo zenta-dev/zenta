@@ -1,10 +1,8 @@
 "use client";
 
+import { EDUCATION_LEVELS } from "@/helper";
 import { usePDF } from "@/provider/pdf-provider";
-import {
-  EducationFormSchema,
-  EducationFormSchemaValue,
-} from "@/schemas/cv/index";
+import { EducationFormSchema, EducationFormSchemaValue } from "@/schemas/cv";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -43,17 +41,6 @@ import {
 import { nullsToUndefined, useDebouncedCallback } from "@packages/utils";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
-
-const EDUCATION_LEVELS = [
-  { value: "certificate", label: "Certificate" },
-  { value: "senior_high_school", label: "Senior High School" },
-  { value: "associates_degree", label: "Associate's Degree" },
-  { value: "diploma", label: "Diploma" },
-  { value: "undergraduate", label: "Undergraduate" },
-  { value: "bachelor", label: "Bachelor" },
-  { value: "master", label: "Master" },
-  { value: "professor", label: "Professor" },
-] as const;
 
 const emptyEducation = {
   name: "",
@@ -429,15 +416,20 @@ export const EducationForm = () => {
                     className="m-2"
                     variant="outline"
                     onClick={() => {
-                      const prev = form.getValues().partial[index];
-                      if (!prev) {
-                        toast.error("Please fill the previous activity first");
-                        return;
-                      }
-                      replace({
-                        ...prev,
-                        activities: [...prev.activities, ""],
-                      });
+                      const data = form.getValues().partial[index];
+                      if (!data) return;
+
+                      const { activities, ...rest } = data;
+
+                      replace([
+                        ...fields.slice(0, index),
+                        {
+                          ...rest,
+                          activities: [...activities, ""],
+                        },
+                        ...fields.slice(index + 1),
+                      ]);
+                      debounced();
                     }}
                   >
                     <PlusCircledIcon className="mr-2 h-4 w-4" />
@@ -453,7 +445,15 @@ export const EducationForm = () => {
                     <FormControl>
                       <Checkbox
                         checked={field.value}
-                        onCheckedChange={field.onChange}
+                        onCheckedChange={(val) => {
+                          if (val === true) {
+                            form.setValue(
+                              `partial.${index}.graduate`,
+                              undefined,
+                            );
+                          }
+                          field.onChange(val);
+                        }}
                       />
                     </FormControl>
                     <FormLabel
@@ -489,6 +489,7 @@ export const EducationForm = () => {
           </Card>
         ))}
         <Button
+          type="button"
           className="mt-4 w-full border-2 border-dashed border-blue-500"
           variant="outline"
           onClick={() =>

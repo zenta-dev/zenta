@@ -1,11 +1,12 @@
 import { randomUUID } from "crypto";
+import { EDUCATION_LEVELS } from "@/helper";
 import {
   EducationFormSchema,
   ExperienceFormSchema,
   OrganizationFormSchema,
   OtherFormSchema,
   PersonalFormSchema,
-} from "@/schemas/cv/index";
+} from "@/schemas/cv";
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -62,8 +63,8 @@ export const cvRouter = createTRPCRouter({
         slug: z.string(),
       }),
     )
-    .query(({ input, ctx: { db } }) => {
-      return db.cv.findFirst({
+    .query(async ({ input, ctx: { db } }) => {
+      const res = await db.cv.findFirst({
         where: {
           slug: input.slug,
         },
@@ -80,6 +81,17 @@ export const cvRouter = createTRPCRouter({
           },
         },
       });
+
+      res?.educations.sort((a, b) => {
+        return (
+          (EDUCATION_LEVELS.find((level) => level.value === a.level)?.level ||
+            0) -
+          (EDUCATION_LEVELS.find((level) => level.value === b.level)?.level ||
+            0)
+        );
+      });
+
+      return res;
     }),
 
   create: protectedProcedure

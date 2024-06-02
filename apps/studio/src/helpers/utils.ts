@@ -135,16 +135,6 @@ export function normalizeZodError(issues: ZodIssue[]) {
   return msgs;
 }
 
-// export function debounce(func: Function, timeout: number) {
-//   let timer: NodeJS.Timeout;
-//   return (...args: any) => {
-//     clearTimeout(timer);
-//     timer = setTimeout(() => {
-//       func(...args);
-//     }, timeout);
-//   };
-// }
-
 export function calculateReadTime(words: number | undefined) {
   if (!words) {
     return 0;

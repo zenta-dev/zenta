@@ -21,6 +21,8 @@
     "prisma": "^5.14.0",
     "typescript": "^5.4.5"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@prisma/client": "^5.14.0"
+  },
   "prettier": "@configs/prettier-config"
 }

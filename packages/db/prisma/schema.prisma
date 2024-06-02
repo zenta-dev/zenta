@@ -169,6 +169,7 @@ model Personal {
     image        String?
     linkedinUrl  String?
     portfolioUrl String?
+    currentJob   String?
     address      String?
     description  String
 
