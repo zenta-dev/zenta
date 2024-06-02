@@ -1,4 +1,6 @@
 import { Button } from "@packages/ui";
+import Image from "next/image";
+import Link from "next/link";
 
 export const dynamic = "force-static";
 
@@ -16,15 +18,18 @@ export default function HomePage() {
               Get a free review of your CV, in just 30 seconds. Save time and
               money🌟
             </div>
-            <Button>Get Started</Button>
+
+            <Link href="/dash">
+              <Button>Get Started</Button>
+            </Link>
           </div>
 
           <div className="flex items-center justify-center pl-20 pr-20">
-            <img
-              src="../images/Homepage_Section1.png"
+            <Image
+              src="/imgs/landing/section1.png"
               alt="Homepage Section Image"
-              width="500"
-              height="500"
+              width={500}
+              height={500}
             />
           </div>
         </div>
@@ -39,11 +44,11 @@ export default function HomePage() {
 
         <div className="m-2 grid grid-cols-3 gap-4 p-8 text-center text-2xl font-medium">
           <div className="flex flex-col items-center p-4">
-            <img
-              src="../images/Homepage_Section2_PickTemplate.png"
+            <Image
+              src="/imgs/landing/section2_PickTemplate.png"
               alt=""
-              width="375"
-              height="440"
+              width={375}
+              height={440}
               className="mb-4"
             />
             <div>Pick Template</div>
@@ -53,11 +58,11 @@ export default function HomePage() {
           </div>
 
           <div className="flex flex-col items-center p-4">
-            <img
-              src="../images/Homepage_Section2_FillForm.png"
+            <Image
+              src="/imgs/landing/section2_FillForm.png"
               alt=""
-              width="350"
-              height="200"
+              width={350}
+              height={200}
               className="mb-4"
             />
             <div>Fill the Form</div>
@@ -67,11 +72,11 @@ export default function HomePage() {
           </div>
 
           <div className="flex flex-col items-center p-4">
-            <img
-              src="../images/Homepage_Section2_Download.png"
+            <Image
+              src="/imgs/landing/section2_Download.png"
               alt=""
-              width="320"
-              height="200"
+              width={320}
+              height={200}
               className="mb-4"
             />
             <div>Finalized and Download It</div>
@@ -90,11 +95,11 @@ export default function HomePage() {
 
         <div className="grid p-8">
           <div className="grid grid-cols-2 pl-28 pr-28">
-            <img
-              src="../images/Homepage_Section3_Services1.png"
+            <Image
+              src="/imgs/landing/section3_Services1.png"
               alt=""
-              width="300"
-              height="300"
+              width={300}
+              height={300}
             />
             <div className="grid gap-4">
               <div className="text-2xl font-medium">ATS CV-Friendly</div>
@@ -104,7 +109,10 @@ export default function HomePage() {
                 resume reaches the right eyes and gets noticed by potential
                 employers.
               </div>
-              <Button>Try Now</Button>
+
+              <Link href="/dash">
+                <Button>Try Now</Button>
+              </Link>
             </div>
           </div>
 
@@ -118,24 +126,27 @@ export default function HomePage() {
                   experience. Stand out from the crowd and catch the attention
                   of employers with ease.
                 </div>
-                <Button>Customized Now</Button>
+
+                <Link href="/dash">
+                  <Button>Customized Now</Button>
+                </Link>
               </div>
-              <img
-                src="../images/Homepage_Section3_Services2.png"
+              <Image
+                src="/imgs/landing/section3_Services2.png"
                 alt=""
-                width="450"
-                height="300"
+                width={450}
+                height={300}
               />
             </div>
           </div>
 
           <div className="grid gap-4 p-8">
             <div className="grid grid-cols-2">
-              <img
-                src="../images/Homepage_Section3_Services3.png"
+              <Image
+                src="/imgs/landing/section3_Services3.png"
                 alt=""
-                width="361"
-                height="369"
+                width={361}
+                height={369}
               />
 
               <div className="grid gap-4">
@@ -145,7 +156,10 @@ export default function HomePage() {
                   guiding you with tailored suggestions to optimize your resume
                   for maximum impact and visibility to potential employers.
                 </div>
-                <Button>Get Started</Button>
+
+                <Link href="/dash">
+                  <Button>Get Started</Button>
+                </Link>
               </div>
             </div>
           </div>

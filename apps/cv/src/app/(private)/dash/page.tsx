@@ -34,7 +34,7 @@ export default async function DashboardPage() {
               <Link href="/dash/cv/[id]" as={`/dash/cv/${item.id}`}>
                 <Card className="mx-auto max-w-96">
                   <Image
-                    src={item.image ?? "https://picsum.photos/200/300"}
+                    src={"https://picsum.photos/200/300"}
                     alt={item.title}
                     width={200}
                     height={300}

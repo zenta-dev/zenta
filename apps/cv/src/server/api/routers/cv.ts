@@ -6,7 +6,11 @@ import {
   OtherFormSchema,
   PersonalFormSchema,
 } from "@/schemas/cv/index";
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -20,11 +24,11 @@ export const cvRouter = createTRPCRouter({
         id: true,
         slug: true,
         title: true,
-        image: true,
         updatedAt: true,
       },
     });
   }),
+
   getById: protectedProcedure
     .input(
       z.object({
@@ -36,6 +40,32 @@ export const cvRouter = createTRPCRouter({
         where: {
           id: input.id,
           userId: user?.id,
+        },
+        include: {
+          personal: true,
+          educations: true,
+          experiences: true,
+          organizations: true,
+          others: true,
+          user: {
+            select: {
+              raw_user_meta_data: true,
+            },
+          },
+        },
+      });
+    }),
+
+  getBySlug: publicProcedure
+    .input(
+      z.object({
+        slug: z.string(),
+      }),
+    )
+    .query(({ input, ctx: { db } }) => {
+      return db.cv.findFirst({
+        where: {
+          slug: input.slug,
         },
         include: {
           personal: true,

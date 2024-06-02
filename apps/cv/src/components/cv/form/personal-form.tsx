@@ -1,5 +1,6 @@
 "use client";
 
+import { env } from "@/env";
 import { usePDF } from "@/provider/pdf-provider";
 import { PersonalFormSchema, PersonalFormValue } from "@/schemas/cv/index";
 import { api } from "@/trpc/react";
@@ -12,6 +13,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  ImageUpload,
   Input,
   Textarea,
   toast,
@@ -116,6 +118,27 @@ export const PersonalForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem className="m-2 pb-4">
+              <FormLabel htmlFor="image">Profile Picture</FormLabel>
+              <FormControl>
+                <ImageUpload
+                  preset={env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+                  value={field.value}
+                  disabled={isPending}
+                  onChange={(url) => field.onChange(url)}
+                  onRemove={() => field.onChange("")}
+                  multiple={false}
+                  maxFiles={1}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="name"

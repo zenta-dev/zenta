@@ -10,6 +10,7 @@ const PersonalSchema = z.object({
   portfolioUrl: z.string().url().optional(),
   address: z.string().optional(),
   description: z.string().min(3),
+  image: z.string().url().optional(),
 });
 export type PersonalSchemaValue = z.infer<typeof PersonalSchema>;
 export const PersonalFormSchema = z
@@ -117,7 +118,6 @@ export type OtherFormSchemaValue = z.infer<typeof OtherFormSchema>;
 export const CVSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(3),
-  image: z.string().url().optional(),
   slug: z.string().min(1),
   personal: PersonalSchema.optional(),
   educations: z.array(EducationSchema),

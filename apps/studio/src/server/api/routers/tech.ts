@@ -68,7 +68,6 @@ export const techRouter = createTRPCRouter({
               },
             })),
           },
-          updaterId: ctx?.user?.id,
           updatedAt: new Date(),
         },
       });

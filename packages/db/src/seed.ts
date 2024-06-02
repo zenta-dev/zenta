@@ -1,4 +1,4 @@
-import { PrismaClient, TechFounderType } from "./client";
+import { PrismaClient, TechFounderType } from "@prisma/client";
 
 const prisma = new PrismaClient();
 

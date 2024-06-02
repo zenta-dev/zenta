@@ -19,5 +19,8 @@
     "typescript": "^5.4.5",
     "@types/bun": "latest"
   },
-  "prettier": "@configs/prettier-config"
+  "prettier": "@configs/prettier-config",
+  "dependencies": {
+    "use-debounce": "^10.0.1"
+  }
 }

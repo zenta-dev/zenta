@@ -1,7 +1,11 @@
+import { api } from "@/trpc/server";
 import { cn } from "@packages/utils";
+import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { FaEnvelope, FaGlobe, FaLinkedin, FaPhone } from "react-icons/fa";
 import styles from "./styles.module.css";
+import { Timeline } from "@packages/ui";
 
 type Props = {
   params: {
@@ -9,7 +13,18 @@ type Props = {
   };
 };
 
-export default function PreviewPage({ params }: Props) {
+export default async function PreviewPage({ params }: Props) {
+  const { slug } = params;
+
+  const data = await api.cv.getBySlug({ slug });
+  console.log("====== CV DATA [p] Page ======", data);
+
+  if (!data) {
+    redirect("/404");
+  }
+
+  const { personal, educations, experiences, organizations, others } = data;
+
   return (
     <main>
       <section
@@ -22,54 +37,45 @@ export default function PreviewPage({ params }: Props) {
         >
           HELLO
         </div>
-
         <div className="flex grid-cols-3 items-center justify-center space-x-4">
           <div className="space-y-2 text-left text-white">
-            <div className="text-6xl font-bold">
-              VIOLIA RUANA NUR’AINI SAGITA
-            </div>
+            <div className="text-6xl font-bold">{personal?.name}</div>
 
-            <div className="text-2xl font-medium">
-              Kusuma Bangsa Street, East Jakarta, Indonesia
-            </div>
+            <div className="text-2xl font-medium">{personal?.address}</div>
 
-            <div className="font-regular text-2xl">
-              Hi, I am an undergraduate Student Majoring in Informatics
-              Engineering at State University of Surabaya. Highly motivated in
-              Software Development Experienced in Website Programming, Front End
-              Developer, and UI/UX Design. Able to use HTML, CSS, JavaScript,
-              TypeScript, MySQL, Bootstrap, Figma, and PostgreSQL.
-            </div>
+            <div className="font-regular text-2xl">{personal?.description}</div>
           </div>
 
           <div className="relative flex h-64 w-full items-center justify-center">
-            <img
-              src="../images/Violia.png"
+            <Image
+              src={personal?.image || ""}
               alt="Violia"
-              className="mx-auto h-full w-auto object-cover"
+              className="mx-auto h-[256px] w-[256px] rounded-full object-cover "
+              width={256}
+              height={256}
             />
           </div>
 
           <div className="grid-cols-1 grid-rows-4 text-black">
-            <Link href="mailto:violiaruana@gmail.com" passHref>
+            <Link href={`mailto:${personal?.email}`} passHref>
               <div className="m-9 w-fit cursor-pointer rounded-full border border-zinc-500 bg-zinc-500 p-2 text-3xl">
                 <FaEnvelope />
               </div>
             </Link>
 
-            <Link href="tel:+6285234258863" passHref>
+            <Link href={`tel:${personal?.phone}`} passHref>
               <div className="m-9 w-fit cursor-pointer rounded-full border border-zinc-500 bg-zinc-500 p-2 text-3xl">
                 <FaPhone />
               </div>
             </Link>
 
-            <Link href="https://www.linkedin.com/in/violia-ruana/" passHref>
+            <Link href={personal?.linkedinUrl || ""} passHref target="_blank">
               <div className="m-9 w-fit cursor-pointer rounded-full border border-zinc-500 bg-zinc-500 p-2 text-3xl">
                 <FaLinkedin />
               </div>
             </Link>
 
-            <Link href="https://github.com/zenta-dev/zenta/tree/main" passHref>
+            <Link href={personal?.portfolioUrl || ""} passHref target="_blank">
               <div className="m-9 w-fit cursor-pointer rounded-full border border-zinc-500 bg-zinc-500 p-2 text-3xl">
                 <FaGlobe />
               </div>
@@ -101,7 +107,10 @@ export default function PreviewPage({ params }: Props) {
             </a>
           </div>
         </div>
-
+        <div className="flex items-center w-full"> 
+        <Timeline positions='center'>
+42        </Timeline>
+        </div>
         <div className="flex justify-center p-6 sm:p-10">
           <div className="relative grid h-fit gap-10 pl-6 after:absolute after:inset-y-[-36px] after:left-0 after:w-px after:bg-yellow-500 ">
             <div className="relative grid  text-left text-sm text-white">
@@ -271,11 +280,11 @@ export default function PreviewPage({ params }: Props) {
         <div className="p-6">
           <div className="grid grid-cols-2">
             <div className="justify-left flex  pl-20 pr-20">
-              <img
-                src="../images/Sertifikat_Panitia_PKKMB_FT_2023.jpg"
+              <Image
+                src="/imgs/Sertifikat_Panitia_PKKMB_FT_2023.jpg"
                 alt=""
-                width="607"
-                height="430"
+                width={607}
+                height={430}
                 className={cn("rounded-lg", styles.shadow_custom)}
               />
             </div>
@@ -329,11 +338,11 @@ export default function PreviewPage({ params }: Props) {
             </div>
 
             <div className="justify-left flex  pl-20 pr-20">
-              <img
-                src="../images/Sertifikat_Panitia_XProject_8.0.png"
+              <Image
+                src="/imgs/Sertifikat_Panitia_XProject_8.0.png"
                 alt=""
-                width="607"
-                height="430"
+                width={607}
+                height={430}
                 className={cn("rounded-lg", styles.shadow_custom)}
               />
             </div>
@@ -365,11 +374,11 @@ export default function PreviewPage({ params }: Props) {
 
         <div className="relative flex items-center justify-center gap-16 pl-16 pr-36">
           <div className="absolute left-[50%] top-[-18%] z-10 translate-x-[-50%] transform">
-            <img
-              src="../images/Union.png"
+            <Image
+              src="/imgs/Union.png"
               alt="Yellow Element"
-              width="80"
-              height="70"
+              width={80}
+              height={70}
               className=""
             />
             <div className="absolute left-[50%] top-[30%] z-10 translate-x-[-50%] transform text-center text-3xl font-semibold text-black">
@@ -405,11 +414,11 @@ export default function PreviewPage({ params }: Props) {
           </div>
 
           <div className="absolute left-[3.5%] top-[-18%] z-10 translate-x-[-50%] transform">
-            <img
-              src="../images/Union.png"
+            <Image
+              src="/imgs/Union.png"
               alt="Yellow Element"
-              width="80"
-              height="70"
+              width={80}
+              height={70}
               className=""
             />
             <div className="absolute left-[50%] top-[30%] z-10 translate-x-[-50%] transform text-center text-3xl font-semibold text-black">

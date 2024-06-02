@@ -6,7 +6,7 @@
     "db:push": "turbo db:push",
     "db:seed": "turbo db:seed",
     "build": "turbo build",
-    "dev": "turbo dev --parallel --concurrency=100%",
+    "dev": "turbo dev",
     "start": "turbo start",
     "lint": "turbo lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""

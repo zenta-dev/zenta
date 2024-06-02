@@ -1,7 +1,7 @@
 generator client {
     provider        = "prisma-client-js"
     previewFeatures = ["multiSchema", "views"]
-    output          = "../src/client"
+    // output          = "../src/client"
 }
 
 datasource db {
@@ -166,6 +166,7 @@ model Personal {
     name         String
     email        String
     phone        String
+    image        String?
     linkedinUrl  String?
     portfolioUrl String?
     address      String?
@@ -184,8 +185,7 @@ model Cv {
     id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
     title String
-    image String?
-    slug  String  @unique
+    slug  String @unique
 
     personal      Personal?      @relation("cv_to_personal", fields: [personalId], references: [id])
     personalId    String?        @db.Uuid
