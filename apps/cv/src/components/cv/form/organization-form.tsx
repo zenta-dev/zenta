@@ -13,6 +13,8 @@ import {
   CalendarIcon,
   Card,
   CardContent,
+  CardHeader,
+  CardTitle,
   Checkbox,
   cn,
   Form,
@@ -26,8 +28,10 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Separator,
   Textarea,
   toast,
+  TrashIcon,
   useStepper,
 } from "@packages/ui";
 import { nullsToUndefined, useDebouncedCallback } from "@packages/utils";
@@ -131,26 +135,23 @@ export const OrganizationForm = () => {
         {fields.map((field, index) => (
           <Card key={field.id} className="mt-4 pt-4">
             <CardContent>
-              <div className="m-2 grid grid-cols-4 gap-4 sm:col-span-2 md:col-span-1">
-                <FormField
-                  control={form.control}
-                  name={`partial.${index}.name`}
-                  render={({ field }) => (
-                    <FormItem className="col-span-2 w-full pb-4">
-                      <FormLabel htmlFor={`partial.${index}.name`}>
-                        Organization or Event Name
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your organization or event name"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
+              <CardHeader className="mt-4 flex flex-row items-center justify-between p-0">
+                <CardTitle>Organizational Experience {index + 1}</CardTitle>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="destructive"
+                  onClick={() => {
+                    replace([
+                      ...fields.slice(0, index),
+                      ...fields.slice(index + 1),
+                    ]);
+                  }}
+                >
+                  <TrashIcon className="  h-4 w-4" />
+                </Button>
+              </CardHeader>
+<Separator className="mt-2" />
                 <FormField
                   control={form.control}
                   name={`partial.${index}.role`}
@@ -169,7 +170,7 @@ export const OrganizationForm = () => {
                     </FormItem>
                   )}
                 />
-              </div>
+              
 
               <FormField
                 control={form.control}

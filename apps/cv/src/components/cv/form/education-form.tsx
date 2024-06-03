@@ -144,7 +144,7 @@ export const EducationForm = () => {
           <Card key={field.id} className="mt-4">
             <CardContent>
               <CardHeader className="mt-4 flex flex-row items-center justify-between p-0">
-                <CardTitle>Education {index + 1}</CardTitle>
+                <CardTitle>Education Level {index + 1}</CardTitle>
                 <Button
                   type="button"
                   size="icon"

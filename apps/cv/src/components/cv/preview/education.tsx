@@ -92,7 +92,7 @@ export const EducationPreview = ({
                 <TimelineLine done={!education.active} />
                 <TimelineContent side={side} className="mt-2">
                   <Separator />
-                  <ol className="list-inside list-disc text-left">
+                  <ol className=" list-inside list-disc text-left">
                     <p className="flex items-center gap-2 text-white">
                       <span>
                         <PiCookingPot className="text-cyan-500" />
@@ -103,6 +103,7 @@ export const EducationPreview = ({
                       return <li>{activity}</li>;
                     })}
                   </ol>
+
                 </TimelineContent>
               </TimelineItem>
             );

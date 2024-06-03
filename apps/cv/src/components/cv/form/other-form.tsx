@@ -8,6 +8,8 @@ import {
   Button,
   Card,
   CardContent,
+  CardHeader,
+  CardTitle,
   Form,
   FormControl,
   FormField,
@@ -23,8 +25,10 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
+  Separator,
   Textarea,
   toast,
+  TrashIcon,
   useStepper,
 } from "@packages/ui";
 import { nullsToUndefined, useDebouncedCallback } from "@packages/utils";
@@ -134,6 +138,23 @@ export const OtherForm = () => {
         {fields.map((field, index) => (
           <Card key={field.id} className="mt-4 pt-4">
             <CardContent>
+            <CardHeader className="mt-4 flex flex-row items-center justify-between p-0">
+                <CardTitle>Skills, Achievements & Other Experience {index + 1}</CardTitle>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="destructive"
+                  onClick={() => {
+                    replace([
+                      ...fields.slice(0, index),
+                      ...fields.slice(index + 1),
+                    ]);
+                  }}
+                >
+                  <TrashIcon className="  h-4 w-4" />
+                </Button>
+              </CardHeader>
+            <Separator className="mt-2" />
               <FormField
                 control={form.control}
                 name={`partial.${index}.category`}
@@ -164,6 +185,8 @@ export const OtherForm = () => {
                   </FormItem>
                 )}
               />
+
+
               <FormField
                 control={form.control}
                 name={`partial.${index}.name`}
