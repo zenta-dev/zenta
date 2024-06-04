@@ -7,24 +7,33 @@ export const dynamic = "force-static";
 export default function HomePage() {
   return (
     <main>
-      <section>
-        <div className="grid grid-cols-2 items-center bg-background-100 pl-10 pr-10">
-          <div className="grid pl-12 pr-12">
-            <div className="pb-6  text-4xl font-semibold">
-              Crafting Careers, Crafting Futures – Zenta, where every CV is a
-              masterpiece in progress!
+      <section className="mx-auto flex w-full items-center justify-center bg-background-100 px-10">
+        <div className="flex w-full flex-col sm:w-1/2">
+          <div className="gap-6 px-12">
+            <div className="my-6 grid grid-cols-1 gap-6 px-6">
+              <div className="row-span-1">
+                <div className="grid grid-cols-1 gap-6">
+                  <div className=" text-4xl font-semibold">
+                    Crafting Careers, Crafting Futures – Zenta, where every CV
+                    is a masterpiece in progress!
+                  </div>
+                  <div className=" text-2xl font-normal">
+                    Get a free review of your CV, in just 30 seconds. Save time
+                    and money🌟
+                  </div>
+                </div>
+              </div>
+              <div className="row-span-1">
+                <Link href="/dash">
+                  <Button>Get Started</Button>
+                </Link>
+              </div>
             </div>
-            <div className="pb-6  text-2xl font-normal">
-              Get a free review of your CV, in just 30 seconds. Save time and
-              money🌟
-            </div>
-
-            <Link href="/dash">
-              <Button>Get Started</Button>
-            </Link>
           </div>
+        </div>
 
-          <div className="flex items-center justify-center pl-20 pr-20">
+        <div className="flex w-full flex-col sm:w-1/2">
+          <div className="px-12">
             <Image
               src="/imgs/landing/section1.png"
               alt="Homepage Section Image"
@@ -35,56 +44,78 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-[#D9DAFD] pl-10 pr-10">
+      <section className="bg-[#D9DAFD] py-9">
         <div className="grid gap-4">
-          <div className="pt-10 text-center text-3xl font-semibold">
+          <div className="text-center text-3xl font-semibold">
             3 Easy Steps to Generate your CV
           </div>
         </div>
 
-        <div className="m-2 grid grid-cols-3 gap-4 p-8 text-center text-2xl font-medium">
-          <div className="flex flex-col items-center p-4">
-            <Image
-              src="/imgs/landing/section2_PickTemplate.png"
-              alt=""
-              width={375}
-              height={440}
-              className="mb-4"
-            />
-            <div>Pick Template</div>
-            <div className="font-regular text-center text-xl">
-              We provide many templates that you can adjust by yourself
-            </div>
-          </div>
+        <div className="my-4 items-center justify-center gap-4 px-10">
+          <div className="grid grid-cols-3 gap-4 text-center text-2xl font-medium">
+            <div className="flex flex-col items-center px-4">
+              <div>
+                <Image
+                  src="/imgs/landing/section2_PickTemplate.png"
+                  alt=""
+                  width={375}
+                  height={440}
+                  className="mb-4"
+                />
+              </div>
 
-          <div className="flex flex-col items-center p-4">
-            <Image
-              src="/imgs/landing/section2_FillForm.png"
-              alt=""
-              width={350}
-              height={200}
-              className="mb-4"
-            />
-            <div>Fill the Form</div>
-            <div className="font-regular text-center text-xl">
-              Fill the blank space in the form until done
+              <div className="gap-4">
+                <div>Pick Template</div>
+                <div className="font-regular text-center text-xl">
+                  We provide many templates that you can adjust by yourself
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div className="flex flex-col items-center p-4">
-            <Image
-              src="/imgs/landing/section2_Download.png"
-              alt=""
-              width={320}
-              height={200}
-              className="mb-4"
-            />
-            <div>Finalized and Download It</div>
-            <div className="font-regular text-center text-xl">
-              Fine-tune the details and download your CV
+            <div className="flex flex-col items-center px-4">
+              <div>
+                <Image
+                  src="/imgs/landing/section2_FillForm.png"
+                  alt=""
+                  width={350}
+                  height={200}
+                  className="mb-4"
+                />
+              </div>
+
+              <div className="gap-4">
+                <div>Fill the Form</div>
+                <div className="font-regular text-center text-xl">
+                  Fill the blank space in the form until done
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center px-4">
+              <div>
+                <Image
+                  src="/imgs/landing/section2_Download.png"
+                  alt=""
+                  width={320}
+                  height={200}
+                  className="mb-4"
+                />
+              </div>
+
+              <div className="gap-4">
+                <div>Finalized and Download It</div>
+                <div className="font-regular text-center text-xl">
+                  Finalized and Download It
+                </div>
+              </div>
             </div>
           </div>
-          <Button className="flex items-center">Create Now</Button>
+        </div>
+
+        <div className="mx-96 my-4 items-center px-96">
+          <Link href="/dash">
+            <Button className=" flex w-full text-center">Create Now</Button>
+          </Link>
         </div>
       </section>
 
@@ -94,20 +125,22 @@ export default function HomePage() {
         </div>
 
         <div className="grid p-8">
-          <div className="grid grid-cols-2 pl-28 pr-28">
+          <div className="mx-12 grid grid-cols-2">
             <Image
               src="/imgs/landing/section3_Services1.png"
               alt=""
               width={300}
               height={300}
             />
-            <div className="grid gap-4">
-              <div className="text-2xl font-medium">ATS CV-Friendly</div>
-              <div className="text-xl font-normal">
-                Navigate Applicant Tracking System (ATS) seamlessly with our
-                range of templates designed to pass ATS scans. Ensure your
-                resume reaches the right eyes and gets noticed by potential
-                employers.
+            <div className="grid">
+              <div className="grid grid-cols-1">
+                <div className=" text-3xl font-medium">ATS CV-Friendly</div>
+                <div className=" text-xl font-normal">
+                  Navigate Applicant Tracking System (ATS) seamlessly with our
+                  range of templates designed to pass ATS scans. Ensure your
+                  resume reaches the right eyes and gets noticed by potential
+                  employers.
+                </div>
               </div>
 
               <Link href="/dash">
@@ -116,15 +149,17 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="grid">
-            <div className="grid grid-cols-2 ">
-              <div className="grid items-center">
-                <div className="text-2xl font-medium">Customized CV</div>
-                <div className="text-xl font-normal">
-                  Create personalized resumes effortlessly with our diverse
-                  range of templates tailored to showcase your unique skills and
-                  experience. Stand out from the crowd and catch the attention
-                  of employers with ease.
+          <div className="grid p-8">
+            <div className="mx-12 grid grid-cols-2">
+              <div className="grid">
+                <div className="grid grid-cols-1">
+                  <div className=" text-3xl font-medium">Customized CV</div>
+                  <div className=" text-xl font-normal">
+                    Create personalized resumes effortlessly with our diverse
+                    range of templates tailored to showcase your unique skills
+                    and experience. Stand out from the crowd and catch the
+                    attention of employers with ease.
+                  </div>
                 </div>
 
                 <Link href="/dash">
@@ -134,33 +169,9 @@ export default function HomePage() {
               <Image
                 src="/imgs/landing/section3_Services2.png"
                 alt=""
-                width={450}
+                width={400}
                 height={300}
               />
-            </div>
-          </div>
-
-          <div className="grid gap-4 p-8">
-            <div className="grid grid-cols-2">
-              <Image
-                src="/imgs/landing/section3_Services3.png"
-                alt=""
-                width={361}
-                height={369}
-              />
-
-              <div className="grid gap-4">
-                <div className="text-2xl font-medium">Resume Assistant</div>
-                <div className="text-xl font-normal">
-                  Elevate your CV score effortlessly with our Resume Assistant,
-                  guiding you with tailored suggestions to optimize your resume
-                  for maximum impact and visibility to potential employers.
-                </div>
-
-                <Link href="/dash">
-                  <Button>Get Started</Button>
-                </Link>
-              </div>
             </div>
           </div>
         </div>

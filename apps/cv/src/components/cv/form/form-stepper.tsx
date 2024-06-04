@@ -18,6 +18,8 @@ import {
   useStepper,
 } from "@packages/ui";
 import { useRouter } from "next/navigation";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { EducationForm } from "./education-form";
 import { ExperienceForm } from "./experience-form";
 import { OrganizationForm } from "./organization-form";
@@ -64,48 +66,82 @@ const STEPPER_ITEMS = [
 
 export const FormStepper = () => {
   return (
-    <div className="flex w-full flex-col gap-4">
-      <Stepper
-        variant="circle-alt"
-        initialStep={0}
-        steps={STEPPER_ITEMS}
-        onClickStep={(step, setStep) => setStep(step)}
-      >
-        {STEPPER_ITEMS.map((stepProps, index) => {
-          if (index === 0) {
-            return (
-              <Step key={stepProps.label} {...stepProps}>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{stepProps.title}</CardTitle>
-                    <CardDescription>{stepProps.desc}</CardDescription>
-                  </CardHeader>
-                  <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
-                  <CardContent>
-                    <PersonalForm />
-                  </CardContent>
-                </Card>
-              </Step>
-            );
-          }
-          if (index === 1) {
-            return (
-              <Step key={stepProps.label} {...stepProps}>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{stepProps.title}</CardTitle>
-                    <CardDescription>{stepProps.desc}</CardDescription>
-                  </CardHeader>
-                  <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
-                  <CardContent>
-                    <EducationForm />
-                  </CardContent>
-                </Card>
-              </Step>
-            );
-          }
+    <DndProvider backend={HTML5Backend}>
+      <div className="flex w-full flex-col gap-4">
+        <Stepper
+          variant="circle-alt"
+          initialStep={0}
+          steps={STEPPER_ITEMS}
+          onClickStep={(step, setStep) => setStep(step)}
+        >
+          {STEPPER_ITEMS.map((stepProps, index) => {
+            if (index === 0) {
+              return (
+                <Step key={stepProps.label} {...stepProps}>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>{stepProps.title}</CardTitle>
+                      <CardDescription>{stepProps.desc}</CardDescription>
+                    </CardHeader>
+                    <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
+                    <CardContent>
+                      <PersonalForm />
+                    </CardContent>
+                  </Card>
+                </Step>
+              );
+            }
+            if (index === 1) {
+              return (
+                <Step key={stepProps.label} {...stepProps}>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>{stepProps.title}</CardTitle>
+                      <CardDescription>{stepProps.desc}</CardDescription>
+                    </CardHeader>
+                    <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
+                    <CardContent>
+                      <EducationForm />
+                    </CardContent>
+                  </Card>
+                </Step>
+              );
+            }
 
-          if (index === 2) {
+            if (index === 2) {
+              return (
+                <Step key={stepProps.label} {...stepProps}>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>{stepProps.title}</CardTitle>
+                      <CardDescription>{stepProps.desc}</CardDescription>
+                    </CardHeader>
+                    <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
+                    <CardContent>
+                      <ExperienceForm />
+                    </CardContent>
+                  </Card>
+                </Step>
+              );
+            }
+
+            if (index === 3) {
+              return (
+                <Step key={stepProps.label} {...stepProps}>
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>{stepProps.title}</CardTitle>
+                      <CardDescription>{stepProps.desc}</CardDescription>
+                    </CardHeader>
+                    <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
+                    <CardContent>
+                      <OrganizationForm />
+                    </CardContent>
+                  </Card>
+                </Step>
+              );
+            }
+
             return (
               <Step key={stepProps.label} {...stepProps}>
                 <Card>
@@ -115,48 +151,16 @@ export const FormStepper = () => {
                   </CardHeader>
                   <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
                   <CardContent>
-                    <ExperienceForm />
+                    <OtherForm />
                   </CardContent>
                 </Card>
               </Step>
             );
-          }
-
-          if (index === 3) {
-            return (
-              <Step key={stepProps.label} {...stepProps}>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{stepProps.title}</CardTitle>
-                    <CardDescription>{stepProps.desc}</CardDescription>
-                  </CardHeader>
-                  <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
-                  <CardContent>
-                    <OrganizationForm />
-                  </CardContent>
-                </Card>
-              </Step>
-            );
-          }
-
-          return (
-            <Step key={stepProps.label} {...stepProps}>
-              <Card>
-                <CardHeader>
-                  <CardTitle>{stepProps.title}</CardTitle>
-                  <CardDescription>{stepProps.desc}</CardDescription>
-                </CardHeader>
-                <Separator className="mx-auto mb-4 w-[calc(50vw-4vw)]" />
-                <CardContent>
-                  <OtherForm />
-                </CardContent>
-              </Card>
-            </Step>
-          );
-        })}
-        <StepperFooter />
-      </Stepper>
-    </div>
+          })}
+          <StepperFooter />
+        </Stepper>
+      </div>
+    </DndProvider>
   );
 };
 
