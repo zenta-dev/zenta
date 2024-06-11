@@ -12,16 +12,16 @@ const createQueryClient = () => new QueryClient();
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined;
 const getQueryClient = () => {
-  if (typeof window === "undefined") { 
+  if (typeof window === "undefined") {
     return createQueryClient();
-  } 
+  }
   return (clientQueryClientSingleton ??= createQueryClient());
 };
 
 export const api = createTRPCReact<AppRouter>();
- 
+
 export type RouterInputs = inferRouterInputs<AppRouter>;
- 
+
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
 
 export function TRPCReactProvider(props: { children: React.ReactNode }) {

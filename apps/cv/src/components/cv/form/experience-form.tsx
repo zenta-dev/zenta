@@ -136,7 +136,7 @@ export const ExperienceForm = () => {
         {fields.map((field, index) => (
           <Card key={field.id} className="mt-4 pt-4">
             <CardContent>
-            <CardHeader className="mt-4 flex flex-row items-center justify-between p-0">
+              <CardHeader className="mt-4 flex flex-row items-center justify-between p-0">
                 <CardTitle>Work Experience {index + 1}</CardTitle>
                 <Button
                   type="button"
@@ -152,46 +152,42 @@ export const ExperienceForm = () => {
                   <TrashIcon className="  h-4 w-4" />
                 </Button>
               </CardHeader>
-              
-              <Separator className="mt-2" />
-                <FormField
-                  control={form.control}
-                  name={`partial.${index}.name`}
-                  render={({ field }) => (
-                    <FormItem className="col-span-2 w-full pb-4">
-                      <FormLabel htmlFor={`partial.${index}.name`}>
-                        Company Name
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your company name"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
-                <FormField
-                  control={form.control}
-                  name={`partial.${index}.role`}
-                  render={({ field }) => (
-                    <FormItem className="col-span-2 w-full pb-4">
-                      <FormLabel htmlFor={`partial.${index}.role`}>
-                        Job Role or Position
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your job role or position"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              
+              <Separator className="mt-2" />
+              <FormField
+                control={form.control}
+                name={`partial.${index}.name`}
+                render={({ field }) => (
+                  <FormItem className="col-span-2 w-full pb-4">
+                    <FormLabel htmlFor={`partial.${index}.name`}>
+                      Company Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter your company name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name={`partial.${index}.role`}
+                render={({ field }) => (
+                  <FormItem className="col-span-2 w-full pb-4">
+                    <FormLabel htmlFor={`partial.${index}.role`}>
+                      Job Role or Position
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your job role or position"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}

@@ -151,26 +151,44 @@ export const OrganizationForm = () => {
                   <TrashIcon className="  h-4 w-4" />
                 </Button>
               </CardHeader>
-<Separator className="mt-2" />
-                <FormField
-                  control={form.control}
-                  name={`partial.${index}.role`}
-                  render={({ field }) => (
-                    <FormItem className="col-span-2 w-full pb-4">
-                      <FormLabel htmlFor={`partial.${index}.role`}>
-                        Organization Role or Position
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter your organization role or position"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              
+              <Separator className="mt-2" />
+              <FormField
+                control={form.control}
+                name={`partial.${index}.name`}
+                render={({ field }) => (
+                  <FormItem className="col-span-2 w-full pb-4">
+                    <FormLabel htmlFor={`partial.${index}.name`}>
+                      Organization or Event Name
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your organization or event name"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name={`partial.${index}.role`}
+                render={({ field }) => (
+                  <FormItem className="col-span-2 w-full pb-4">
+                    <FormLabel htmlFor={`partial.${index}.role`}>
+                      Organization Role or Position
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your organization role or position"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}
